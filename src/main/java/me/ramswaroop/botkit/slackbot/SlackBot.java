@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -36,7 +35,7 @@ public class SlackBot extends Bot {
         return this;
     }
 
-    @Override
+    /*@Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         logger.info("Message: {}", message.getPayload());
         ObjectMapper mapper = new ObjectMapper();
@@ -54,5 +53,10 @@ public class SlackBot extends Bot {
             logger.error("Error", e);
         }
 
+    }*/
+
+    @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
+    public void onReceiveMessage(WebSocketSession session, Message message) {
+        reply(session, message, "hi");
     }
 }

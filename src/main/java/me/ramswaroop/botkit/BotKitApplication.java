@@ -8,11 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BotKitApplication {
 
-    private static Logger logger = LoggerFactory.getLogger(BotKitApplication.class);
-
     public static void main(String[] args) {
         SpringApplication.run(BotKitApplication.class, args);
-        logger.info("Bot started!");
     }
-
 }

@@ -1,11 +1,15 @@
 package me.ramswaroop.botkit.slackbot.core;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
@@ -16,6 +20,9 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ramswaroop on 05/06/2016.
@@ -30,19 +37,16 @@ public abstract class Bot {
 
     private String[] dmChannels;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     public abstract String getSlackToken();
 
     public abstract Bot getSlackBot();
 
     public void afterConnectionEstablished(WebSocketSession session) {
-        logger.info("WebSocket connected: {}", session);
+        logger.debug("WebSocket connected: {}", session);
     }
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        logger.info("WebSocket closed: {}, Close Status: {}", session, status.toString());
+        logger.debug("WebSocket closed: {}, Close Status: {}", session, status.toString());
     }
 
     public void handleTransportError(WebSocketSession session, Throwable exception) {
@@ -51,13 +55,16 @@ public abstract class Bot {
 
     public final void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
-    };
+    }
 
-    public final void reply(WebSocketSession session, Message message) {
+    public final void reply(WebSocketSession session, Message message, String reply) {
         try {
-            session.sendMessage(new TextMessage(message.toString()));
+            message.setId(1);
+            message.setText(reply);
+            message.setUser(null);
+            session.sendMessage(new TextMessage(message.toJSONString()));
         } catch (IOException e) {
-            logger.error("Error sending message: {}", message.getText());
+            logger.error("Error sending message: {}. Exception: {}", message.getText(), e.getMessage());
         }
     }
 
@@ -71,10 +78,26 @@ public abstract class Bot {
 
     private void startRTM() {
         try {
+            RestTemplate restTemplate = new RestTemplate();
+            // Custom Deserializers
+            List<HttpMessageConverter<?>> httpMessageConverters = new ArrayList<>();
+            MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+            Jackson2ObjectMapperBuilder mapperBuilder = new Jackson2ObjectMapperBuilder();
+            mapperBuilder.deserializerByType(RTM.class, new JsonDeserializer<RTM>() {
+                @Override
+                public RTM deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+
+                    return null;
+                }
+            });
+            jsonConverter.setObjectMapper(mapperBuilder.build());
+            httpMessageConverters.add(jsonConverter);
+            restTemplate.setMessageConverters(httpMessageConverters);
+
             ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
             webSocketUrl = response.getBody().getUrl();
             dmChannels = response.getBody().getDmChannels();
-            logger.info("RTM connection successful. WebSocket URL: {}", webSocketUrl);
+            logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
         } catch (RestClientException e) {
             logger.error("RTM connection error. Exception: {}", e.getMessage());
         }
@@ -93,10 +116,5 @@ public abstract class Bot {
         startRTM();
         WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
         manager.start();
-    }
-
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
     }
 }
