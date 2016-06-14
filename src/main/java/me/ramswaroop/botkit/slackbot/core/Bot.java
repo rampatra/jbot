@@ -1,9 +1,14 @@
 package me.ramswaroop.botkit.slackbot.core;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.ramswaroop.botkit.slackbot.core.models.Attachment;
+import me.ramswaroop.botkit.slackbot.core.models.Event;
+import me.ramswaroop.botkit.slackbot.core.models.Message;
+import me.ramswaroop.botkit.slackbot.core.models.RTM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +26,8 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by ramswaroop on 05/06/2016.
@@ -35,7 +40,7 @@ public abstract class Bot {
 
     private String webSocketUrl;
 
-    private String[] dmChannels;
+    private List<String> dmChannels;
 
     public abstract String getSlackToken();
 
@@ -53,18 +58,23 @@ public abstract class Bot {
         logger.error("Transport Error: {}", exception);
     }
 
-    public final void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        Event event = mapper.readValue(textMessage.getPayload(), Event.class);
+        if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
+            dmChannels.add(event.getChannel());
+        } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
 
+        }
     }
 
-    public final void reply(WebSocketSession session, Message message, String reply) {
+    public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
-            message.setId(1);
-            message.setText(reply);
-            message.setUser(null);
-            session.sendMessage(new TextMessage(message.toJSONString()));
+            reply.setType("message");
+            reply.setChannel(event.getChannel());
+            session.sendMessage(new TextMessage(reply.toJSONString()));
         } catch (IOException e) {
-            logger.error("Error sending message: {}. Exception: {}", message.getText(), e.getMessage());
+            logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
 
@@ -85,9 +95,22 @@ public abstract class Bot {
             Jackson2ObjectMapperBuilder mapperBuilder = new Jackson2ObjectMapperBuilder();
             mapperBuilder.deserializerByType(RTM.class, new JsonDeserializer<RTM>() {
                 @Override
-                public RTM deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-
-                    return null;
+                public RTM deserialize(JsonParser p, DeserializationContext ctxt) {
+                    try {
+                        JsonNode node = p.readValueAsTree();
+                        RTM rtm = new RTM();
+                        rtm.setUrl(node.get("url").asText());
+                        List<String> dmChannels = new ArrayList<>();
+                        Iterator<JsonNode> iterator = node.get("ims").iterator();
+                        while (iterator.hasNext()) {
+                            dmChannels.add(iterator.next().get("id").asText());
+                        }
+                        rtm.setDmChannels(dmChannels);
+                        return rtm;
+                    } catch (IOException e) {
+                        logger.error("Error de-serializing RTM.start(): {}", e.getMessage());
+                        return null;
+                    }
                 }
             });
             jsonConverter.setObjectMapper(mapperBuilder.build());
@@ -97,7 +120,9 @@ public abstract class Bot {
             ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
             webSocketUrl = response.getBody().getUrl();
             dmChannels = response.getBody().getDmChannels();
+
             logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
+
         } catch (RestClientException e) {
             logger.error("RTM connection error. Exception: {}", e.getMessage());
         }

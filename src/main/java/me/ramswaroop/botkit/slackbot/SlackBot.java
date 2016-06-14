@@ -1,18 +1,15 @@
 package me.ramswaroop.botkit.slackbot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.botkit.slackbot.core.Bot;
 import me.ramswaroop.botkit.slackbot.core.Controller;
 import me.ramswaroop.botkit.slackbot.core.EventType;
-import me.ramswaroop.botkit.slackbot.core.Message;
+import me.ramswaroop.botkit.slackbot.core.models.Event;
+import me.ramswaroop.botkit.slackbot.core.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-
-import java.io.IOException;
 
 /**
  * Created by ramswaroop on 05/06/2016.
@@ -37,10 +34,10 @@ public class SlackBot extends Bot {
 
     /*@Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-        logger.info("Message: {}", message.getPayload());
+        logger.info("Event: {}", message.getPayload());
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Message msg = mapper.readValue(message.getPayload(), Message.class);
+            Event msg = mapper.readValue(message.getPayload(), Event.class);
             if ("message".equals(msg.getType())) {
                 session.sendMessage(new TextMessage("{\n" +
                         "    \"id\": 1,\n" +
@@ -56,7 +53,7 @@ public class SlackBot extends Bot {
     }*/
 
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
-    public void onReceiveMessage(WebSocketSession session, Message message) {
-        reply(session, message, "hi");
+    public void onReceiveMessage(WebSocketSession session, Event event) {
+        reply(session, event, new Message("hi"));
     }
 }

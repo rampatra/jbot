@@ -1,6 +1,7 @@
-package me.ramswaroop.botkit.slackbot.core;
+package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,13 +9,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Created by ramswaroop on 10/06/2016.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Message {
+public class Event {
 
     private int id;
     private String type;
     private String channel;
     private String user;
     private String text;
+    private boolean isStarred;
+    private String[] pinnedTo;
+    @JsonProperty("channel")
+    private Channel channelObj;
+    private String emailDomain;
+    private String subteamId;
+    private Event item;
+    private String ts;
+    private String eventTs;
 
     public int getId() {
         return id;
@@ -54,9 +64,5 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public String toJSONString() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
     }
 }

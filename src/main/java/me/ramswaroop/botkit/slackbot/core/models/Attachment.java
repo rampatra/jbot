@@ -1,4 +1,4 @@
-package me.ramswaroop.botkit.slackbot.core;
+package me.ramswaroop.botkit.slackbot.core.models;
 
 /**
  * Created by ramswaroop on 12/06/2016.
