@@ -53,7 +53,7 @@ public class SlackBot extends Bot {
     }*/
 
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
-    public void onReceiveMessage(WebSocketSession session, Event event) {
+    public void onReceiveDM(WebSocketSession session, Event event) {
         reply(session, event, new Message("hi"));
     }
 }

@@ -78,14 +78,6 @@ public abstract class Bot {
         }
     }
 
-    /**
-     * TODO: For sending attachments via chat.postMessage
-     * {@see: https://api.slack.com/docs/attachments}
-     */
-    public final void reply(Attachment attachment) {
-
-    }
-
     private void startRTM() {
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -137,7 +129,7 @@ public abstract class Bot {
     }
 
     @PostConstruct
-    private final void startWebSocketConnection() {
+    private void startWebSocketConnection() {
         startRTM();
         WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
         manager.start();

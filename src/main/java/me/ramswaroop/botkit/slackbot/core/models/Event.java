@@ -3,13 +3,18 @@ package me.ramswaroop.botkit.slackbot.core.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by ramswaroop on 10/06/2016.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
+
+    private static final Logger logger = LoggerFactory.getLogger(Event.class);
 
     private int id;
     private String type;
@@ -18,12 +23,18 @@ public class Event {
     private String text;
     private boolean isStarred;
     private String[] pinnedTo;
-    @JsonProperty("channel")
     private Channel channelObj;
     private String emailDomain;
     private String subteamId;
     private Event item;
+    private Bot bot;
+    private File file;
+    private Reaction[] reactions;
+    private boolean upload;
+    private boolean hidden;
+    private String latest;
     private String ts;
+    private String deletedTs;
     private String eventTs;
 
     public int getId() {
@@ -46,8 +57,18 @@ public class Event {
         return channel;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
+    @JsonProperty("channel")
+    public void setChannel(JsonNode jsonNode) {
+        JsonNode channelNode = jsonNode.get("channel");
+        if (channelNode.isObject()) {
+            try {
+                this.channelObj = new ObjectMapper().treeToValue(channelNode, Channel.class);
+            } catch (JsonProcessingException e) {
+                logger.error("Error deserializing json: {}", e.getMessage());
+            }
+        } else {
+            this.channel = channelNode.asText();
+        }
     }
 
     public String getUser() {

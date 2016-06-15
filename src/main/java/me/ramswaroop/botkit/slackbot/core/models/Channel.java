@@ -5,8 +5,10 @@ package me.ramswaroop.botkit.slackbot.core.models;
  */
 public class Channel {
     private String id;
+    private String name;
     private String user;
-    private int created;
+    private long created;
+    private String creator;
     boolean isIm;
     boolean isOrgShared;
     boolean isUserDeleted;
@@ -19,6 +21,14 @@ public class Channel {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUser() {
         return user;
     }
@@ -27,12 +37,20 @@ public class Channel {
         this.user = user;
     }
 
-    public int getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(long created) {
         this.created = created;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public boolean isIm() {
