@@ -34,25 +34,26 @@ import java.util.*;
 public abstract class Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
-
-    private static final String RTM_ENDPOINT = "https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads";
-
     /**
-     * Current logged in user id
+     * Endpoint for RTM.start()
      */
-    private String currentUserId;
+    private static final String RTM_ENDPOINT = "https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads";
+    /**
+     * A Map for all controller methods
+     */
+    private final Map<String, Method> methodMap = new HashMap<>();
     /**
      * Websocket url to connect to
      */
     private String webSocketUrl;
     /**
+     * Current logged in user
+     */
+    protected User currentUser;
+    /**
      * List of channel ids to determine direct messages
      */
-    private List<String> dmChannels;
-    /**
-     * A Map for all controller methods
-     */
-    private final Map<String, Method> methodMap = new HashMap<>();
+    protected List<String> dmChannels;
 
     public abstract String getSlackToken();
 
@@ -86,10 +87,10 @@ public abstract class Bot {
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Event event = mapper.readValue(textMessage.getPayload(), Event.class);
-        if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
+        if (event.getType() != null && event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
             dmChannels.add(event.getChannelId());
-        } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
-            if (event.getText().contains(currentUserId)) { // direct mention
+        } else if (event.getType() != null && event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
+            if (event.getText().contains(currentUser.getId())) { // direct mention
                 event.setType(EventType.DIRECT_MENTION.name());
             } else if (dmChannels.contains(event.getChannelId())) { // direct message
                 event.setType(EventType.DIRECT_MESSAGE.name());
@@ -100,8 +101,10 @@ public abstract class Bot {
 
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
-            reply.setType("message");
-            reply.setChannel(event.getChannelId());
+            reply.setType(EventType.MESSAGE.name().toLowerCase());
+            if (reply.getChannel() == null && event.getChannelId() != null) {
+                reply.setChannel(event.getChannelId());
+            }
             session.sendMessage(new TextMessage(reply.toJSONString()));
         } catch (IOException e) {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
@@ -154,7 +157,7 @@ public abstract class Bot {
             ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
             webSocketUrl = response.getBody().getUrl();
             dmChannels = response.getBody().getDmChannels();
-            currentUserId = response.getBody().getUser().getId();
+            currentUser = response.getBody().getUser();
 
             logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
 

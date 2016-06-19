@@ -32,33 +32,13 @@ public class SlackBot extends Bot {
         return this;
     }
 
-    /*@Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-        logger.info("Event: {}", message.getPayload());
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            Event msg = mapper.readValue(message.getPayload(), Event.class);
-            if ("message".equals(msg.getType())) {
-                session.sendMessage(new TextMessage("{\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"type\": \"message\",\n" +
-                        "    \"channel\": \"" + msg.getChannelId() + "\",\n" +
-                        "    \"text\": \"Hello world\"\n" +
-                        "}"));
-            }
-        } catch (Exception e) {
-            logger.error("Error", e);
-        }
-
-    }*/
-
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
     public void onReceiveDM(WebSocketSession session, Event event) {
-        reply(session, event, new Message("hi"));
+        reply(session, event, new Message("Hi, I am " + currentUser.getName()));
     }
 
     @Controller(events = EventType.MESSAGE)
     public void onReceiveMessage(WebSocketSession session, Event event) {
-        reply(session, event, new Message("hi"));
+        reply(session, event, new Message("Hi, this is a message!"));
     }
 }
