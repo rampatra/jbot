@@ -6,7 +6,7 @@ package me.ramswaroop.botkit.slackbot.core.models;
 public class Bot {
     private String id;
     private String name;
-    private Icon[] icons;
+    private Icon icons;
 
     public String getId() {
         return id;
@@ -24,11 +24,11 @@ public class Bot {
         this.name = name;
     }
 
-    public Icon[] getIcons() {
+    public Icon getIcons() {
         return icons;
     }
 
-    public void setIcons(Icon[] icons) {
+    public void setIcons(Icon icons) {
         this.icons = icons;
     }
 }

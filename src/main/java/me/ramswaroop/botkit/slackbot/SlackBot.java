@@ -42,7 +42,7 @@ public class SlackBot extends Bot {
                 session.sendMessage(new TextMessage("{\n" +
                         "    \"id\": 1,\n" +
                         "    \"type\": \"message\",\n" +
-                        "    \"channel\": \"" + msg.getChannel() + "\",\n" +
+                        "    \"channel\": \"" + msg.getChannelId() + "\",\n" +
                         "    \"text\": \"Hello world\"\n" +
                         "}"));
             }

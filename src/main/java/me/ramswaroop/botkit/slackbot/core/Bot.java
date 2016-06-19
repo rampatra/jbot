@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.botkit.slackbot.core.models.Attachment;
 import me.ramswaroop.botkit.slackbot.core.models.Event;
 import me.ramswaroop.botkit.slackbot.core.models.Message;
 import me.ramswaroop.botkit.slackbot.core.models.RTM;
@@ -62,7 +61,7 @@ public abstract class Bot {
         ObjectMapper mapper = new ObjectMapper();
         Event event = mapper.readValue(textMessage.getPayload(), Event.class);
         if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
-            dmChannels.add(event.getChannel());
+            dmChannels.add(event.getChannelId());
         } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
 
         }
@@ -71,7 +70,7 @@ public abstract class Bot {
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
             reply.setType("message");
-            reply.setChannel(event.getChannel());
+            reply.setChannel(event.getChannelId());
             session.sendMessage(new TextMessage(reply.toJSONString()));
         } catch (IOException e) {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
