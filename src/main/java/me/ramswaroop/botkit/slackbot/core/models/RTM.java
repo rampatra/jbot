@@ -12,6 +12,7 @@ public class RTM {
 
     private String url;
     private List<String> dmChannels;
+    private User user;
 
     public String getUrl() {
         return url;
@@ -27,5 +28,13 @@ public class RTM {
 
     public void setDmChannels(List<String> dmChannels) {
         this.dmChannels = dmChannels;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

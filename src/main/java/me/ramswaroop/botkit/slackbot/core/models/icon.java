@@ -1,8 +1,11 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by ramswaroop on 14/06/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Icon {
     private String image24;
     private String image32;

@@ -354,57 +354,53 @@ public class Event {
 
     @JsonSetter("channel")
     public void setChannel(JsonNode jsonNode) {
-        JsonNode channelNode = jsonNode.get("channel");
-        if (channelNode.isObject()) {
+        if (jsonNode.isObject()) {
             try {
-                this.channel = new ObjectMapper().treeToValue(channelNode, Channel.class);
+                this.channel = new ObjectMapper().treeToValue(jsonNode, Channel.class);
             } catch (JsonProcessingException e) {
                 logger.error("Error deserializing json: {}", e.getMessage());
             }
-        } else if (channelNode.isTextual()) {
-            this.channelId = channelNode.asText();
+        } else if (jsonNode.isTextual()) {
+            this.channelId = jsonNode.asText();
         }
     }
 
     @JsonSetter("file")
     public void setFile(JsonNode jsonNode) {
-        JsonNode fileNode = jsonNode.get("file");
-        if (fileNode.isObject()) {
+        if (jsonNode.isObject()) {
             try {
-                this.file = new ObjectMapper().treeToValue(fileNode, File.class);
+                this.file = new ObjectMapper().treeToValue(jsonNode, File.class);
             } catch (JsonProcessingException e) {
                 logger.error("Error deserializing json: {}", e.getMessage());
             }
-        } else if (fileNode.isTextual()) {
-            this.fileId = fileNode.asText();
+        } else if (jsonNode.isTextual()) {
+            this.fileId = jsonNode.asText();
         }
     }
 
     @JsonSetter("comment")
     public void setComment(JsonNode jsonNode) {
-        JsonNode commentNode = jsonNode.get("comment");
-        if (commentNode.isObject()) {
+        if (jsonNode.isObject()) {
             try {
-                this.comment = new ObjectMapper().treeToValue(commentNode, Comment.class);
+                this.comment = new ObjectMapper().treeToValue(jsonNode, Comment.class);
             } catch (JsonProcessingException e) {
                 logger.error("Error deserializing json: {}", e.getMessage());
             }
-        } else if (commentNode.isTextual()) {
-            this.commentId = commentNode.asText();
+        } else if (jsonNode.isTextual()) {
+            this.commentId = jsonNode.asText();
         }
     }
 
     @JsonSetter("user")
     public void setUser(JsonNode jsonNode) {
-        JsonNode userNode = jsonNode.get("user");
-        if (userNode.isObject()) {
+        if (jsonNode.isObject()) {
             try {
-                this.user = new ObjectMapper().treeToValue(userNode, User.class);
+                this.user = new ObjectMapper().treeToValue(jsonNode, User.class);
             } catch (JsonProcessingException e) {
                 logger.error("Error deserializing json: {}", e.getMessage());
             }
-        } else if (userNode.isTextual()) {
-            this.userId = userNode.asText();
+        } else if (jsonNode.isTextual()) {
+            this.userId = jsonNode.asText();
         }
     }
 

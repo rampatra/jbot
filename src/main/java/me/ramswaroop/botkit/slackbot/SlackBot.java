@@ -56,4 +56,9 @@ public class SlackBot extends Bot {
     public void onReceiveDM(WebSocketSession session, Event event) {
         reply(session, event, new Message("hi"));
     }
+
+    @Controller(events = EventType.MESSAGE)
+    public void onReceiveMessage(WebSocketSession session, Event event) {
+        reply(session, event, new Message("hi"));
+    }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.botkit.slackbot.core.models.Event;
 import me.ramswaroop.botkit.slackbot.core.models.Message;
 import me.ramswaroop.botkit.slackbot.core.models.RTM;
+import me.ramswaroop.botkit.slackbot.core.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,8 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Created by ramswaroop on 05/06/2016.
@@ -37,13 +37,39 @@ public abstract class Bot {
 
     private static final String RTM_ENDPOINT = "https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads";
 
+    /**
+     * Current logged in user id
+     */
+    private String currentUserId;
+    /**
+     * Websocket url to connect to
+     */
     private String webSocketUrl;
-
+    /**
+     * List of channel ids to determine direct messages
+     */
     private List<String> dmChannels;
+    /**
+     * A Map for all controller methods
+     */
+    private final Map<String, Method> methodMap = new HashMap<>();
 
     public abstract String getSlackToken();
 
     public abstract Bot getSlackBot();
+
+    {
+        Method[] methods = this.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Controller.class)) {
+                Controller controller = method.getAnnotation(Controller.class);
+                EventType[] eventTypes = controller.events();
+                for (EventType eventType : eventTypes) {
+                    methodMap.put(eventType.name(), method);
+                }
+            }
+        }
+    }
 
     public void afterConnectionEstablished(WebSocketSession session) {
         logger.debug("WebSocket connected: {}", session);
@@ -63,8 +89,13 @@ public abstract class Bot {
         if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
             dmChannels.add(event.getChannelId());
         } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
-
+            if (event.getText().contains(currentUserId)) { // direct mention
+                event.setType(EventType.DIRECT_MENTION.name());
+            } else if (dmChannels.contains(event.getChannelId())) { // direct message
+                event.setType(EventType.DIRECT_MESSAGE.name());
+            }
         }
+        invokeMethods(session, event);
     }
 
     public final void reply(WebSocketSession session, Event event, Message reply) {
@@ -74,6 +105,17 @@ public abstract class Bot {
             session.sendMessage(new TextMessage(reply.toJSONString()));
         } catch (IOException e) {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
+        }
+    }
+
+    private void invokeMethods(WebSocketSession session, Event event) {
+        try {
+            Method method = methodMap.get(event.getType().toUpperCase());
+            if (method != null) {
+                method.invoke(this, session, event);
+            }
+        } catch (Exception e) {
+            logger.error("Error invoking controller: {}", e.getMessage());
         }
     }
 
@@ -91,6 +133,7 @@ public abstract class Bot {
                         JsonNode node = p.readValueAsTree();
                         RTM rtm = new RTM();
                         rtm.setUrl(node.get("url").asText());
+                        rtm.setUser(new ObjectMapper().treeToValue(node.get("self"), User.class));
                         List<String> dmChannels = new ArrayList<>();
                         Iterator<JsonNode> iterator = node.get("ims").iterator();
                         while (iterator.hasNext()) {
@@ -111,6 +154,7 @@ public abstract class Bot {
             ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
             webSocketUrl = response.getBody().getUrl();
             dmChannels = response.getBody().getDmChannels();
+            currentUserId = response.getBody().getUser().getId();
 
             logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
 
