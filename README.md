@@ -11,10 +11,10 @@ the boilerplate code needed so that you can __make your bot live__ right away.
 
 **Running your SlackBot is just 4 easy steps:**
   
-1. Clone this project `git clone git@github.com:ramswaroop/botkit.git`.  
-2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
-3. Paste the token in [application.properties](/src/main/resources/application.properties) file.  
-4. Run the application by running `BotKitApplication` in your IDE or via commandline `$ mvn spring-boot:run`.  
+1. Clone this project `git clone git@github.com:ramswaroop/botkit.git`  
+2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token    
+3. Paste the token in [application.properties](/src/main/resources/application.properties) file    
+4. Run the application by running `BotKitApplication` in your IDE or via commandline `$ mvn spring-boot:run`  
 
 You can now start talking with your bot ;)
 
