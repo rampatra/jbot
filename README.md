@@ -8,7 +8,9 @@ the boilerplate code needed so that you can __make your bot live__ right away.
 ## SlackBot
 
 ### Getting started
-Running your SlackBot is just 4 easy steps:  
+
+**Running your SlackBot is just 4 easy steps:**
+  
 1. Clone this project `git clone git@github.com:ramswaroop/botkit.git`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
 3. Paste the token in [application.properties](/src/main/resources/application.properties) file.  
@@ -22,7 +24,7 @@ Botkit currently supports:
 * [Slack Slash Commands](http://api.slack.com/slash-commands)
 * [Slack Webhooks](http://api.slack.com/incoming-webhooks)
 
-### Core concepts
+### Basic Usage
 
 The main function of a Bot is to receive and reply messages. With this kit receiving messages is as easy as just
 writing a simple controller and replying to it by calling the `reply()` method as shown below:
@@ -30,7 +32,7 @@ writing a simple controller and replying to it by calling the `reply()` method a
 ```java
 @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
 public void onReceiveDM(WebSocketSession session, Event event) {
-    reply(session, event, new Message("Hi, I am Bot!"));
+    reply(session, event, new Message("Hi, I am a Slack Bot!"));
 }
 ```
 
