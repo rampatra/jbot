@@ -1,9 +1,9 @@
 # BotKit
 Building blocks for building bots.
 
-BotKit is a java spring-boot application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to make
-Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
-the boilerplate code needed so that you can make your bot live right away.
+__BotKit__ is a java spring-boot application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
+make Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
+the boilerplate code needed so that you can __make your bot live__ right away.
 
 ## SlackBot
 
@@ -16,7 +16,29 @@ Running your SlackBot is just 4 easy steps:
 
 You can now start talking with your bot ;)
 
+Botkit currently supports:
+
+* [Slack Real Time Messaging (RTM) API](http://api.slack.com/rtm)
+* [Slack Slash Commands](http://api.slack.com/slash-commands)
+* [Slack Webhooks](http://api.slack.com/incoming-webhooks)
+
 ### Core concepts
+
+The main function of a Bot is to receive and reply messages. With this kit receiving messages is as easy as just
+writing a simple controller and replying to it by calling the `reply()` method as shown below:
+
+```java
+@Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
+public void onReceiveDM(WebSocketSession session, Event event) {
+    reply(session, event, new Message("Hi, I am Bot!"));
+}
+```
+
+All the code for your bot goes in [SlackBot](/src/main/java/me/ramswaroop/botkit/slackbot/SlackBot.java) class which
+extends [Bot](/src/main/java/me/ramswaroop/botkit/slackbot/core/Bot.java) from the core package. You can have as many
+bots as you want, just make the class extend [Bot](/src/main/java/me/ramswaroop/botkit/slackbot/core/Bot.java) class
+and it gets all the powers of a Slack Bot.
+
 
 
 
