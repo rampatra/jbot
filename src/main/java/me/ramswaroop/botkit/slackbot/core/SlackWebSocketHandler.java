@@ -11,7 +11,8 @@ import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 /**
- * Created by ramswaroop on 05/06/2016.
+ * @author ramswaroop
+ * @version 05/06/2016
  */
 public class SlackWebSocketHandler extends AbstractWebSocketHandler {
 

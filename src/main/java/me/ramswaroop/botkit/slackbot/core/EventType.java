@@ -3,7 +3,8 @@ package me.ramswaroop.botkit.slackbot.core;
 import java.util.List;
 
 /**
- * Created by ramswaroop on 12/06/2016.
+ * @author ramswaroop
+ * @version 12/06/2016
  */
 public enum EventType {
     HELLO, MESSAGE, DIRECT_MENTION, DIRECT_MESSAGE, USER_TYPING, CHANNEL_MARKED, CHANNEL_CREATED, CHANNEL_JOINED,

@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.botkit.slackbot.core.models.Event;
-import me.ramswaroop.botkit.slackbot.core.models.Message;
-import me.ramswaroop.botkit.slackbot.core.models.RTM;
-import me.ramswaroop.botkit.slackbot.core.models.User;
+import me.ramswaroop.botkit.slackbot.core.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -29,7 +27,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Created by ramswaroop on 05/06/2016.
+ * @author ramswaroop
+ * @version 05/06/2016
  */
 public abstract class Bot {
 
@@ -39,26 +38,41 @@ public abstract class Bot {
      */
     private static final String RTM_ENDPOINT = "https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads";
     /**
-     * A Map for all controller methods
+     * A Map for all controller methods.
      */
     private final Map<String, Method> methodMap = new HashMap<>();
     /**
-     * Websocket url to connect to
+     * Websocket url to connect to.
      */
     private String webSocketUrl;
     /**
-     * Current logged in user
+     * Current logged in user.
      */
     protected User currentUser;
     /**
-     * List of channel ids to determine direct messages
+     * List of channel ids to determine direct messages.
      */
     protected List<String> dmChannels;
 
+    /**
+     * Class extending this must implement this as it's
+     * required to make the initial RTM.start() call.
+     * 
+     * @return
+     */
     public abstract String getSlackToken();
 
+    /**
+     * An instance of the Bot is required by
+     * the {@link SlackWebSocketHandler} class.
+     * 
+     * @return
+     */
     public abstract Bot getSlackBot();
 
+    /**
+     * Constructs a map of all the controller methods to handle RTM Events.
+     */
     {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
@@ -72,18 +86,46 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Invoked after a successful web socket connection is 
+     * established. You can override this method in the child classes.
+     * 
+     * @see WebSocketHandler#afterConnectionEstablished
+     * @param session
+     */
     public void afterConnectionEstablished(WebSocketSession session) {
         logger.debug("WebSocket connected: {}", session);
     }
 
+    /**
+     * Invoked after the web socket connection is closed.
+     * You can override this method in the child classes.
+     * 
+     * @see WebSocketHandler#afterConnectionClosed
+     * @param session
+     * @param status
+     */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         logger.debug("WebSocket closed: {}, Close Status: {}", session, status.toString());
     }
 
+    /**
+     * Handles an error from the underlying WebSocket message transport.
+     * 
+     * @see WebSocketHandler#handleTransportError
+     * @param session
+     * @param exception
+     */
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         logger.error("Transport Error: {}", exception);
     }
 
+    /**
+     * 
+     * @param session
+     * @param textMessage
+     * @throws Exception
+     */
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Event event = mapper.readValue(textMessage.getPayload(), Event.class);
@@ -99,9 +141,16 @@ public abstract class Bot {
         invokeMethods(session, event);
     }
 
+    /**
+     * 
+     * @param session
+     * @param event
+     * @param reply
+     */
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
             reply.setType(EventType.MESSAGE.name().toLowerCase());
+            reply.setText(encode(reply.getText()));
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
             }
@@ -111,6 +160,32 @@ public abstract class Bot {
         }
     }
 
+    // TODO
+    public final void reply(String url, Message message) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity(url, message, Message.class);
+    }
+
+    // TODO
+    public final void reply(String url, Attachment attachment) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity(url, attachment, Attachment.class);
+    }
+
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    private String encode(String message) {
+        return message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    /**
+     * 
+     * @param session
+     * @param event
+     */
     private void invokeMethods(WebSocketSession session, Event event) {
         try {
             Method method = methodMap.get(event.getType().toUpperCase());
@@ -122,6 +197,10 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Fetches the web socket url to connect to and 
+     * also constructs the RTM object.
+     */
     private void startRTM() {
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -155,12 +234,14 @@ public abstract class Bot {
             restTemplate.setMessageConverters(httpMessageConverters);
 
             ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
-            webSocketUrl = response.getBody().getUrl();
-            dmChannels = response.getBody().getDmChannels();
-            currentUser = response.getBody().getUser();
-
-            logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
-
+            if (response.getBody() != null) {
+                webSocketUrl = response.getBody().getUrl();
+                dmChannels = response.getBody().getDmChannels();
+                currentUser = response.getBody().getUser();
+                logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
+            } else {
+                logger.debug("RTM response invalid. Response: {}", response);
+            }
         } catch (RestClientException e) {
             logger.error("RTM connection error. Exception: {}", e.getMessage());
         }
@@ -174,9 +255,13 @@ public abstract class Bot {
         return new SlackWebSocketHandler(getSlackBot());
     }
 
+    /**
+     * Entry point where the web socket connection starts
+     * and after which your bot becomes live.
+     */
     @PostConstruct
     private void startWebSocketConnection() {
-        startRTM();
+        startRTM(); // fetches the web socket url
         WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
         manager.start();
     }
