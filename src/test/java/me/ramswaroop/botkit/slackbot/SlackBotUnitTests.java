@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  * @author ramswaroop
  * @version 20/06/2016
  */
-public class SlackBotTest {
+public class SlackBotUnitTests {
     
     @Test
     public void numberOfEventsType() {
