@@ -1,9 +1,7 @@
 package me.ramswaroop.botkit.slackbot;
 
 import me.ramswaroop.botkit.slackbot.core.models.Attachment;
-import me.ramswaroop.botkit.slackbot.core.models.Error;
 import me.ramswaroop.botkit.slackbot.core.models.RichMessage;
-import org.hibernate.validator.cfg.defs.AssertTrueDef;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Sample Slash Command Handler.
+ * 
  * @author ramswaroop
- * @version 20/06/2016
+ * @version 1.0.0, 20/06/2016
  */
 @RestController
 public class SlackSlashCommand {
@@ -23,6 +23,10 @@ public class SlackSlashCommand {
 
 
     /**
+     * Slash Command handler. When a user types for example "/app help"
+     * then slack sends a POST request to this endpoint. So, this endpoint 
+     * should match the url you set while creating the Slack Slash Command.
+     * 
      * @param token
      * @param teamId
      * @param teamDomain
@@ -50,7 +54,7 @@ public class SlackSlashCommand {
                                              @RequestParam("response_url") String responseUrl) {
         // validate token
         if (!token.equals(slackToken)) {
-            // return error;
+            return new RichMessage("Sorry! You're not lucky enough to use our slack command.");
         }        
         
         /** build response */

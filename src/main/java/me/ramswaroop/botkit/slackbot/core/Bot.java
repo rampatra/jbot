@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.botkit.slackbot.core.models.*;
+import me.ramswaroop.botkit.slackbot.core.models.Event;
+import me.ramswaroop.botkit.slackbot.core.models.Message;
+import me.ramswaroop.botkit.slackbot.core.models.RTM;
+import me.ramswaroop.botkit.slackbot.core.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +30,11 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * Base class for making Slack Bots. Any class extending
+ * this will get all powers of a Slack Bot.
+ *
  * @author ramswaroop
- * @version 05/06/2016
+ * @version 1.0.0, 05/06/2016
  */
 public abstract class Bot {
 
@@ -57,7 +63,7 @@ public abstract class Bot {
     /**
      * Class extending this must implement this as it's
      * required to make the initial RTM.start() call.
-     * 
+     *
      * @return
      */
     public abstract String getSlackToken();
@@ -65,15 +71,14 @@ public abstract class Bot {
     /**
      * An instance of the Bot is required by
      * the {@link SlackWebSocketHandler} class.
-     * 
+     *
      * @return
      */
     public abstract Bot getSlackBot();
 
     /**
-     * Constructs a map of all the controller methods to handle RTM Events.
-     */
-    {
+     * Construct a map of all the controller methods to handle RTM Events.
+     */ {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Controller.class)) {
@@ -87,11 +92,11 @@ public abstract class Bot {
     }
 
     /**
-     * Invoked after a successful web socket connection is 
+     * Invoked after a successful web socket connection is
      * established. You can override this method in the child classes.
-     * 
-     * @see WebSocketHandler#afterConnectionEstablished
+     *
      * @param session
+     * @see WebSocketHandler#afterConnectionEstablished
      */
     public void afterConnectionEstablished(WebSocketSession session) {
         logger.debug("WebSocket connected: {}", session);
@@ -100,28 +105,29 @@ public abstract class Bot {
     /**
      * Invoked after the web socket connection is closed.
      * You can override this method in the child classes.
-     * 
-     * @see WebSocketHandler#afterConnectionClosed
+     *
      * @param session
      * @param status
+     * @see WebSocketHandler#afterConnectionClosed
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         logger.debug("WebSocket closed: {}, Close Status: {}", session, status.toString());
     }
 
     /**
-     * Handles an error from the underlying WebSocket message transport.
-     * 
-     * @see WebSocketHandler#handleTransportError
+     * Handle an error from the underlying WebSocket message transport.
+     *
      * @param session
      * @param exception
+     * @see WebSocketHandler#handleTransportError
      */
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         logger.error("Transport Error: {}", exception);
     }
 
     /**
-     * 
+     * Invoked when a new WebSocket text message arrives.
+     *
      * @param session
      * @param textMessage
      * @throws Exception
@@ -142,7 +148,9 @@ public abstract class Bot {
     }
 
     /**
-     * 
+     * Method to send a reply back to Slack after receiving an {@link Event}.
+     * Learn <a href="https://api.slack.com/rtm">more on sending responses to Slack.</a>
+     *
      * @param session
      * @param event
      * @param reply
@@ -160,29 +168,21 @@ public abstract class Bot {
         }
     }
 
-    // TODO
-    public final void reply(String url, Message message) {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity(url, message, Message.class);
-    }
-
-    // TODO
-    public final void reply(String url, Attachment attachment) {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity(url, attachment, Attachment.class);
-    }
-
     /**
-     * 
+     * Encode the text before sending to Slack.
+     * Learn <a href="https://api.slack.com/docs/formatting">more on message formatting in Slack</a>
+     *
      * @param message
-     * @return
+     * @return encoded text.
      */
     private String encode(String message) {
         return message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
     /**
-     * 
+     * Invoke the methods with {@link EventType} as that of
+     * the event type received from Slack.
+     *
      * @param session
      * @param event
      */
@@ -198,7 +198,7 @@ public abstract class Bot {
     }
 
     /**
-     * Fetches the web socket url to connect to and 
+     * Fetch the web socket url to connect to and
      * also constructs the RTM object.
      */
     private void startRTM() {

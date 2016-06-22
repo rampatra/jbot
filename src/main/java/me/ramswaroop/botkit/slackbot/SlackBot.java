@@ -16,13 +16,16 @@ import org.springframework.web.socket.WebSocketSession;
  * extending {@link Bot} class like this one.
  *
  * @author ramswaroop
- * @date 05/06/2016
+ * @version 1.0.0, 05/06/2016
  */
 @Component
 public class SlackBot extends Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
+    /**
+     * Slack token from application.properties file
+     */
     @Value("${slackBotToken}")
     private String slackToken;
 
@@ -36,11 +39,24 @@ public class SlackBot extends Bot {
         return this;
     }
 
+    /**
+     * Invoked when the bot receives an event of type direct mention 
+     * or direct message.
+     * 
+     * @param session
+     * @param event
+     */
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
     public void onReceiveDM(WebSocketSession session, Event event) {
         reply(session, event, new Message("Hi, I am " + currentUser.getName()));
     }
 
+    /**
+     * Invoked when bot receives an event of type message.
+     * 
+     * @param session
+     * @param event
+     */
     @Controller(events = EventType.MESSAGE)
     public void onReceiveMessage(WebSocketSession session, Event event) {
         reply(session, event, new Message("Hi, this is a message!"));

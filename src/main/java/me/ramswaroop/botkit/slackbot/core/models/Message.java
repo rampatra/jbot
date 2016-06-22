@@ -18,7 +18,8 @@ public class Message {
     private String user;
     private String text;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String text) {
         this.text = text;

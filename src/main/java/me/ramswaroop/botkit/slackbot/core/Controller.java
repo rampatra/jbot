@@ -6,8 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author amswaroop
- * @version 12/06/2016.
+ * Annotation for different Event types in Slack RTM API.
+ * 
+ * @author ramswaroop
+ * @version 1.0.0, 12/06/2016.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

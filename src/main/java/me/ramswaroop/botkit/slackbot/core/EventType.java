@@ -1,10 +1,11 @@
 package me.ramswaroop.botkit.slackbot.core;
 
-import java.util.List;
-
 /**
+ * All events supported by Slack RTM API plus
+ * two events added by botkit.
+ *
  * @author ramswaroop
- * @version 12/06/2016
+ * @version 1.0.0, 12/06/2016
  */
 public enum EventType {
     HELLO, MESSAGE, DIRECT_MENTION, DIRECT_MESSAGE, USER_TYPING, CHANNEL_MARKED, CHANNEL_CREATED, CHANNEL_JOINED,

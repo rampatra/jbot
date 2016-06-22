@@ -7,8 +7,6 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
-import org.springframework.web.socket.handler.BinaryWebSocketHandler;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 /**
  * @author ramswaroop
@@ -36,7 +34,7 @@ public class SlackWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
-        logger.error("Binary message currently not supported by BotKit");
+        logger.error("Binary messages are not supported in Slack RTM API");
     }
 
     @Override

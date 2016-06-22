@@ -15,6 +15,13 @@ public class RichMessage {
     private String responseType;
     private Attachment[] attachments;
 
+    public RichMessage() {
+    }
+
+    public RichMessage(String text) {
+        this.text = text;
+    }
+
     public String getUsername() {
         return username;
     }
