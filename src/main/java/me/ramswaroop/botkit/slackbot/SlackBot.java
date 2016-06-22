@@ -23,7 +23,7 @@ public class SlackBot extends Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
-    @Value("${slackToken}")
+    @Value("${slackBotToken}")
     private String slackToken;
 
     @Override

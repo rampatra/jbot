@@ -24,7 +24,7 @@ The main function of a Bot is to receive and reply messages. With this kit recei
 writing a simple controller and replying to it by calling the `reply()` method as shown below:
 
 ```java
-@Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
+@Controller(events = EventType.MESSAGE)
 public void onReceiveDM(WebSocketSession session, Event event) {
     reply(session, event, new Message("Hi, I am a Slack Bot!"));
 }

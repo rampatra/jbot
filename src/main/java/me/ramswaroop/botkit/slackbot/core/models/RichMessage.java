@@ -1,13 +1,17 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author ramswaroop
- * @version 20/06/2016
+ * @version 21/06/2016
  */
-public class CommandResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RichMessage {
     private String username;
     private String iconEmoji;
     private String channel;
+    private String text;
     private String responseType;
     private Attachment[] attachments;
 
@@ -33,6 +37,14 @@ public class CommandResponse {
 
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getResponseType() {
