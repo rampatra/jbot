@@ -11,6 +11,7 @@ import me.ramswaroop.botkit.slackbot.core.models.RTM;
 import me.ramswaroop.botkit.slackbot.core.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -42,7 +43,8 @@ public abstract class Bot {
     /**
      * Endpoint for RTM.start()
      */
-    private static final String RTM_ENDPOINT = "https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads";
+    @Value("${rtmUrl}")
+    private String rtmUrl;
     /**
      * A Map for all controller methods.
      */
@@ -70,7 +72,7 @@ public abstract class Bot {
 
     /**
      * An instance of the Bot is required by
-     * the {@link SlackWebSocketHandler} class.
+     * the {@link BotWebSocketHandler} class.
      *
      * @return
      */
@@ -233,7 +235,7 @@ public abstract class Bot {
             httpMessageConverters.add(jsonConverter);
             restTemplate.setMessageConverters(httpMessageConverters);
 
-            ResponseEntity<RTM> response = restTemplate.getForEntity(RTM_ENDPOINT, RTM.class, getSlackToken());
+            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, getSlackToken());
             if (response.getBody() != null) {
                 webSocketUrl = response.getBody().getUrl();
                 dmChannels = response.getBody().getDmChannels();
@@ -251,8 +253,8 @@ public abstract class Bot {
         return new StandardWebSocketClient();
     }
 
-    private SlackWebSocketHandler handler() {
-        return new SlackWebSocketHandler(getSlackBot());
+    private BotWebSocketHandler handler() {
+        return new BotWebSocketHandler(getSlackBot());
     }
 
     /**

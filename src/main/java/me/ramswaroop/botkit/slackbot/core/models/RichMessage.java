@@ -21,6 +21,11 @@ public class RichMessage {
     public RichMessage(String text) {
         this.text = text;
     }
+    
+    public RichMessage encodedMessage() {
+        this.setText(this.getText().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
+        return this;
+    }
 
     public String getUsername() {
         return username;

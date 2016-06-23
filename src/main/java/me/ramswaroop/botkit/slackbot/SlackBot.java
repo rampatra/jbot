@@ -24,7 +24,8 @@ public class SlackBot extends Bot {
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
     /**
-     * Slack token from application.properties file
+     * Slack token from application.properties file. You get your slack token 
+     * after <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
      */
     @Value("${slackBotToken}")
     private String slackToken;

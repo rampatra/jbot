@@ -12,13 +12,13 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
  * @author ramswaroop
  * @version 05/06/2016
  */
-public class SlackWebSocketHandler extends AbstractWebSocketHandler {
+public class BotWebSocketHandler extends AbstractWebSocketHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(SlackWebSocketHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(BotWebSocketHandler.class);
 
     private Bot bot;
 
-    public SlackWebSocketHandler(Bot bot) {
+    public BotWebSocketHandler(Bot bot) {
         this.bot = bot;
     }
 

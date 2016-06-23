@@ -1,5 +1,6 @@
 package me.ramswaroop.botkit.slackbot;
 
+import me.ramswaroop.botkit.slackbot.core.SlashCommand;
 import me.ramswaroop.botkit.slackbot.core.models.Attachment;
 import me.ramswaroop.botkit.slackbot.core.models.RichMessage;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0, 20/06/2016
  */
 @RestController
-public class SlackSlashCommand {
+public class SlackSlashCommand extends SlashCommand {
 
+    /**
+     * The token you get while creating a new Slash Command. You
+     * should paste the token in application.properties file.
+     */
     @Value("${slashCommandToken}")
     private String slackToken;
 
@@ -58,14 +63,13 @@ public class SlackSlashCommand {
         }        
         
         /** build response */
-        RichMessage richMessage = new RichMessage();
-        richMessage.setText("The is Slash Commander!");
+        RichMessage richMessage = new RichMessage("The is Slash Commander!");
         richMessage.setResponseType("in_channel");
         // set attachments
         Attachment[] attachments = new Attachment[1];
         attachments[0] = new Attachment();
         attachments[0].setText("I will perform all tasks for you.");
         richMessage.setAttachments(attachments);
-        return richMessage;
+        return richMessage.encodedMessage(); // don't forget to send the encoded message to Slack
     }
 }
