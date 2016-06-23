@@ -11,14 +11,14 @@ import static org.junit.Assert.assertEquals;
  */
 public class SlackBotUnitTests {
     
+    /**
+     * Number of events in {@link EventType} should be
+     * equal to the number of events supported by slack
+     * plus 2 added by BotKit.
+     */
     @Test
     public void numberOfEventsType() {
         EventType[] events = EventType.values();
-        /**
-         * Number of events in {@link EventType} should be
-         * equal to the number of events supported by slack
-         * plus 2 added by BotKit.
-         */
         assertEquals(events.length, 70);
     }
 }

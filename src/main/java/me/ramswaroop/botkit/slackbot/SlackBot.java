@@ -41,7 +41,9 @@ public class SlackBot extends Bot {
 
     /**
      * Invoked when the bot receives an event of type direct mention 
-     * or direct message.
+     * or direct message. NOTE: These two event types are added by botkit
+     * to make your task easier, Slack doesn't have any direct way to 
+     * determine these type of events.
      * 
      * @param session
      * @param event
@@ -60,6 +62,17 @@ public class SlackBot extends Bot {
     @Controller(events = EventType.MESSAGE)
     public void onReceiveMessage(WebSocketSession session, Event event) {
         reply(session, event, new Message("Hi, this is a message!"));
+    }
+
+    /**
+     * Invoked when bot receives an event of type file shared.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller(events = EventType.FILE_SHARED)
+    public void onFileShared(WebSocketSession session, Event event) {
+        reply(session, event, new Message("Thanks for sharing the file!"));
     }
     
 }
