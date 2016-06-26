@@ -70,7 +70,7 @@ is where you `POST` data from outside (i.e, your app) to Slack and
 
 You need to first paste your tokens/urls in [application.properties](/src/main/resources/application.properties) file:
  
-```java
+```.properties
 slackBotToken=xoxb-50014434-slacktokenx29U9X1bQ
 slashCommandToken=X73Fv3tokenx242CdpEq
 slackIncomingWebhookUrl=https://hooks.slack.com/services/T02WEBHOOKURLV7oOYvPiHL7y6
@@ -115,7 +115,7 @@ listen to `EventType.MESSAGE` events if you do not specify any events explicitly
 
 In __Slash Commands__, you receive a `GET` or `POST` request as below:
 
-```
+```.properties
 token=gIkuvaNzQIHg97ATvDxqgjtO
 team_id=T0001
 team_domain=example
@@ -140,7 +140,7 @@ as [RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMe
 
 In __Outgoing Webhooks__, you receive a `POST` request from Slack like below:  
 
-```
+```.properties
 token=mbxmjpceetMUz2hfecqM31KC
 team_id=T0001
 team_domain=example
