@@ -94,7 +94,7 @@ For __Bots__, you receive a message as [Event](/src/main/java/me/ramswaroop/botk
 almost all actions Slack fires a relevant [event](https://api.slack.com/events) for it. Unfortunately, it does not fire
 appropriate events when someone directly messages the bot (direct message) or mentions the bot on a channel 
 (like `@bot`). It just fires an event of type `message` for all the messages (directly to bot and to channels where bot
-is a member) sent. But guess what, you're at the right place now, BotKit handles that for you. It fires two extra 
+is a member) sent. But guess what, you're at the right place now, BotKit handles that for you. It supports two extra 
 events `EventType.DIRECT_MESSAGE` and `EventType.DIRECT_MENTION` in addition to all the currently supported
 [Slack events](https://api.slack.com/events).
 
@@ -109,7 +109,52 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
+What you're doing here is annotating a method with [@Controller](/src/main/java/me/ramswaroop/botkit/slackbot/core/Controller.java)
+annotation and passing an array events to that annotation which you want to listen to. By default your controller will
+listen to `EventType.MESSAGE` events if you do not specify any events explicitly. 
 
+In __Slash Commands__, you receive a `GET` or `POST` request as below:
+
+```
+token=gIkuvaNzQIHg97ATvDxqgjtO
+team_id=T0001
+team_domain=example
+channel_id=C2147483705
+channel_name=test
+user_id=U2147483697
+user_name=Steve
+command=/weather
+text=94070
+response_url=https://hooks.slack.com/commands/1234/5678
+```
+
+If you have configured for `POST` requests, data will be sent to your URL with a `content-type` header set as 
+`application/x-www-form-urlencoded`. If you've chosen to have your slash command's URL receive invocations as a `GET`
+request, no explicit `content-type` header will be set.
+
+__NOTE:__ The URL you provide must be a __HTTPS URL__ with a valid, verifiable __SSL certificate__.
+
+In __Incoming Webhooks__, your [application](/src/main/java/me/ramswaroop/botkit/slackbot/SlackWebhooks.java) `POST` 
+data and do not receive any data apart from the acknowledgement for your sent data. You send data
+as [RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java) to Slack Webhook URL.
+
+In __Outgoing Webhooks__, you receive a `POST` request from Slack like below:  
+
+```
+token=mbxmjpceetMUz2hfecqM31KC
+team_id=T0001
+team_domain=example
+channel_id=C2147483705
+channel_name=test
+timestamp=1355517523.000005
+user_id=U2147483697
+user_name=Steve
+text=googlebot: What is the air-speed velocity of an unladen swallow?
+trigger_word=googlebot:
+```
+
+Please note that the content of [message attachments](https://api.slack.com/docs/attachments) will not be included in 
+the outgoing `POST` data in case of Outgoing Webhooks.
 
 #### Sending Messages
 
