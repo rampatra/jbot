@@ -158,9 +158,64 @@ the outgoing `POST` data in case of Outgoing Webhooks.
 
 #### Sending Messages
 
+In __Bots__, you can use the `reply()` method defined in [Bot](/src/main/java/me/ramswaroop/botkit/slackbot/core/Bot.java)
+class to send messages to Slack. You just need to set the text you want to send in 
+[Message](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Message.java) and everything else will be taken care 
+by BotKit. But you can set other fields if you want such as `id` in the message.
 
+Here is an example:
+```java
+@Controller(events = EventType.MESSAGE)
+public void onReceiveMessage(WebSocketSession session, Event event) {
+    reply(session, event, new Message("Hi, this is a message!"));
+}
+```
 
-### Deploy to the Cloud
+Under the hood the message sent is nothing but a json like below:
+```json
+{
+    "id": 1,
+    "type": "message",
+    "channel": "C024BE91L",
+    "text": "Hi, this is a message!"
+}
+```
+
+For __Slash Commands__ and __Incoming Webhooks__, you can send messages as 
+[RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java). Just keep in mind to encode it
+before sending by just calling the `encode()` method. Below is an example:
+```java
+@RequestMapping(value = "/slash-command",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
+                                         @RequestParam("team_id") String teamId,
+                                         @RequestParam("team_domain") String teamDomain,
+                                         @RequestParam("channel_id") String channelId,
+                                         @RequestParam("channel_name") String channelName,
+                                         @RequestParam("user_id") String userId,
+                                         @RequestParam("user_name") String userName,
+                                         @RequestParam("command") String command,
+                                         @RequestParam("text") String text,
+                                         @RequestParam("response_url") String responseUrl) {
+    // validate token
+    if (!token.equals(slackToken)) {
+        return new RichMessage("Sorry! You're not lucky enough to use our slack command.");
+    }        
+    
+    /** build response */
+    RichMessage richMessage = new RichMessage("The is Slash Commander!");
+    richMessage.setResponseType("in_channel");
+    // set attachments
+    Attachment[] attachments = new Attachment[1];
+    attachments[0] = new Attachment();
+    attachments[0].setText("I will perform all tasks for you.");
+    richMessage.setAttachments(attachments);
+    return richMessage.encodedMessage(); // don't forget to send the encoded message to Slack
+}
+```
+
+#### Deploy to the Cloud
 
 Bokit is Heroku ready, to deploy you need to perform the below simple steps: 
 
