@@ -183,7 +183,7 @@ Under the hood the message sent is nothing but a json like below:
 
 For __Slash Commands__ and __Incoming Webhooks__, you can send messages as 
 [RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java). Just keep in mind to encode it
-before sending by just calling the `encode()` method. Below is an example:
+before sending by just calling the `encodedMessage()` method. Below is an example:
 ```java
 @RequestMapping(value = "/slash-command",
             method = RequestMethod.POST,
