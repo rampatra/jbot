@@ -94,12 +94,14 @@ For __Bots__, you receive a message as [Event](/src/main/java/me/ramswaroop/botk
 almost all actions Slack fires a relevant [event](https://api.slack.com/events) for it. Unfortunately, it does not fire
 appropriate events when someone directly messages the bot (direct message) or mentions the bot on a channel 
 (like `@bot`). It just fires an event of type `message` for all the messages (directly to bot and to channels where bot
-is a member) sent. But guess what, you're at the right place now, BotKit handles that for you. It supports two extra 
-events `EventType.DIRECT_MESSAGE` and `EventType.DIRECT_MENTION` in addition to all the currently supported
-[Slack events](https://api.slack.com/events).
+is a member) sent. 
+
+But guess what, you're at the right place now, BotKit handles that for you. It supports three extra 
+events `EventType.DIRECT_MESSAGE`, `EventType.DIRECT_MENTION` and `EventType.ACK` in addition to all the currently 
+supported [Slack events](https://api.slack.com/events). The first two events are self-explanatory, the `EventType.ACK` 
+event is nothing but an acknowledgement event which acknowledges the delivery of a previously sent message. 
 
 To receive and parse slack bot events you just need to have this:
-
 ```java
 @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
 public void onReceiveDM(WebSocketSession session, Event event) {
@@ -217,7 +219,7 @@ public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
 
 #### Deploy to the Cloud
 
-Bokit is Heroku ready, to deploy you need to perform the below simple steps: 
+Bokit is Heroku ready. To deploy, you need to perform the below simple steps: 
 
 1. Clone this project `$ git clone git@github.com:ramswaroop/botkit.git` and `$ cd botkit`.
 2. Get your [slack bot token](https://my.slack.com/services/new/bot) or 

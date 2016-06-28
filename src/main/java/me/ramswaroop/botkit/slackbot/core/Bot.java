@@ -77,10 +77,9 @@ public abstract class Bot {
      * @return
      */
     public abstract Bot getSlackBot();
-
-    /**
-     * Construct a map of all the controller methods to handle RTM Events.
-     */ {
+    
+    // Construct a map of all the controller methods to handle RTM Events. 
+    {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Controller.class)) {
@@ -137,14 +136,18 @@ public abstract class Bot {
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Event event = mapper.readValue(textMessage.getPayload(), Event.class);
-        if (event.getType() != null && event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
-            dmChannels.add(event.getChannelId());
-        } else if (event.getType() != null && event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
-            if (event.getText().contains(currentUser.getId())) { // direct mention
-                event.setType(EventType.DIRECT_MENTION.name());
-            } else if (dmChannels.contains(event.getChannelId())) { // direct message
-                event.setType(EventType.DIRECT_MESSAGE.name());
+        if (event.getType() != null) {
+            if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
+                dmChannels.add(event.getChannelId());
+            } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
+                if (event.getText().contains(currentUser.getId())) { // direct mention
+                    event.setType(EventType.DIRECT_MENTION.name());
+                } else if (dmChannels.contains(event.getChannelId())) { // direct message
+                    event.setType(EventType.DIRECT_MESSAGE.name());
+                }
             }
+        } else { // slack does not send any TYPE for acknowledgement messages
+            event.setType(EventType.ACK.name());
         }
         invokeMethods(session, event);
     }
@@ -195,7 +198,7 @@ public abstract class Bot {
                 method.invoke(this, session, event);
             }
         } catch (Exception e) {
-            logger.error("Error invoking controller: {}", e.getMessage());
+            logger.error("Error invoking controller: ", e);
         }
     }
 
@@ -225,8 +228,8 @@ public abstract class Bot {
                         }
                         rtm.setDmChannels(dmChannels);
                         return rtm;
-                    } catch (IOException e) {
-                        logger.error("Error de-serializing RTM.start(): {}", e.getMessage());
+                    } catch (Exception e) {
+                        logger.error("Error de-serializing RTM.start(): ", e);
                         return null;
                     }
                 }
@@ -264,7 +267,11 @@ public abstract class Bot {
     @PostConstruct
     private void startWebSocketConnection() {
         startRTM(); // fetches the web socket url
-        WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
-        manager.start();
+        if (webSocketUrl != null) {
+            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
+            manager.start();
+        } else {
+            
+        }
     }
 }

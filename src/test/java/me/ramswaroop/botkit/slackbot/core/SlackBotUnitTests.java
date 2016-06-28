@@ -14,11 +14,11 @@ public class SlackBotUnitTests {
     /**
      * Number of events in {@link EventType} should be
      * equal to the number of events supported by slack
-     * plus 2 added by BotKit.
+     * plus 3 added by BotKit.
      */
     @Test
     public void numberOfEventsType() {
         EventType[] events = EventType.values();
-        assertEquals(events.length, 70);
+        assertEquals(events.length, 71);
     }
 }
