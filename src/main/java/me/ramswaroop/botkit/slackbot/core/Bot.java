@@ -271,7 +271,7 @@ public abstract class Bot {
             WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
             manager.start();
         } else {
-            
+            logger.error("No websocket url returned by Slack.");
         }
     }
 }
