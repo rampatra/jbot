@@ -77,7 +77,7 @@ public abstract class Bot {
      * @return
      */
     public abstract Bot getSlackBot();
-    
+
     // Construct a map of all the controller methods to handle RTM Events. 
     {
         Method[] methods = this.getClass().getMethods();
@@ -181,7 +181,7 @@ public abstract class Bot {
      * @return encoded text.
      */
     private String encode(String message) {
-        return message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        return message == null ? null : message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
     /**

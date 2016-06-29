@@ -220,7 +220,7 @@ public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
 __NOTE:__ [Event](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Event.java), 
 [Message](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Message.java) and 
 [RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java) are generic classes. Not all the 
-time, all the attributes present in them will have values. For example, [Slack sends different responses for different
+time, all the attributes present in them will have values. In other words, [Slack sends different responses for different
 events](https://api.slack.com/events/hello).
 
 
