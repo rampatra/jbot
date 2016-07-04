@@ -66,7 +66,7 @@ and `POST` calls to your app. Finally, __Webhooks__ can be of two types, Incomin
 is where you `POST` data from outside (i.e, your app) to Slack and 
 [__Outgoing webhooks__](https://api.slack.com/outgoing-webhooks) is where Slack `POST` data to an endpoint you specify.
 
-#### Setting up your Bot
+#### Setting up your app
 
 You need to first paste your tokens/urls in [application.properties](/src/main/resources/application.properties) file:
  
