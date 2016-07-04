@@ -21,11 +21,11 @@ You can now start talking with your bot ;)
 ### Why use Botkit for Slack?
 
 * Provides you with all the boilerplate code which handles underlying websocket connections and other complexities.  
-* Fires events in addition to all the [events supported by Slack RTM API](https://api.slack.com/events)
-  which makes your work even easier.  
+* Fires specific events in addition to all the [events supported by Slack RTM API](https://api.slack.com/events)
+  which makes your work a lot more easier.  
 * Receiving & sending messages is as easy as defining a `controller` method and calling `reply()`, you don't need to 
   manually parse any events nor manually encode any messages before sending.  
-* Well tested with various unit tests.  
+* Well tested with unit tests.  
 
 ### Basic Usage
 
