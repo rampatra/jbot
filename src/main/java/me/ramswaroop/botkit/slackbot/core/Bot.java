@@ -135,21 +135,25 @@ public abstract class Bot {
      */
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Event event = mapper.readValue(textMessage.getPayload(), Event.class);
-        if (event.getType() != null) {
-            if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
-                dmChannels.add(event.getChannelId());
-            } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
-                if (event.getText().contains(currentUser.getId())) { // direct mention
-                    event.setType(EventType.DIRECT_MENTION.name());
-                } else if (dmChannels.contains(event.getChannelId())) { // direct message
-                    event.setType(EventType.DIRECT_MESSAGE.name());
+        try {
+            Event event = mapper.readValue(textMessage.getPayload(), Event.class);
+            if (event.getType() != null) {
+                if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
+                    dmChannels.add(event.getChannelId());
+                } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
+                    if (event.getText() != null && event.getText().contains(currentUser.getId())) { // direct mention
+                        event.setType(EventType.DIRECT_MENTION.name());
+                    } else if (dmChannels.contains(event.getChannelId())) { // direct message
+                        event.setType(EventType.DIRECT_MESSAGE.name());
+                    }
                 }
+            } else { // slack does not send any TYPE for acknowledgement messages
+                event.setType(EventType.ACK.name());
             }
-        } else { // slack does not send any TYPE for acknowledgement messages
-            event.setType(EventType.ACK.name());
+            invokeMethods(session, event);
+        } catch (Exception e) {
+            logger.error("Error handling response from Slack: {}. \nException: ", textMessage.getPayload(), e);
         }
-        invokeMethods(session, event);
     }
 
     /**
