@@ -10,6 +10,7 @@
 
 	<name>BotKit</name>
 	<description>Building blocks for building bots.</description>
+	<url>https://github.com/ramswaroop/botkit</url>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
