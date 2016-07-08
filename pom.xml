@@ -28,7 +28,7 @@
 		<repository>
 			<id>github-repo</id>
 			<name>Github Repository</name>
-			<url>scm:git@github.com:ramswaroop/botkit.git</url>
+			<url>git@github.com:ramswaroop/botkit.git</url>
 		</repository>
 	</distributionManagement>
 
