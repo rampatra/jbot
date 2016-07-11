@@ -1,1 +1,1 @@
-web: java -Dserver.port=8080 -jar  target/botkit-1.0.0-SNAPSHOT.jar
+web: java -Dserver.port=8080 -jar  target/botkit-1.0.0.jar
