@@ -172,6 +172,9 @@ public abstract class Bot {
                 reply.setChannel(event.getChannelId());
             }
             session.sendMessage(new TextMessage(reply.toJSONString()));
+            if (logger.isDebugEnabled()) {  // For debugging purpose only
+                logger.debug("Reply (Message): {}", reply.toJSONString());
+            }
         } catch (IOException e) {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }

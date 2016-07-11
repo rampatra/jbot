@@ -1,7 +1,11 @@
 package me.ramswaroop.botkit.slackbot;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.botkit.slackbot.core.models.Attachment;
 import me.ramswaroop.botkit.slackbot.core.models.RichMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +24,8 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class SlackWebhooks {
+
+    private static final Logger logger = LoggerFactory.getLogger(SlackWebhooks.class);
 
     /**
      * The Url you get while configuring a new incoming webhook
@@ -41,6 +47,16 @@ public class SlackWebhooks {
         attachments[0] = new Attachment();
         attachments[0].setText("Some data relevant to your users.");
         richMessage.setAttachments(attachments);
+
+        // For debugging purpose only
+        if (logger.isDebugEnabled()) {
+            try {
+                logger.debug("Reply (RichMessage): {}", new ObjectMapper().writeValueAsString(richMessage));
+            } catch (JsonProcessingException e) {
+                logger.debug("Error parsing RichMessage: ", e);
+            }
+        }
+        
         // always remember to send the encoded message to Slack
         restTemplate.postForEntity(slackIncomingWebhookUrl, richMessage.encodedMessage(), String.class);
     }

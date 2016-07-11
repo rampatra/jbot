@@ -1,7 +1,11 @@
 package me.ramswaroop.botkit.slackbot;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.botkit.slackbot.core.models.Attachment;
 import me.ramswaroop.botkit.slackbot.core.models.RichMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class SlackSlashCommand {
+
+    private static final Logger logger = LoggerFactory.getLogger(SlackSlashCommand.class);
 
     /**
      * The token you get while creating a new Slash Command. You
@@ -69,6 +75,16 @@ public class SlackSlashCommand {
         attachments[0] = new Attachment();
         attachments[0].setText("I will perform all tasks for you.");
         richMessage.setAttachments(attachments);
+        
+        // For debugging purpose only
+        if (logger.isDebugEnabled()) {
+            try {
+                logger.debug("Reply (RichMessage): {}", new ObjectMapper().writeValueAsString(richMessage));
+            } catch (JsonProcessingException e) {
+                logger.debug("Error parsing RichMessage: ", e);
+            }
+        }
+        
         return richMessage.encodedMessage(); // don't forget to send the encoded message to Slack
     }
 }
