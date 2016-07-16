@@ -115,6 +115,22 @@ What you're doing here is annotating a method with [@Controller](/src/main/java/
 annotation and passing an array events to that annotation which you want to listen to. By default your controller will
 listen to `EventType.MESSAGE` events if you do not specify any events explicitly. 
 
+You can also add regular expressions to your [@Controller](/src/main/java/me/ramswaroop/botkit/slackbot/core/Controller.java)
+annotation like:
+
+```java
+@Controller(events = EventType.MESSAGE, pattern = "([a-zA-Z ]{1,})(\\d+)([a-zA-Z ]{1,})")
+public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
+    reply(session, event, new Message("First group: " + matcher.group(0) + "\n" +
+            "Second group: " + matcher.group(1) + "\n" +
+            "Third group: " + matcher.group(2) + "\n" +
+            "Fourth group: " + matcher.group(3)));
+}
+```
+
+You can __optionally__ have the `matcher` as a formal parameter in the method if you want to work on the values sent 
+by the user. But do keep the order of parameters as shown above.
+
 In __Slash Commands__, you receive a `GET` or `POST` request as below:
 
 ```.properties
