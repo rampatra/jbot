@@ -236,6 +236,8 @@ public abstract class Bot {
      * @param methodWrappers
      */
     private void filterMethodsBasedOnPattern(Event event, List<MethodWrapper> methodWrappers) {
+        if (methodWrappers == null) return;
+        
         Iterator<MethodWrapper> listIterator = methodWrappers.listIterator();
         while (listIterator.hasNext()) {
             MethodWrapper methodWrapper = listIterator.next();
