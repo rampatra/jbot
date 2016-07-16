@@ -44,10 +44,13 @@
 	</scm>
 	
 	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 		<repository>
-			<id>github-repo</id>
-			<name>Github Repository</name>
-			<url>https://github.com/ramswaroop/botkit</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
 
@@ -78,5 +81,4 @@
 		</plugins>
 	</build>
 	
-
 </project>

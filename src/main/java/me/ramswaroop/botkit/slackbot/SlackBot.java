@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
@@ -24,7 +25,7 @@ public class SlackBot extends Bot {
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
     /**
-     * Slack token from application.properties file. You get your slack token 
+     * Slack token from application.properties file. You can get your slack token 
      * after <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
      */
     @Value("${slackBotToken}")
@@ -60,7 +61,7 @@ public class SlackBot extends Bot {
      * @param session
      * @param event
      */
-    @Controller(events = EventType.MESSAGE)
+    @Controller(events = EventType.MESSAGE, pattern = "asd")
     public void onReceiveMessage(WebSocketSession session, Event event) {
         reply(session, event, new Message("Hi, this is a message!"));
     }

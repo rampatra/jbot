@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
@@ -29,6 +30,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Base class for making Slack Bots. Any class extending
@@ -46,9 +49,9 @@ public abstract class Bot {
     @Value("${rtmUrl}")
     private String rtmUrl;
     /**
-     * A Map for all controller methods.
+     * A Map of all methods annotated with {@link Controller}.
      */
-    private final Map<String, Method> methodMap = new HashMap<>();
+    private final Map<String, List<MethodWrapper>> eventToMethodMap = new HashMap<>();
     /**
      * Websocket url to connect to.
      */
@@ -85,8 +88,21 @@ public abstract class Bot {
             if (method.isAnnotationPresent(Controller.class)) {
                 Controller controller = method.getAnnotation(Controller.class);
                 EventType[] eventTypes = controller.events();
+                String pattern = controller.pattern();
+
                 for (EventType eventType : eventTypes) {
-                    methodMap.put(eventType.name(), method);
+                    List<MethodWrapper> methodWrappers = eventToMethodMap.get(eventType.name());
+
+                    if (methodWrappers == null) {
+                        methodWrappers = new ArrayList<>();
+                    }
+
+                    MethodWrapper methodWrapper = new MethodWrapper();
+                    methodWrapper.setMethod(method);
+                    methodWrapper.setPattern(pattern);
+                    methodWrappers.add(methodWrapper);
+
+                    eventToMethodMap.put(eventType.name(), methodWrappers);
                 }
             }
         }
@@ -127,7 +143,7 @@ public abstract class Bot {
     }
 
     /**
-     * Invoked when a new WebSocket text message arrives.
+     * Invoked when a new Slack event(WebSocket text message) arrives.
      *
      * @param session
      * @param textMessage
@@ -192,23 +208,52 @@ public abstract class Bot {
     }
 
     /**
-     * Invoke the methods with {@link EventType} as that of
-     * the event type received from Slack.
+     * Invoke the methods with matching {@link Controller#events()}
+     * and {@link Controller#pattern()} in events received from Slack.
      *
      * @param session
      * @param event
      */
     private void invokeMethods(WebSocketSession session, Event event) {
         try {
-            Method method = methodMap.get(event.getType().toUpperCase());
-            if (method != null) {
-                method.invoke(this, session, event);
+            List<MethodWrapper> methodWrappers = eventToMethodMap.get(event.getType().toUpperCase());
+            filterMethodsBasedOnPattern(event, methodWrappers);
+            if (methodWrappers != null) {
+                for (MethodWrapper methodWrapper : methodWrappers) {
+                    methodWrapper.getMethod().invoke(this, session, event);
+                }
             }
         } catch (Exception e) {
             logger.error("Error invoking controller: ", e);
         }
     }
 
+    /**
+     * Filter methods whose {@link Controller#pattern()} match the {@link Event#text}
+     * in events received from Slack.
+     * 
+     * @param event
+     * @param methodWrappers
+     */
+    private void filterMethodsBasedOnPattern(Event event, List<MethodWrapper> methodWrappers) {
+        Iterator<MethodWrapper> listIterator = methodWrappers.listIterator();
+        while (listIterator.hasNext()) {
+            MethodWrapper methodWrapper = listIterator.next();
+            String pattern = methodWrapper.getPattern();
+            String text = event.getText();
+            
+            if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
+                Pattern p = Pattern.compile(pattern);
+                Matcher m = p.matcher(text);
+                if (!m.find()) {
+                    listIterator.remove();
+                    continue;
+                }
+                methodWrapper.setMatcher(m);
+            }
+        }
+    }
+    
     /**
      * Fetch the web socket url to connect to and
      * also constructs the RTM object.
@@ -279,6 +324,36 @@ public abstract class Bot {
             manager.start();
         } else {
             logger.error("No websocket url returned by Slack.");
+        }
+    }
+
+    private class MethodWrapper {
+        private Method method;
+        private String pattern;
+        private Matcher matcher;
+
+        public Method getMethod() {
+            return method;
+        }
+
+        public void setMethod(Method method) {
+            this.method = method;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public Matcher getMatcher() {
+            return matcher;
+        }
+
+        public void setMatcher(Matcher matcher) {
+            this.matcher = matcher;
         }
     }
 }

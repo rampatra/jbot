@@ -15,4 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Controller {
     EventType[] events() default EventType.MESSAGE;
+    
+    String pattern() default "";
 }
