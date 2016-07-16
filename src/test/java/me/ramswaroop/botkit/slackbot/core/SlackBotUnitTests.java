@@ -3,6 +3,8 @@ package me.ramswaroop.botkit.slackbot.core;
 import me.ramswaroop.botkit.slackbot.core.EventType;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 
 /**

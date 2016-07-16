@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.WebSocketSession;
+
+import java.util.regex.Matcher;
 
 /**
  * Example Slack Bot. You can create multiple bots by just
@@ -25,7 +26,7 @@ public class SlackBot extends Bot {
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
     /**
-     * Slack token from application.properties file. You can get your slack token 
+     * Slack token from application.properties file. You can get your slack token
      * after <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
      */
     @Value("${slackBotToken}")
@@ -42,11 +43,11 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * Invoked when the bot receives an event of type direct mention 
+     * Invoked when the bot receives an event of type direct mention
      * or direct message. NOTE: These two event types are added by botkit
-     * to make your task easier, Slack doesn't have any direct way to 
+     * to make your task easier, Slack doesn't have any direct way to
      * determine these type of events.
-     * 
+     *
      * @param session
      * @param event
      */
@@ -56,14 +57,20 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * Invoked when bot receives an event of type message.
-     * 
+     * Invoked when bot receives an event of type message with text satisfying
+     * the pattern {@code ([a-zA-Z ]{1,})(\d+)([a-zA-Z ]{1,})}. For example,
+     * messages like "I want 5 pizzas", "I have 4 tasks" etc will invoke this 
+     * method.
+     *
      * @param session
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "asd")
-    public void onReceiveMessage(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Hi, this is a message!"));
+    @Controller(events = EventType.MESSAGE, pattern = "([a-zA-Z ]{1,})(\\d+)([a-zA-Z ]{1,})")
+    public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
+        reply(session, event, new Message("First group: " + matcher.group(0) + "\n" +
+                "Second group: " + matcher.group(1) + "\n" +
+                "Third group: " + matcher.group(2) + "\n" +
+                "Fourth group: " + matcher.group(3)));
     }
 
     /**
@@ -76,5 +83,5 @@ public class SlackBot extends Bot {
     public void onFileShared(WebSocketSession session, Event event) {
         reply(session, event, new Message("Thanks for sharing the file!"));
     }
-    
+
 }

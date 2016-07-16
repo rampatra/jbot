@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -58,6 +59,10 @@ public class SlackWebhooks {
         }
         
         // always remember to send the encoded message to Slack
-        restTemplate.postForEntity(slackIncomingWebhookUrl, richMessage.encodedMessage(), String.class);
+        try {
+            restTemplate.postForEntity(slackIncomingWebhookUrl, richMessage.encodedMessage(), String.class);
+        } catch (RestClientException e) {
+            logger.error("Error posting to Slack Incoming Webhook: ", e);
+        }
     }
 }

@@ -217,10 +217,19 @@ public abstract class Bot {
     private void invokeMethods(WebSocketSession session, Event event) {
         try {
             List<MethodWrapper> methodWrappers = eventToMethodMap.get(event.getType().toUpperCase());
-            filterMethodsBasedOnPattern(event, methodWrappers);
-            if (methodWrappers != null) {
-                for (MethodWrapper methodWrapper : methodWrappers) {
-                    methodWrapper.getMethod().invoke(this, session, event);
+            if (methodWrappers == null) return;
+            
+            List<MethodWrapper> newMethodWrappers = new ArrayList<>(methodWrappers);
+            filterMethodsBasedOnPattern(event, newMethodWrappers);
+            
+            if (newMethodWrappers != null) {
+                for (MethodWrapper methodWrapper : newMethodWrappers) {
+                    Method method = methodWrapper.getMethod();
+                    if (method.getParameterCount() == 3) {
+                        method.invoke(this, session, event, methodWrapper.getMatcher());
+                    } else {
+                        method.invoke(this, session, event);
+                    }
                 }
             }
         } catch (Exception e) {
