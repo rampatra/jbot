@@ -1,7 +1,7 @@
 # BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit)
 Building blocks for building bots.
 
-__BotKit__ is a java spring-boot application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
+__BotKit__ is a java application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
 make Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
 the boilerplate code needed so that you can __make your bot live__ right away.
 
@@ -25,7 +25,8 @@ You can now start talking with your bot ;)
   which makes your work a lot more easier.  
 * Receiving & sending messages is as easy as defining a `controller` method and calling `reply()`, you don't need to 
   manually parse any events nor manually encode any messages before sending.  
-* Well tested with unit tests.  
+* Well tested with unit tests.
+* And many other features which can't just be mentioned here.
 
 ### Basic Usage
 
@@ -255,4 +256,4 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 7. `$ git push heroku master` - Push your code to Heroku.  
 8. `$ heroku ps:scale web=1` - Start your application.  
 
-You can now start talking with your Bot or send commands to your Slash Command or play with Incoming Webhooks ;)
+You can now start talking with your Bot, send commands to your Slash Command or play with Incoming Webhooks ;)
