@@ -49,10 +49,6 @@ public abstract class Bot {
     @Value("${rtmUrl}")
     private String rtmUrl;
     /**
-     * A Map of all methods annotated with {@link Controller}.
-     */
-    private final Map<String, List<MethodWrapper>> eventToMethodMap = new HashMap<>();
-    /**
      * Websocket url to connect to.
      */
     private String webSocketUrl;
@@ -64,6 +60,24 @@ public abstract class Bot {
      * List of channel ids to determine direct messages.
      */
     protected List<String> dmChannels;
+    /**
+     * A Map of all methods annotated with {@link Controller} where key is the {@link EventType#name()} and
+     * value is a list of {@link MethodWrapper}.
+     */
+    private final Map<String, List<MethodWrapper>> eventToMethodsMap = new HashMap<>();
+    /**
+     * 
+     */
+    private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
+    /**
+     * 
+     */
+    private final List<String> conversationMethodNames = new ArrayList<>();
+    /**
+     * A List of Queues with each Queue holding all methods for a particular conversation. Methods
+     * can be chained into a conversation by {@link Controller#next()}.
+     */
+    private final Map<String, Queue<MethodWrapper>> conversationQueueMap = new HashMap<>();
 
     /**
      * Class extending this must implement this as it's
@@ -81,29 +95,40 @@ public abstract class Bot {
      */
     public abstract Bot getSlackBot();
 
-    // Construct a map of all the controller methods to handle RTM Events. 
-    {
+    /**
+     * Construct a map of all the controller methods to handle RTM Events.
+     */
+    public Bot() {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Controller.class)) {
                 Controller controller = method.getAnnotation(Controller.class);
                 EventType[] eventTypes = controller.events();
                 String pattern = controller.pattern();
+                String next = controller.next();
 
-                for (EventType eventType : eventTypes) {
-                    List<MethodWrapper> methodWrappers = eventToMethodMap.get(eventType.name());
-
-                    if (methodWrappers == null) {
-                        methodWrappers = new ArrayList<>();
-                    }
-
-                    MethodWrapper methodWrapper = new MethodWrapper();
-                    methodWrapper.setMethod(method);
-                    methodWrapper.setPattern(pattern);
-                    methodWrappers.add(methodWrapper);
-
-                    eventToMethodMap.put(eventType.name(), methodWrappers);
+                if (!StringUtils.isEmpty(next)) {
+                    conversationMethodNames.add(next);
                 }
+                
+                MethodWrapper methodWrapper = new MethodWrapper();
+                methodWrapper.setMethod(method);
+                methodWrapper.setPattern(pattern);
+                methodWrapper.setNext(next);
+                
+                if (!conversationMethodNames.contains(method.getName())) {
+                    for (EventType eventType : eventTypes) {
+                        List<MethodWrapper> methodWrappers = eventToMethodsMap.get(eventType.name());
+
+                        if (methodWrappers == null) {
+                            methodWrappers = new ArrayList<>();
+                        }
+                        
+                        methodWrappers.add(methodWrapper);
+                        eventToMethodsMap.put(eventType.name(), methodWrappers);
+                    }
+                }
+                methodNameMap.put(method.getName(), methodWrapper);
             }
         }
     }
@@ -166,10 +191,50 @@ public abstract class Bot {
             } else { // slack does not send any TYPE for acknowledgement messages
                 event.setType(EventType.ACK.name());
             }
-            invokeMethods(session, event);
+
+            if (isConversationOn(event)) {
+                invokeChainedMethod(session, event);
+            } else {
+                invokeMethods(session, event);
+            }
         } catch (Exception e) {
             logger.error("Error handling response from Slack: {}. \nException: ", textMessage.getPayload(), e);
         }
+    }
+
+    /**
+     * @param event
+     */
+    public void startConversation(Event event, String methodName) {
+        String channelId = event.getChannelId();
+
+        if (!StringUtils.isEmpty(channelId)) {
+            Queue<MethodWrapper> queue = formConversationQueue(new LinkedList<>(), methodName);
+            conversationQueueMap.put(channelId, queue);
+        }
+    }
+
+    /**
+     * @param event
+     */
+    public void nextConversation(Event event) {
+        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
+        if (queue != null) queue.poll();
+    }
+
+    /**
+     * @param event
+     */
+    public void stopConversation(Event event) {
+        conversationQueueMap.remove(event.getChannelId());
+    }
+
+    /**
+     * @param event
+     * @return
+     */
+    public boolean isConversationOn(Event event) {
+        return conversationQueueMap.get(event.getChannelId()) != null;
     }
 
     /**
@@ -208,6 +273,21 @@ public abstract class Bot {
     }
 
     /**
+     * @param queue
+     * @param methodName
+     * @return
+     */
+    private Queue<MethodWrapper> formConversationQueue(Queue<MethodWrapper> queue, String methodName) {
+        MethodWrapper methodWrapper = methodNameMap.get(methodName);
+        queue.add(methodWrapper);
+        if (StringUtils.isEmpty(methodName)) {
+            return queue;
+        } else {
+            return formConversationQueue(queue, methodWrapper.getNext());
+        }
+    }
+
+    /**
      * Invoke the methods with matching {@link Controller#events()}
      * and {@link Controller#pattern()} in events received from Slack.
      *
@@ -216,14 +296,18 @@ public abstract class Bot {
      */
     private void invokeMethods(WebSocketSession session, Event event) {
         try {
-            List<MethodWrapper> methodWrappers = eventToMethodMap.get(event.getType().toUpperCase());
+            List<MethodWrapper> methodWrappers = eventToMethodsMap.get(event.getType().toUpperCase());
             if (methodWrappers == null) return;
-            
-            List<MethodWrapper> newMethodWrappers = new ArrayList<>(methodWrappers);
-            filterMethodsBasedOnPattern(event, newMethodWrappers);
-            
-            if (newMethodWrappers != null) {
-                for (MethodWrapper methodWrapper : newMethodWrappers) {
+
+            methodWrappers = new ArrayList<>(methodWrappers);
+            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(event, methodWrappers);
+            if (matchedMethod != null) {
+                methodWrappers = new ArrayList<>();
+                methodWrappers.add(matchedMethod);
+            }
+
+            if (methodWrappers != null) {
+                for (MethodWrapper methodWrapper : methodWrappers) {
                     Method method = methodWrapper.getMethod();
                     if (method.getParameterCount() == 3) {
                         method.invoke(this, session, event, methodWrapper.getMatcher());
@@ -238,33 +322,65 @@ public abstract class Bot {
     }
 
     /**
-     * Filter methods whose {@link Controller#pattern()} match the {@link Event#text}
-     * in events received from Slack.
-     * 
+     * Invoke the appropriate method in a conversation.
+     *
+     * @param session
      * @param event
-     * @param methodWrappers
      */
-    private void filterMethodsBasedOnPattern(Event event, List<MethodWrapper> methodWrappers) {
-        if (methodWrappers == null) return;
-        
-        Iterator<MethodWrapper> listIterator = methodWrappers.listIterator();
-        while (listIterator.hasNext()) {
-            MethodWrapper methodWrapper = listIterator.next();
-            String pattern = methodWrapper.getPattern();
-            String text = event.getText();
-            
-            if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
-                Pattern p = Pattern.compile(pattern);
-                Matcher m = p.matcher(text);
-                if (!m.find()) {
-                    listIterator.remove();
-                    continue;
+    private void invokeChainedMethod(WebSocketSession session, Event event) {
+        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
+
+        if (queue != null && !queue.isEmpty()) {
+            MethodWrapper methodWrapper = queue.peek();
+
+            try {
+                EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
+                for (EventType eventType : eventTypes) {
+                    if (eventType.name().equals(event.getType().toUpperCase())) {
+                        methodWrapper.getMethod().invoke(this, session, event);
+                        return;
+                    }
                 }
-                methodWrapper.setMatcher(m);
+            } catch (Exception e) {
+                logger.error("Error invoking chained method: ", e);
             }
         }
     }
-    
+
+    /**
+     * Search for a method whose {@link Controller#pattern()} match with the {@link Event#text}
+     * in events received from Slack and also filter out the methods whose {@link Controller#pattern()} do not
+     * match with slack message received ({@link Event#text}) for cases where there are no matched methods.
+     *
+     * @param event
+     * @param methodWrappers
+     * @return the MethodWrapper whose method pattern match with that of the slack message received, {@code null} if no
+     * such method is found.
+     */
+    private MethodWrapper getMethodWithMatchingPatternAndFilterUnmatchedMethods(Event event, List<MethodWrapper> methodWrappers) {
+        if (methodWrappers != null) {
+            Iterator<MethodWrapper> listIterator = methodWrappers.listIterator();
+
+            while (listIterator.hasNext()) {
+                MethodWrapper methodWrapper = listIterator.next();
+                String pattern = methodWrapper.getPattern();
+                String text = event.getText();
+
+                if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
+                    Pattern p = Pattern.compile(pattern);
+                    Matcher m = p.matcher(text);
+                    if (m.find()) {
+                        methodWrapper.setMatcher(m);
+                        return methodWrapper;
+                    } else {
+                        listIterator.remove();  // remove methods from the original list whose pattern do not match
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Fetch the web socket url to connect to and
      * also constructs the RTM object.
@@ -338,10 +454,14 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Wrapper class for methods annotated with {@link Controller}.
+     */
     private class MethodWrapper {
         private Method method;
         private String pattern;
         private Matcher matcher;
+        private String next;
 
         public Method getMethod() {
             return method;
@@ -365,6 +485,37 @@ public abstract class Bot {
 
         public void setMatcher(Matcher matcher) {
             this.matcher = matcher;
+        }
+
+        public String getNext() {
+            return next;
+        }
+
+        public void setNext(String next) {
+            this.next = next;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            MethodWrapper that = (MethodWrapper) o;
+
+            if (!method.equals(that.method)) return false;
+            if (pattern != null ? !pattern.equals(that.pattern) : that.pattern != null) return false;
+            if (matcher != null ? !matcher.equals(that.matcher) : that.matcher != null) return false;
+            return next != null ? next.equals(that.next) : that.next == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = method.hashCode();
+            result = 31 * result + (pattern != null ? pattern.hashCode() : 0);
+            result = 31 * result + (matcher != null ? matcher.hashCode() : 0);
+            result = 31 * result + (next != null ? next.hashCode() : 0);
+            return result;
         }
     }
 }

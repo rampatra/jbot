@@ -17,4 +17,6 @@ public @interface Controller {
     EventType[] events() default EventType.MESSAGE;
     
     String pattern() default "";
+    
+    String next() default "";
 }
