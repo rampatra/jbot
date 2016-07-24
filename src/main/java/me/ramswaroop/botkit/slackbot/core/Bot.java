@@ -62,15 +62,17 @@ public abstract class Bot {
     protected List<String> dmChannels;
     /**
      * A Map of all methods annotated with {@link Controller} where key is the {@link EventType#name()} and
-     * value is a list of {@link MethodWrapper}.
+     * value is a list of {@link MethodWrapper}. NOTE: It does not contain methods which are part of any
+     * conversation.
      */
     private final Map<String, List<MethodWrapper>> eventToMethodsMap = new HashMap<>();
     /**
-     * 
+     * A Map of all methods annotated with {@link Controller} where key is the {@link Method#getName()} and
+     * value is the respective {@link MethodWrapper}.
      */
     private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
     /**
-     * 
+     * A List of names of the methods which are part of any conversation.
      */
     private final List<String> conversationMethodNames = new ArrayList<>();
     /**
@@ -203,6 +205,8 @@ public abstract class Bot {
     }
 
     /**
+     * Call this method to start a conversation.
+     * 
      * @param event
      */
     public void startConversation(Event event, String methodName) {
@@ -215,6 +219,8 @@ public abstract class Bot {
     }
 
     /**
+     * Call this method to jump to the next method in a conversation.
+     * 
      * @param event
      */
     public void nextConversation(Event event) {
@@ -223,6 +229,8 @@ public abstract class Bot {
     }
 
     /**
+     * Call this method to stop the end the conversation.
+     * 
      * @param event
      */
     public void stopConversation(Event event) {
@@ -230,8 +238,10 @@ public abstract class Bot {
     }
 
     /**
+     * Check whether a conversation is up in a particular slack channel.
+     * 
      * @param event
-     * @return
+     * @return true if a conversation is on, false otherwise.
      */
     public boolean isConversationOn(Event event) {
         return conversationQueueMap.get(event.getChannelId()) != null;
@@ -273,6 +283,8 @@ public abstract class Bot {
     }
 
     /**
+     * Form a Queue with all the methods responsible for a particular conversation.
+     * 
      * @param queue
      * @param methodName
      * @return

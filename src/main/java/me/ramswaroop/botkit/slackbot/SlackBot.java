@@ -14,7 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.regex.Matcher;
 
 /**
- * Example Slack Bot. You can create multiple bots by just
+ * A Slack Bot sample. You can create multiple bots by just
  * extending {@link Bot} class like this one.
  *
  * @author ramswaroop
@@ -83,13 +83,13 @@ public class SlackBot extends Bot {
     public void onFileShared(WebSocketSession session, Event event) {
         reply(session, event, new Message("Thanks for sharing the file!"));
     }
-    
+
     /**
-     * Conversation feature of Botkit. This method is the starting point of the conversation (as it 
-     * calls {@link Bot#startConversation(Event, String)} within it. You can chain methods which will be invoked one  
-     * after the other leading to a conversation. You can chain methods with {@link Controller#next()} by 
+     * Conversation feature of Botkit. This method is the starting point of the conversation (as it
+     * calls {@link Bot#startConversation(Event, String)} within it. You can chain methods which will be invoked one
+     * after the other leading to a conversation. You can chain methods with {@link Controller#next()} by
      * specifying the method name to chain with.
-     * 
+     *
      * @param session
      * @param event
      */
@@ -101,7 +101,7 @@ public class SlackBot extends Bot {
 
     /**
      * This method is chained with {@link SlackBot#setupMeeting(WebSocketSession, Event)}.
-     * 
+     *
      * @param session
      * @param event
      */
@@ -114,7 +114,7 @@ public class SlackBot extends Bot {
 
     /**
      * This method is chained with {@link SlackBot#confirmTiming(WebSocketSession, Event)}.
-     * 
+     *
      * @param session
      * @param event
      */
@@ -130,7 +130,8 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * 
+     * This method is chained with {@link SlackBot#askTimeForMeeting(WebSocketSession, Event)}.
+     *
      * @param session
      * @param event
      */
