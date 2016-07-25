@@ -248,6 +248,8 @@ This is the most wonderful feature of botkit, with this you can literally talk t
 below for an example as to how your bot sets up a meeting for your team by asking some simple questions one after the 
 other.
 
+![Conversation feature in BotKit](http://i.imgur.com/AWiImIN.png)
+
 ```java
 
     /**
