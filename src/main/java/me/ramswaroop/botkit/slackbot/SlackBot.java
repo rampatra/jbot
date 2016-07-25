@@ -86,8 +86,8 @@ public class SlackBot extends Bot {
 
     /**
      * Conversation feature of Botkit. This method is the starting point of the conversation (as it
-     * calls {@link Bot#startConversation(Event, String)} within it. You can chain methods which will be invoked one
-     * after the other leading to a conversation. You can chain methods with {@link Controller#next()} by
+     * calls {@link Bot#startConversation(Event, String)} within it. You can chain methods which will be invoked
+     * one after the other leading to a conversation. You can chain methods with {@link Controller#next()} by
      * specifying the method name to chain with.
      *
      * @param session
