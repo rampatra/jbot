@@ -1,4 +1,6 @@
-# BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
+# BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit) 
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
+
 Building blocks for building bots.
 
 __BotKit__ is a java application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
@@ -20,12 +22,13 @@ You can now start talking with your bot ;)
 
 ### Why use Botkit for Slack?
 
-* Provides you with all the boilerplate code which handles underlying websocket connections and other complexities.  
-* Fires specific events in addition to all the [events supported by Slack RTM API](https://api.slack.com/events)
-  which makes your work a lot more easier.  
-* Receiving & sending messages is as easy as defining a `controller` method and calling `reply()`, you don't need to 
-  manually parse any events nor manually encode any messages before sending.  
-* Well tested with unit tests.
+* Provides you with __all the boilerplate code__ which handles underlying websocket connections and other complexities.  
+* Supports a few __extra events__ in addition to all the [events supported by Slack RTM API](https://api.slack.com/events)
+  which makes your work a lot more easier.
+* __Receiving & sending messages__ is as easy as defining a `controller` method and calling `reply()`, you don't need to 
+  manually parse any events nor manually encode any messages before sending.
+* __Conversation feature__ of botkit makes talking to your bot a breeze.
+* __Well tested__ with unit tests.
 * And many other features which can't just be mentioned here.
 
 ### Basic Usage
@@ -240,6 +243,94 @@ __NOTE:__ [Event](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Event
 time, all the attributes present in them will have values. In other words, [Slack sends different responses for different
 events](https://api.slack.com/events/hello).
 
+#### Conversations
+
+This is the most wonderful feature of botkit, with this you can literally talk to your bot and have a conversation. See 
+below for an example as to how your bot sets up a meeting for your team by asking some simple questions one after the 
+other.
+
+```java
+
+    /**
+     * Conversation feature of Botkit. This method is the starting point of the conversation (as it
+     * calls {@link Bot#startConversation(Event, String)} within it. You can chain methods which will be invoked one
+     * after the other leading to a conversation. You can chain methods with {@link Controller#next()} by
+     * specifying the method name to chain with.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller(pattern = "(setup meeting)", next = "confirmTiming")
+    public void setupMeeting(WebSocketSession session, Event event) {
+        startConversation(event, "confirmTiming");   // start conversation
+        reply(session, event, new Message("Cool! At what time (ex. 15:30) do you want me to set up the meeting?"));
+    }
+```
+
+You can start a conversation by calling `startConversation(event, nextMethodName)` within your controller. You can pass 
+the event and the name of the next controller method.
+
+```java
+    /**
+     * This method is chained with {@link SlackBot#setupMeeting(WebSocketSession, Event)}.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller(next = "askTimeForMeeting")
+    public void confirmTiming(WebSocketSession session, Event event) {
+        reply(session, event, new Message("Your meeting is set at " + event.getText() +
+                ". Would you like to repeat it tomorrow?"));
+        nextConversation(event);    // jump to next question in conversation
+    }
+```
+
+This is your next method in the conversation. After your desired work is done, do not forget to call `nextConversation(event)`
+to jump to the next method. You can specify the next method to call in 
+[next](/src/main/java/me/ramswaroop/botkit/slackbot/core/Controller.java#next) attribute of 
+[Controller](/src/main/java/me/ramswaroop/botkit/slackbot/core/Controller.java) annotation.
+
+```java
+    /**
+     * This method is chained with {@link SlackBot#confirmTiming(WebSocketSession, Event)}.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller(next = "askWhetherToRepeat")
+    public void askTimeForMeeting(WebSocketSession session, Event event) {
+        if (event.getText().contains("yes")) {
+            reply(session, event, new Message("Okay. Would you like me to set a reminder for you?"));
+            nextConversation(event);    // jump to next question in conversation  
+        } else {
+            reply(session, event, new Message("No problem. You can always schedule one with 'setup meeting' command."));
+            stopConversation(event);    // stop conversation only if user says no
+        }
+    }
+
+    /**
+     * This method is chained with {@link SlackBot#askTimeForMeeting(WebSocketSession, Event)}.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller
+    public void askWhetherToRepeat(WebSocketSession session, Event event) {
+        if (event.getText().contains("yes")) {
+            reply(session, event, new Message("Great! I will remind you tomorrow before the meeting."));
+        } else {
+            reply(session, event, new Message("Oh! my boss is smart enough to remind himself :)"));
+        }
+        stopConversation(event);    // stop conversation
+    }
+```
+
+To end the conversation, call `stopConversation(event)` inside your controller method.
+
+**NOTE:**
+* Only the first method in a conversation can define a `pattern`. `pattern` attribute in `Controller` annotation has no
+effect for rest of the methods in a conversation.
+* The first method in the conversation need not call `nextConversation(event)` but rest of the methods do need to.
 
 #### Deploy to the Cloud
 
