@@ -1,6 +1,6 @@
 # BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
 
-Building blocks for building bots.
+LEGO for building bots.
 
 __BotKit__ is a java application _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
 make Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
