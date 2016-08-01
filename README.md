@@ -1,4 +1,4 @@
-# BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
+# BotKit [![Build Status](https://travis-ci.org/ramswaroop/botkit.svg?branch=master)](https://travis-ci.org/ramswaroop/botkit) [![Bountysource](https://api.bountysource.com/badge/team?team_id=160604)](https://www.bountysource.com/teams/botkit) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
 
 LEGO for building bots.
 
@@ -32,7 +32,7 @@ You can now start talking with your bot ;)
 
 ### Basic Usage
 
-The main function of a Bot is to receive and reply messages. With this kit receiving messages is as easy as just
+The main function of a Bot is to receive and reply messages. With this kit, receiving messages is as easy as just
 writing a simple controller and replying to it by calling the `reply()` method as shown below:
 
 ```java
@@ -333,6 +333,24 @@ To end the conversation, call `stopConversation(event)` inside your controller m
 effect for rest of the methods in a conversation.
 * The first method in the conversation need not call `nextConversation(event)` but rest of the methods do need to.
 
+#### Include as a Maven dependency
+
+```xml
+<dependency>
+    <groupId>me.ramswaroop.botkit</groupId>
+    <artifactId>botkit</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+#### Include as a Gradle dependency
+
+```groovy
+dependencies {
+    compile("me.ramswaroop.botkit:botkit:1.0.0")
+}
+```
+
 #### Deploy to the Cloud
 
 Bokit is Heroku ready. To deploy, you need to perform the below simple steps: 
@@ -349,3 +367,12 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 8. `$ heroku ps:scale web=1` - Start your application.  
 
 You can now start talking with your Bot, send commands to your Slash Command or play with Incoming Webhooks ;)
+
+### Contributions
+
+If you would like like to contribute, raise an issue on Github and I would be more than happy to discuss :)
+
+### Donations
+
+[Buy me a coffee](https://www.bountysource.com/teams/botkit) so that I stay awake whole night and complete Botkit soon
+enough :D
