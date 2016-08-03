@@ -8,6 +8,21 @@ the boilerplate code needed so that you can __make your bot live__ right away.
 
 ## SlackBot
 
+### Table of Contents
+1. [Getting started](#getting-started)
+2. [Why use Botkit for Slack?](#why-use-botkit-for-slack)
+3. [Basic Usage](#basic-usage)
+4. [Building a Slack Integration with Botkit](#building-a-slack-integration-with-botkit)
+    - [Setting up your app](#setting-up-your-app)
+    - [Receiving messages](#receiving-messages)
+    - [Sending messages](#sending-messages)
+    - [Conversations](#conversations)
+    - [Include as a dependency](#include-as-a-dependency)
+    - [Deploy to the cloud](#deploy-to-the-cloud)
+5. [Contributions](#contributions)
+6. [Donations](#donations)
+    
+
 ### Getting started
 
 **Running your SlackBot is just 4 easy steps:**
@@ -333,7 +348,9 @@ To end the conversation, call `stopConversation(event)` inside your controller m
 effect for rest of the methods in a conversation.
 * The first method in the conversation need not call `nextConversation(event)` but rest of the methods do need to.
 
-#### Include as a Maven dependency
+#### Include as a dependency
+
+**Maven**
 
 ```xml
 <dependency>
@@ -343,7 +360,7 @@ effect for rest of the methods in a conversation.
 </dependency>
 ```
 
-#### Include as a Gradle dependency
+**Gradle**
 
 ```groovy
 dependencies {
