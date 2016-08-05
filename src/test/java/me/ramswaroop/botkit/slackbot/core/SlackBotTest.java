@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core;
 
 import me.ramswaroop.botkit.slackbot.core.EventType;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertEquals;
  * @author ramswaroop
  * @version 20/06/2016
  */
+@Ignore
 @RunWith(SpringRunner.class)
 public class SlackBotTest {
     
