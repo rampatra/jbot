@@ -17,7 +17,7 @@ the boilerplate code needed so that you can __make your bot live__ right away.
     * [Receiving messages](#receiving-messages)
     * [Sending messages](#sending-messages)
     * [Conversations](#conversations)
-    * [Include as a dependency](#include-as-a-dependency)
+    * [Usage](#usage)
     * [Deploy to the cloud](#deploy-to-the-cloud)
 5. [Contributions](#contributions)
 6. [Donations](#donations)
@@ -348,7 +348,10 @@ To end the conversation, call `stopConversation(event)` inside your controller m
 effect for rest of the methods in a conversation.
 * The first method in the conversation need not call `nextConversation(event)` but rest of the methods do need to.
 
-#### Include as a dependency
+#### Usage
+
+You can directly clone this project and start coding your bot (just don't touch the 
+[core](/src/main/java/me/ramswaroop/botkit/slackbot/core) package) or you can include it as a maven/gradle dependency.
 
 **Maven**
 
