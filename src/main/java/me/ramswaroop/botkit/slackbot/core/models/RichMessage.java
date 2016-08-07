@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author ramswaroop
@@ -9,9 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RichMessage {
     private String username;
+    @JsonProperty("icon_emoji")
     private String iconEmoji;
     private String channel;
     private String text;
+    @JsonProperty("response_type")
     private String responseType;
     private Attachment[] attachments;
 

@@ -137,7 +137,7 @@ You can also add regular expressions to your [@Controller](/src/main/java/me/ram
 annotation like:
 
 ```java
-@Controller(events = EventType.MESSAGE, pattern = "([a-zA-Z ]{1,})(\\d+)([a-zA-Z ]{1,})")
+@Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
 public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
     reply(session, event, new Message("First group: " + matcher.group(0) + "\n" +
             "Second group: " + matcher.group(1) + "\n" +
@@ -251,11 +251,15 @@ public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
 }
 ```
 
-__NOTE:__ [Event](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Event.java), 
+__Points to Note:__ 
+* [Event](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Event.java), 
 [Message](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Message.java) and 
-[RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java) are generic classes. Not all the 
+[RichMessage](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/RichMessage.java) are generic models. Not all the 
 time, all the attributes present in them will have values. In other words, [Slack sends different responses for different
 events](https://api.slack.com/events/hello).
+* You need a __channel id__ to send replies. Therefore, you can use `reply()` method for events which have a channel id
+in them or else you have to explicitly set the channel id in the 
+[Message](/src/main/java/me/ramswaroop/botkit/slackbot/core/models/Message.java) object.
 
 #### Conversations
 

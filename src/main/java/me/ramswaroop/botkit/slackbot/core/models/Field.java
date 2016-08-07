@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 12/06/2016.
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Field {
     private String title;
     private String value;
+    @JsonProperty("short_enough")
     private boolean shortEnough;
 
     public String getTitle() {

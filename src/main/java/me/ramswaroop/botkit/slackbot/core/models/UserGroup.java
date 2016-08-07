@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 14/06/2016.
@@ -8,21 +9,32 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserGroup {
     private String id;
+    @JsonProperty("team_id")
     private String teamId;
+    @JsonProperty("is_user_group")
     private boolean isUsergroup;
     private String name;
     private String description;
     private String handle;
+    @JsonProperty("is_external")
     private boolean isExternal;
+    @JsonProperty("date_created")
     private long dateCreated;
+    @JsonProperty("date_updated")
     private long dateUpdated;
+    @JsonProperty("date_deleted")
     private long dateDeleted;
+    @JsonProperty("auto_type")
     private String autoType;
+    @JsonProperty("created_by")
     private String createdBy;
+    @JsonProperty("updated_by")
     private String updatedBy;
+    @JsonProperty("deleted_by")
     private String deletedBy;
     private Prefs prefs;
     private String[] users;
+    @JsonProperty("user_count")
     private int userCount;
 
     public String getId() {

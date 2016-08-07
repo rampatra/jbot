@@ -43,8 +43,8 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * Invoked when the bot receives an event of type direct mention
-     * or direct message. NOTE: These two event types are added by botkit
+     * Invoked when the bot receives a direct mention (@botname: message)
+     * or a direct message. NOTE: These two event types are added by botkit
      * to make your task easier, Slack doesn't have any direct way to
      * determine these type of events.
      *
@@ -58,14 +58,13 @@ public class SlackBot extends Bot {
 
     /**
      * Invoked when bot receives an event of type message with text satisfying
-     * the pattern {@code ([a-zA-Z ]{1,})(\d+)([a-zA-Z ]{1,})}. For example,
-     * messages like "I want 5 pizzas", "I have 4 tasks" etc will invoke this
-     * method.
+     * the pattern {@code ([a-z ]{2})(\d+)([a-z ]{2})}. For example,
+     * messages like "ab12xy" or "ab2bc" etc will invoke this method.
      *
      * @param session
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "([a-zA-Z ]{1,})(\\d+)([a-zA-Z ]{1,})")
+    @Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
     public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
         reply(session, event, new Message("First group: " + matcher.group(0) + "\n" +
                 "Second group: " + matcher.group(1) + "\n" +
@@ -74,15 +73,31 @@ public class SlackBot extends Bot {
     }
 
     /**
+     * Invoked when an item is pinned in the channel.
+     *
+     * @param session
+     * @param event
+     */
+    @Controller(events = EventType.PIN_ADDED)
+    public void onPinAdded(WebSocketSession session, Event event) {
+        reply(session, event, new Message("Thanks for the pin! You can find all pinned items under channel details."));
+    }
+
+    /**
      * Invoked when bot receives an event of type file shared.
+     * NOTE: You can't reply to this event as slack doesn't send
+     * a channel id for this event type. You can learn more about
+     * <a href="https://api.slack.com/events/file_shared">file_shared</a>
+     * event from Slack's Api documentation.
      *
      * @param session
      * @param event
      */
     @Controller(events = EventType.FILE_SHARED)
     public void onFileShared(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Thanks for sharing the file!"));
+        logger.info("File shared: {}", event);
     }
+
 
     /**
      * Conversation feature of Botkit. This method is the starting point of the conversation (as it

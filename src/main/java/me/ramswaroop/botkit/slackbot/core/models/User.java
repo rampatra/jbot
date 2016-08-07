@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 14/06/2016.
@@ -12,13 +13,20 @@ public class User {
     private boolean deleted;
     private String color;
     private Profile profile;
+    @JsonProperty("is_admin")
     private boolean isAdmin;
+    @JsonProperty("is_owner")
     private boolean isOwner;
+    @JsonProperty("is_primary_owner")
     private boolean isPrimaryOwner;
+    @JsonProperty("is_restricted")
     private boolean isRestricted;
+    @JsonProperty("is_ultra_restricted")
     private boolean isUltraRestricted;
     private boolean has2fa;
+    @JsonProperty("two_factor_type")
     private String twoFactorType;
+    @JsonProperty("has_files")
     private boolean hasFiles;
 
     public String getId() {

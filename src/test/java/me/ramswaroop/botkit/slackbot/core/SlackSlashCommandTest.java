@@ -49,7 +49,7 @@ public class SlackSlashCommandTest {
                 "http://example.com")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"username\":null,\"icon_emoji\":null,\"channel\":null,\"text\":\"Sorry! " +
-                        "You're not lucky enough to use our slack command.\",\"response_type\":null,\"attachments\":null}"));
+                .andExpect(content().string("{\"username\":null,\"channel\":null,\"text\":\"Sorry! You're not lucky " +
+                        "enough to use our slack command.\",\"attachments\":null,\"icon_emoji\":null,\"response_type\":null}"));
     }
 }

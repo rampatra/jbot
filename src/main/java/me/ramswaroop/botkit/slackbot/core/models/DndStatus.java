@@ -1,16 +1,22 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 15/06/2016.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DndStatus {
+    @JsonProperty("dnd_enabled")
     private boolean dndEnabled;
+    @JsonProperty("next_dnd_start_ts")
     private long nextDndStartTs;
+    @JsonProperty("next_dnd_end_ts")
     private long nextDndEndTs;
+    @JsonProperty("snooze_enabled")
     private boolean snoozeEnabled;
+    @JsonProperty("snooze_endtime")
     private long snoozeEndtime;
 
     public boolean isDndEnabled() {

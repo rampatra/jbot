@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 14/06/2016.
@@ -12,8 +13,11 @@ public class Channel {
     private String user;
     private long created;
     private String creator;
+    @JsonProperty("is_im")
     boolean isIm;
+    @JsonProperty("is_org_shared")
     boolean isOrgShared;
+    @JsonProperty("is_user_deleted")
     boolean isUserDeleted;
 
     public String getId() {

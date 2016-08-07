@@ -1,6 +1,7 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,21 +19,28 @@ public class Event {
 
     private int id;
     private String type;
+    @JsonProperty("channel_id")
     private String channelId;
+    @JsonProperty("user_id")
     private String userId;
     private String text;
     private Edited edited;
     private Error error;
     private boolean ok;
+    @JsonProperty("reply_to")
     private int replyTo;
+    @JsonProperty("is_starred")
     private boolean isStarred;
+    @JsonProperty("pinned_to")
     private String[] pinnedTo;
     private Channel channel;
-    private Event item;
+    private Item item;
     private Bot bot;
     private File file;
+    @JsonProperty("file_id")
     private String fileId;
     private User user;
+    @JsonProperty("has_pins")
     private boolean hasPins;
     private Reaction[] reactions;
     private boolean upload;
@@ -40,20 +48,27 @@ public class Event {
     private String latest;
     private String presence;
     private Comment comment;
+    @JsonProperty("comment_id")
     private String commentId;
     private String reaction;
+    @JsonProperty("item_user")
     private String itemUser;
     private String[] names;
     private String value;
     private String plan;
     private String url;
     private String domain;
+    @JsonProperty("email_domain")
     private String emailDomain;
     private UserGroup subteam;
+    @JsonProperty("subteam_id")
     private String subteamId;
+    @JsonProperty("dnd_status")
     private DndStatus dndStatus;
     private String ts;
+    @JsonProperty("deleted_ts")
     private String deletedTs;
+    @JsonProperty("event_ts")
     private String eventTs;
 
     public int getId() {
@@ -70,6 +85,10 @@ public class Event {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getChannelId() {
+        return channelId;
     }
 
     public void setChannelId(String channelId) {
@@ -132,11 +151,11 @@ public class Event {
         this.channel = channel;
     }
 
-    public Event getItem() {
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(Event item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
@@ -346,10 +365,6 @@ public class Event {
 
     public void setEventTs(String eventTs) {
         this.eventTs = eventTs;
-    }
-
-    public String getChannelId() {
-        return channelId;
     }
 
     @JsonSetter("channel")

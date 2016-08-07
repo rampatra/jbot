@@ -1,14 +1,18 @@
 package me.ramswaroop.botkit.slackbot.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ramswaroop on 14/06/2016.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Profile {
+    @JsonProperty("first_name")
     private String firstName;
+    @JsonProperty("last_name")
     private String lastName;
+    @JsonProperty("real_name")
     private String realName;
     private String email;
     private String skype;
