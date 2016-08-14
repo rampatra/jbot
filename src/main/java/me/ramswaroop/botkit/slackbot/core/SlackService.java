@@ -28,7 +28,6 @@ public class SlackService {
      * and list of channel ids where the current user has had conversation.
      *
      * @param slackToken
-     * @return rtm object
      */
     public void startRTM(String slackToken) {
         RTM rtm = slackDao.startRTM(slackToken);
