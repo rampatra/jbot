@@ -124,7 +124,7 @@ To receive and parse slack bot events you just need to have this:
 @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
 public void onReceiveDM(WebSocketSession session, Event event) {
     if (event.getText().contains("hi")) {
-        reply(session, event, new Message("Hi, I am " + currentUser.getName()));
+        reply(session, event, new Message("Hi, I am " + slackService.getCurrentUser().getName()));
     }
 }
 ```

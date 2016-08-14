@@ -3,10 +3,12 @@ package me.ramswaroop.botkit.slackbot;
 import me.ramswaroop.botkit.slackbot.core.Bot;
 import me.ramswaroop.botkit.slackbot.core.Controller;
 import me.ramswaroop.botkit.slackbot.core.EventType;
+import me.ramswaroop.botkit.slackbot.core.SlackService;
 import me.ramswaroop.botkit.slackbot.core.models.Event;
 import me.ramswaroop.botkit.slackbot.core.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
@@ -31,6 +33,9 @@ public class SlackBot extends Bot {
      */
     @Value("${slackBotToken}")
     private String slackToken;
+    
+    @Autowired
+    private SlackService slackService;
 
     @Override
     public String getSlackToken() {
@@ -53,7 +58,7 @@ public class SlackBot extends Bot {
      */
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
     public void onReceiveDM(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Hi, I am " + currentUser.getName()));
+        reply(session, event, new Message("Hi, I am " + slackService.getCurrentUser().getName()));
     }
 
     /**

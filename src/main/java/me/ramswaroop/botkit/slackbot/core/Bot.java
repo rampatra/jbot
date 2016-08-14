@@ -1,24 +1,12 @@
 package me.ramswaroop.botkit.slackbot.core;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.botkit.slackbot.core.models.Event;
 import me.ramswaroop.botkit.slackbot.core.models.Message;
-import me.ramswaroop.botkit.slackbot.core.models.RTM;
-import me.ramswaroop.botkit.slackbot.core.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
@@ -43,23 +31,9 @@ import java.util.regex.Pattern;
 public abstract class Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
-    /**
-     * Endpoint for RTM.start()
-     */
-    @Value("${rtmUrl}")
-    private String rtmUrl;
-    /**
-     * Websocket url to connect to.
-     */
-    private String webSocketUrl;
-    /**
-     * Current logged in user.
-     */
-    protected User currentUser;
-    /**
-     * List of channel ids to determine direct messages.
-     */
-    protected List<String> dmChannels;
+
+    @Autowired
+    private SlackService slackService;
     /**
      * A Map of all methods annotated with {@link Controller} where key is the {@link EventType#name()} and
      * value is a list of {@link MethodWrapper}. NOTE: It does not contain methods which are part of any
@@ -112,12 +86,12 @@ public abstract class Bot {
                 if (!StringUtils.isEmpty(next)) {
                     conversationMethodNames.add(next);
                 }
-                
+
                 MethodWrapper methodWrapper = new MethodWrapper();
                 methodWrapper.setMethod(method);
                 methodWrapper.setPattern(pattern);
                 methodWrapper.setNext(next);
-                
+
                 if (!conversationMethodNames.contains(method.getName())) {
                     for (EventType eventType : eventTypes) {
                         List<MethodWrapper> methodWrappers = eventToMethodsMap.get(eventType.name());
@@ -125,7 +99,7 @@ public abstract class Bot {
                         if (methodWrappers == null) {
                             methodWrappers = new ArrayList<>();
                         }
-                        
+
                         methodWrappers.add(methodWrapper);
                         eventToMethodsMap.put(eventType.name(), methodWrappers);
                     }
@@ -182,11 +156,11 @@ public abstract class Bot {
             Event event = mapper.readValue(textMessage.getPayload(), Event.class);
             if (event.getType() != null) {
                 if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
-                    dmChannels.add(event.getChannelId());
+                    slackService.addDmChannel(event.getChannelId());
                 } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
-                    if (event.getText() != null && event.getText().contains(currentUser.getId())) { // direct mention
+                    if (event.getText() != null && event.getText().contains(slackService.getCurrentUser().getId())) { // direct mention
                         event.setType(EventType.DIRECT_MENTION.name());
-                    } else if (dmChannels.contains(event.getChannelId())) { // direct message
+                    } else if (slackService.getDmChannels().contains(event.getChannelId())) { // direct message
                         event.setType(EventType.DIRECT_MESSAGE.name());
                     }
                 }
@@ -206,7 +180,7 @@ public abstract class Bot {
 
     /**
      * Call this method to start a conversation.
-     * 
+     *
      * @param event
      */
     public void startConversation(Event event, String methodName) {
@@ -220,7 +194,7 @@ public abstract class Bot {
 
     /**
      * Call this method to jump to the next method in a conversation.
-     * 
+     *
      * @param event
      */
     public void nextConversation(Event event) {
@@ -230,7 +204,7 @@ public abstract class Bot {
 
     /**
      * Call this method to stop the end the conversation.
-     * 
+     *
      * @param event
      */
     public void stopConversation(Event event) {
@@ -239,7 +213,7 @@ public abstract class Bot {
 
     /**
      * Check whether a conversation is up in a particular slack channel.
-     * 
+     *
      * @param event
      * @return true if a conversation is on, false otherwise.
      */
@@ -284,7 +258,7 @@ public abstract class Bot {
 
     /**
      * Form a Queue with all the methods responsible for a particular conversation.
-     * 
+     *
      * @param queue
      * @param methodName
      * @return
@@ -393,56 +367,6 @@ public abstract class Bot {
         return null;
     }
 
-    /**
-     * Fetch the web socket url to connect to and
-     * also constructs the RTM object.
-     */
-    private void startRTM() {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            // Custom Deserializers
-            List<HttpMessageConverter<?>> httpMessageConverters = new ArrayList<>();
-            MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-            Jackson2ObjectMapperBuilder mapperBuilder = new Jackson2ObjectMapperBuilder();
-            mapperBuilder.deserializerByType(RTM.class, new JsonDeserializer<RTM>() {
-                @Override
-                public RTM deserialize(JsonParser p, DeserializationContext ctxt) {
-                    try {
-                        JsonNode node = p.readValueAsTree();
-                        RTM rtm = new RTM();
-                        rtm.setUrl(node.get("url").asText());
-                        rtm.setUser(new ObjectMapper().treeToValue(node.get("self"), User.class));
-                        List<String> dmChannels = new ArrayList<>();
-                        Iterator<JsonNode> iterator = node.get("ims").iterator();
-                        while (iterator.hasNext()) {
-                            dmChannels.add(iterator.next().get("id").asText());
-                        }
-                        rtm.setDmChannels(dmChannels);
-                        return rtm;
-                    } catch (Exception e) {
-                        logger.error("Error de-serializing RTM.start(): ", e);
-                        return null;
-                    }
-                }
-            });
-            jsonConverter.setObjectMapper(mapperBuilder.build());
-            httpMessageConverters.add(jsonConverter);
-            restTemplate.setMessageConverters(httpMessageConverters);
-
-            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, getSlackToken());
-            if (response.getBody() != null) {
-                webSocketUrl = response.getBody().getUrl();
-                dmChannels = response.getBody().getDmChannels();
-                currentUser = response.getBody().getUser();
-                logger.debug("RTM connection successful. WebSocket URL: {}", webSocketUrl);
-            } else {
-                logger.debug("RTM response invalid. Response: {}", response);
-            }
-        } catch (RestClientException e) {
-            logger.error("RTM connection error. Exception: {}", e.getMessage());
-        }
-    }
-
     private StandardWebSocketClient client() {
         return new StandardWebSocketClient();
     }
@@ -457,9 +381,9 @@ public abstract class Bot {
      */
     @PostConstruct
     private void startWebSocketConnection() {
-        startRTM(); // fetches the web socket url
-        if (webSocketUrl != null) {
-            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), webSocketUrl);
+        slackService.startRTM(getSlackToken());
+        if (slackService.getWebSocketUrl() != null) {
+            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
             manager.start();
         } else {
             logger.error("No websocket url returned by Slack.");

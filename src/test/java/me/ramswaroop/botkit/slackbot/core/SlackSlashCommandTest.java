@@ -3,6 +3,7 @@ package me.ramswaroop.botkit.slackbot.core;
 import me.ramswaroop.botkit.slackbot.SlackSlashCommand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -49,7 +51,6 @@ public class SlackSlashCommandTest {
                 "http://example.com")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"username\":null,\"channel\":null,\"text\":\"Sorry! You're not lucky " +
-                        "enough to use our slack command.\",\"attachments\":null,\"icon_emoji\":null,\"response_type\":null}"));
+                .andExpect(jsonPath("$.text").value("Sorry! You're not lucky enough to use our slack command."));
     }
 }

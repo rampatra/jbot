@@ -10,16 +10,16 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RTM {
 
-    private String url;
+    private String webSocketUrl;
     private List<String> dmChannels;
     private User user;
 
-    public String getUrl() {
-        return url;
+    public String getWebSocketUrl() {
+        return webSocketUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setWebSocketUrl(String webSocketUrl) {
+        this.webSocketUrl = webSocketUrl;
     }
 
     public List<String> getDmChannels() {

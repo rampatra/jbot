@@ -50,15 +50,13 @@ public class SlackWebhooks {
         richMessage.setAttachments(attachments);
 
         // For debugging purpose only
-        if (logger.isDebugEnabled()) {
-            try {
-                logger.debug("Reply (RichMessage): {}", new ObjectMapper().writeValueAsString(richMessage));
-            } catch (JsonProcessingException e) {
-                logger.debug("Error parsing RichMessage: ", e);
-            }
+        try {
+            logger.debug("Reply (RichMessage): {}", new ObjectMapper().writeValueAsString(richMessage));
+        } catch (JsonProcessingException e) {
+            logger.debug("Error parsing RichMessage: ", e);
         }
-        
-        // always remember to send the encoded message to Slack
+
+        // Always remember to send the encoded message to Slack
         try {
             restTemplate.postForEntity(slackIncomingWebhookUrl, richMessage.encodedMessage(), String.class);
         } catch (RestClientException e) {
