@@ -363,7 +363,7 @@ You can directly clone this project and start coding your bot (just don't touch 
 <dependency>
     <groupId>me.ramswaroop.botkit</groupId>
     <artifactId>botkit</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -371,7 +371,7 @@ You can directly clone this project and start coding your bot (just don't touch 
 
 ```groovy
 dependencies {
-    compile("me.ramswaroop.botkit:botkit:1.0.0")
+    compile("me.ramswaroop.botkit:botkit:1.1.0")
 }
 ```
 
