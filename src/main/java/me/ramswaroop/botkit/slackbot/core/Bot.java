@@ -31,9 +31,6 @@ import java.util.regex.Pattern;
 public abstract class Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
-
-    @Autowired
-    private SlackService slackService;
     /**
      * A Map of all methods annotated with {@link Controller} where key is the {@link EventType#name()} and
      * value is a list of {@link MethodWrapper}. NOTE: It does not contain methods which are part of any
@@ -54,6 +51,12 @@ public abstract class Bot {
      * can be chained into a conversation by {@link Controller#next()}.
      */
     private final Map<String, Queue<MethodWrapper>> conversationQueueMap = new HashMap<>();
+
+    /**
+     * Service to access Slack APIs.
+     */
+    @Autowired
+    protected SlackService slackService;
 
     /**
      * Class extending this must implement this as it's

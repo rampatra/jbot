@@ -3,6 +3,7 @@ package me.ramswaroop.botkit.slackbot.core;
 import me.ramswaroop.botkit.slackbot.core.models.RTM;
 import me.ramswaroop.botkit.slackbot.core.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  * @version 14/08/2016
  */
 @Service
+@Scope("prototype")
 public class SlackService {
 
     @Autowired

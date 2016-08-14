@@ -33,9 +33,6 @@ public class SlackBot extends Bot {
      */
     @Value("${slackBotToken}")
     private String slackToken;
-    
-    @Autowired
-    private SlackService slackService;
 
     @Override
     public String getSlackToken() {
