@@ -11,7 +11,7 @@
 
     <groupId>me.ramswaroop.botkit</groupId>
     <artifactId>botkit</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>BotKit</name>
@@ -39,7 +39,7 @@
         <url>https://github.com/ramswaroop/botkit</url>
         <connection>scm:git:git://github.com/ramswaroop/botkit.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/ramswaroop/botkit.git</developerConnection>
-        <tag>botkit-1.1.0</tag>
+        <tag>master</tag>
     </scm>
 
     <distributionManagement>
