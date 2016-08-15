@@ -11,7 +11,7 @@
 
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>JBot</name>
@@ -39,7 +39,7 @@
         <url>https://github.com/ramswaroop/jbot</url>
         <connection>scm:git:git://github.com/ramswaroop/jbot.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/ramswaroop/jbot.git</developerConnection>
-        <tag>jbot-2.0.0</tag>
+        <tag>master</tag>
     </scm>
 
     <distributionManagement>
