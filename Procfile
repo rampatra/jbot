@@ -1,1 +1,1 @@
-web: java -Dserver.port=8080 -jar  target/botkit-1.1.0.jar
+web: java -Dserver.port=8080 -jar  target/jbot-2.0.0.jar
