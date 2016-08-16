@@ -42,8 +42,17 @@ You can now start talking with your bot ;)
 * __Receiving & sending messages__ is as easy as defining a `controller` method and calling `reply()`, you don't need to 
   manually parse any events nor manually encode any messages before sending.
 * __Conversation feature__ of JBot makes talking to your bot a breeze.
-* __Well tested__ with unit tests.
+* __Well tested__ with good coverage unit tests.
 * And many other features which can't just be mentioned here.
+
+**Not satisfied?** Read on...
+
+* JBot got more than __400 stars__ in just 2 days after release.
+* It is in the [Hacker News](https://news.ycombinator.com/item?id=12239667) 50 club.
+* Chosen by [DZone daily picks](http://mailer.dzone.com/display.php?M=15184241&C=dcebb6887365120539df1fbf19a071ed&S=9043&L=658&N=4604).
+* Last but not the least, it's listed on [Slack.com](https://api.slack.com/community)
+ 
+**Still not satisfied?** Open an [issue on Github](/issues) and we can chat.
 
 ### Basic Usage
 
