@@ -52,7 +52,7 @@ You can now start talking with your bot ;)
 * Chosen by [DZone daily picks](http://mailer.dzone.com/display.php?M=15184241&C=dcebb6887365120539df1fbf19a071ed&S=9043&L=658&N=4604).
 * Last but not the least, it's listed on [Slack.com](https://api.slack.com/community)
  
-**Still not satisfied?** Open an [issue on Github](/issues) and we can chat.
+**Still not satisfied?** Open an [issue on Github](https://github.com/ramswaroop/jbot/issues) and we can chat.
 
 ### Basic Usage
 
@@ -403,7 +403,8 @@ You can now start talking with your Bot, send commands to your Slash Command or 
 
 ### Contributions
 
-If you would like like to contribute, raise an issue on Github and I would be more than happy to discuss :)
+If you would like like to contribute, raise an [issue on Github](https://github.com/ramswaroop/jbot/issues) and I would
+be more than happy to discuss :)
 
 ### Donations
 
