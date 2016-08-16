@@ -4,9 +4,11 @@ package me.ramswaroop.jbot.slackbot.core;
 import me.ramswaroop.jbot.slackbot.core.models.Event;
 import me.ramswaroop.jbot.slackbot.core.models.User;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -79,7 +81,7 @@ public class SlackBotTest {
     public void when_MessageWithPattern_Should_InvokeOnReceiveMessageWithPattern() throws Exception {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1358878749.000002\"," +
-                "\"channel\": \"D1E78BACV\"," +
+                "\"channel\": \"A1E78BACV\"," +
                 "\"user\": \"U023BECGF\"," +
                 "\"text\": \"as12sd\"}");
         bot.handleTextMessage(session, textMessage);
@@ -126,6 +128,68 @@ public class SlackBotTest {
         bot.handleTextMessage(session, textMessage);
         assertThat(capture.toString(), containsString("File shared"));
     }
+
+    @Test
+    public void when_ConversationPattern_Should_StartConversation() throws Exception {
+        TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1158878749.000002\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"setup meeting\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("At what time (ex. 15:30) do you want me to set up the meeting?"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1258878749.000002\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"12:50\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Would you like to repeat it tomorrow?"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1358878749.000002\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"yes\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Would you like me to set a reminder for you"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1458878749.000002\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"yes\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("I will remind you tomorrow before the meeting"));
+    }
+
+    @Test
+    public void given_InConversation_when_AnswerNo_Should_StopConversation() throws Exception {
+        TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1368878749.000602\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"setup meeting\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("At what time (ex. 15:30) do you want me to set up the meeting?"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"12:40\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Would you like to repeat it tomorrow?"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," +
+                "\"ts\": \"1358878749.000002\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"," +
+                "\"text\": \"no\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("You can always schedule one with 'setup meeting' command"));
+    }
 }
 
 /**
@@ -168,5 +232,43 @@ class SlackBot extends Bot {
     @Controller(events = EventType.FILE_SHARED)
     public void onFileShared(WebSocketSession session, Event event) {
         System.out.println("File shared.");
+    }
+
+    /**
+     * Conversation feature of JBot.
+     */
+
+    @Controller(pattern = "(setup meeting)", next = "confirmTiming")
+    public void setupMeeting(WebSocketSession session, Event event) {
+        startConversation(event, "confirmTiming");   // start conversation
+        System.out.println("Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
+    }
+
+    @Controller(next = "askTimeForMeeting")
+    public void confirmTiming(WebSocketSession session, Event event) {
+        System.out.println("Your meeting is set at " + event.getText() +
+                ". Would you like to repeat it tomorrow?");
+        nextConversation(event);    // jump to next question in conversation
+    }
+
+    @Controller(next = "askWhetherToRepeat")
+    public void askTimeForMeeting(WebSocketSession session, Event event) {
+        if (event.getText().contains("yes")) {
+            System.out.println("Okay. Would you like me to set a reminder for you?");
+            nextConversation(event);    // jump to next question in conversation  
+        } else {
+            System.out.println("No problem. You can always schedule one with 'setup meeting' command.");
+            stopConversation(event);    // stop conversation only if user says no
+        }
+    }
+
+    @Controller
+    public void askWhetherToRepeat(WebSocketSession session, Event event) {
+        if (event.getText().contains("yes")) {
+            System.out.println("Great! I will remind you tomorrow before the meeting.");
+        } else {
+            System.out.println("Oh! my boss is smart enough to remind himself :)");
+        }
+        stopConversation(event);    // stop conversation
     }
 }
