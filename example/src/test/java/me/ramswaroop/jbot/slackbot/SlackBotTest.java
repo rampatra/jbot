@@ -1,14 +1,16 @@
-package me.ramswaroop.jbot.slackbot.core;
+package me.ramswaroop.jbot.slackbot;
 
 
+import me.ramswaroop.jbot.slackbot.core.Bot;
+import me.ramswaroop.jbot.slackbot.core.Controller;
+import me.ramswaroop.jbot.slackbot.core.EventType;
+import me.ramswaroop.jbot.slackbot.core.SlackService;
 import me.ramswaroop.jbot.slackbot.core.models.Event;
 import me.ramswaroop.jbot.slackbot.core.models.User;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -39,7 +41,7 @@ public class SlackBotTest {
     private SlackService slackService;
 
     @InjectMocks
-    private SlackBot bot;
+    private TestBot bot;
 
     @Rule
     public OutputCapture capture = new OutputCapture();
@@ -190,85 +192,86 @@ public class SlackBotTest {
         bot.handleTextMessage(session, textMessage);
         assertThat(capture.toString(), containsString("You can always schedule one with 'setup meeting' command"));
     }
-}
 
-/**
- * Slack Bot for unit tests.
- */
-class SlackBot extends Bot {
-    @Override
-    public String getSlackToken() {
-        return "slackToken";
-    }
-
-    @Override
-    public Bot getSlackBot() {
-        return this;
-    }
-
-    @Controller(events = EventType.DIRECT_MENTION)
-    public void onDirectMention(WebSocketSession session, Event event) {
-        System.out.println("Hi, I am SlackBot");
-    }
-
-    @Controller(events = EventType.DIRECT_MESSAGE)
-    public void onDirectMessage(WebSocketSession session, Event event) {
-        System.out.println("Hi, this is a direct message.");
-    }
-
-    @Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
-    public void onReceiveMessageWithPattern(WebSocketSession session, Event event, Matcher matcher) {
-        System.out.println("First group: " + matcher.group(0) + "\n" +
-                "Second group: " + matcher.group(1) + "\n" +
-                "Third group: " + matcher.group(2) + "\n" +
-                "Fourth group: " + matcher.group(3));
-    }
-
-    @Controller(events = EventType.PIN_ADDED)
-    public void onPinAdded(WebSocketSession session, Event event) {
-        System.out.println("Thanks for the pin! You can find all pinned items under channel details.");
-    }
-
-    @Controller(events = EventType.FILE_SHARED)
-    public void onFileShared(WebSocketSession session, Event event) {
-        System.out.println("File shared.");
-    }
 
     /**
-     * Conversation feature of JBot.
+     * Slack Bot for unit tests.
      */
-
-    @Controller(pattern = "(setup meeting)", next = "confirmTiming")
-    public void setupMeeting(WebSocketSession session, Event event) {
-        startConversation(event, "confirmTiming");   // start conversation
-        System.out.println("Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
-    }
-
-    @Controller(next = "askTimeForMeeting")
-    public void confirmTiming(WebSocketSession session, Event event) {
-        System.out.println("Your meeting is set at " + event.getText() +
-                ". Would you like to repeat it tomorrow?");
-        nextConversation(event);    // jump to next question in conversation
-    }
-
-    @Controller(next = "askWhetherToRepeat")
-    public void askTimeForMeeting(WebSocketSession session, Event event) {
-        if (event.getText().contains("yes")) {
-            System.out.println("Okay. Would you like me to set a reminder for you?");
-            nextConversation(event);    // jump to next question in conversation  
-        } else {
-            System.out.println("No problem. You can always schedule one with 'setup meeting' command.");
-            stopConversation(event);    // stop conversation only if user says no
+    public static class TestBot extends Bot {
+        @Override
+        public String getSlackToken() {
+            return "slackToken";
         }
-    }
 
-    @Controller
-    public void askWhetherToRepeat(WebSocketSession session, Event event) {
-        if (event.getText().contains("yes")) {
-            System.out.println("Great! I will remind you tomorrow before the meeting.");
-        } else {
-            System.out.println("Oh! my boss is smart enough to remind himself :)");
+        @Override
+        public Bot getSlackBot() {
+            return this;
         }
-        stopConversation(event);    // stop conversation
+
+        @Controller(events = EventType.DIRECT_MENTION)
+        public void onDirectMention(WebSocketSession session, Event event) {
+            System.out.println("Hi, I am SlackBot");
+        }
+
+        @Controller(events = EventType.DIRECT_MESSAGE)
+        public void onDirectMessage(WebSocketSession session, Event event) {
+            System.out.println("Hi, this is a direct message.");
+        }
+
+        @Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
+        public void onReceiveMessageWithPattern(WebSocketSession session, Event event, Matcher matcher) {
+            System.out.println("First group: " + matcher.group(0) + "\n" +
+                    "Second group: " + matcher.group(1) + "\n" +
+                    "Third group: " + matcher.group(2) + "\n" +
+                    "Fourth group: " + matcher.group(3));
+        }
+
+        @Controller(events = EventType.PIN_ADDED)
+        public void onPinAdded(WebSocketSession session, Event event) {
+            System.out.println("Thanks for the pin! You can find all pinned items under channel details.");
+        }
+
+        @Controller(events = EventType.FILE_SHARED)
+        public void onFileShared(WebSocketSession session, Event event) {
+            System.out.println("File shared.");
+        }
+
+        /**
+         * Conversation feature of JBot.
+         */
+
+        @Controller(pattern = "(setup meeting)", next = "confirmTiming")
+        public void setupMeeting(WebSocketSession session, Event event) {
+            startConversation(event, "confirmTiming");   // start conversation
+            System.out.println("Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
+        }
+
+        @Controller(next = "askTimeForMeeting")
+        public void confirmTiming(WebSocketSession session, Event event) {
+            System.out.println("Your meeting is set at " + event.getText() +
+                    ". Would you like to repeat it tomorrow?");
+            nextConversation(event);    // jump to next question in conversation
+        }
+
+        @Controller(next = "askWhetherToRepeat")
+        public void askTimeForMeeting(WebSocketSession session, Event event) {
+            if (event.getText().contains("yes")) {
+                System.out.println("Okay. Would you like me to set a reminder for you?");
+                nextConversation(event);    // jump to next question in conversation
+            } else {
+                System.out.println("No problem. You can always schedule one with 'setup meeting' command.");
+                stopConversation(event);    // stop conversation only if user says no
+            }
+        }
+
+        @Controller
+        public void askWhetherToRepeat(WebSocketSession session, Event event) {
+            if (event.getText().contains("yes")) {
+                System.out.println("Great! I will remind you tomorrow before the meeting.");
+            } else {
+                System.out.println("Oh! my boss is smart enough to remind himself :)");
+            }
+            stopConversation(event);    // stop conversation
+        }
     }
 }

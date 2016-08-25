@@ -1,4 +1,4 @@
-package me.ramswaroop.jbot.slackbot.core;
+package me.ramswaroop.jbot.slackbot;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

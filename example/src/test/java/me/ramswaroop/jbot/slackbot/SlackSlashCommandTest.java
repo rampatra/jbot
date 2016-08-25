@@ -1,4 +1,4 @@
-package me.ramswaroop.jbot.slackbot.core;
+package me.ramswaroop.jbot.slackbot;
 
 import me.ramswaroop.jbot.slackbot.SlackSlashCommand;
 import org.junit.Test;
