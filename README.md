@@ -107,21 +107,20 @@ slashCommandToken=X73Fv3tokenx242CdpEq
 slackIncomingWebhookUrl=https://hooks.slack.com/services/T02WEBHOOKURLV7oOYvPiHL7y6
 ```
 
-The [core](src/main/java/me/ramswaroop/jbot/slackbot/core) package contains all of JBot code. You can create
-packages outside `core` package and put your custom code there. To make a 
-* __Slack Bot__ &rArr; Extend [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) class.  
-* __Slash Command Handler__ &rArr; Annotate your [class](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java)
-  with Spring's `@Controller` and have a [method](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java#onReceiveSlashCommand)
+You can directly use [jbot-example](/jbot-example) or use jbot as a dependency. To make a 
+* __Slack Bot__ &rArr; Extend [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class.  
+* __Slash Command Handler__ &rArr; Annotate your [class](/jbot-example/src/main/java/example/jbot/slack/SlackSlashCommand.java)
+  with Spring's `@Controller` and have a [method](/jbot-example/src/main/java/example/jbot/slack/SlackSlashCommand.java#onReceiveSlashCommand)
   with the required `@RequestMapping` path receiving a set of request params as shown in the 
   [sample](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java).  
 * __Slack Incoming Webhook__ &rArr; Just make a `POST` call with 
-  [RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) whenever you want to update 
+  [RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) whenever you want to update 
   your Slack users about something.
 * __Slack Outgoing Webhook__ &rArr; Same as Slash Command Handler.
 
 #### Receiving Messages
 
-For __Bots__, you receive a message as [Event](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Event.java). For
+For __Bots__, you receive a message as [Event](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Event.java). For
 almost all actions Slack fires a relevant [event](https://api.slack.com/events) for it. Unfortunately, it does not fire
 appropriate events when someone directly messages the bot (direct message) or mentions the bot on a channel 
 (like `@bot`). It just fires an event of type `message` for all the messages (directly to bot and to channels where bot
@@ -142,11 +141,11 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
-What you're doing here is annotating a method with [@Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java)
+What you're doing here is annotating a method with [@Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java)
 annotation and passing an array events to that annotation which you want to listen to. By default your controller will
 listen to `EventType.MESSAGE` events if you do not specify any events explicitly. 
 
-You can also add regular expressions to your [@Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java)
+You can also add regular expressions to your [@Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java)
 annotation like:
 
 ```java
@@ -183,9 +182,9 @@ request, no explicit `content-type` header will be set.
 
 __NOTE:__ The URL you provide must be a __HTTPS URL__ with a valid, verifiable __SSL certificate__.
 
-In __Incoming Webhooks__, your [application](/src/main/java/me/ramswaroop/jbot/slackbot/SlackWebhooks.java) `POST` 
+In __Incoming Webhooks__, your [application](/jbot-example/src/main/java/example/jbot/slack/SlackWebhooks.java) `POST` 
 data and do not receive any data apart from the acknowledgement for your sent data. You send data
-as [RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) to Slack Webhook URL.
+as [RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) to Slack Webhook URL.
 
 In __Outgoing Webhooks__, you receive a `POST` request from Slack like below:  
 
@@ -207,9 +206,9 @@ the outgoing `POST` data in case of Outgoing Webhooks.
 
 #### Sending Messages
 
-In __Bots__, you can use the `reply()` method defined in [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java)
+In __Bots__, you can use the `reply()` method defined in [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java)
 class to send messages to Slack. You just need to set the text you want to send in 
-[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) and everything else will be taken care 
+[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) and everything else will be taken care 
 by JBot. But you can set other fields if you want such as `id` in the message.
 
 Here is an example:
@@ -231,7 +230,7 @@ Under the hood the message sent is nothing but a json like below:
 ```
 
 For __Slash Commands__ and __Incoming Webhooks__, you can send messages as 
-[RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java). Just keep in mind to encode it
+[RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java). Just keep in mind to encode it
 before sending by just calling the `encodedMessage()` method. Below is an example:
 ```java
 @RequestMapping(value = "/slash-command",
@@ -265,14 +264,14 @@ public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
 ```
 
 __Points to Note:__ 
-* [Event](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Event.java), 
-[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) and 
-[RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) are generic models. Not all the 
+* [Event](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Event.java), 
+[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) and 
+[RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) are generic models. Not all the 
 time, all the attributes present in them will have values. In other words, [Slack sends different responses for different
 events](https://api.slack.com/events/hello).
 * You need a __channel id__ to send replies. Therefore, you can use `reply()` method for events which have a channel id
 in them or else you have to explicitly set the channel id in the 
-[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) object.
+[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) object.
 
 #### Conversations
 
@@ -368,7 +367,7 @@ effect for rest of the methods in a conversation.
 #### Usage
 
 You can directly clone this project and use [jbot-example](/jbot-example) or you can include it as a maven/gradle 
-dependency.
+dependency in your project.
 
 **Maven**
 
@@ -387,6 +386,10 @@ dependencies {
     compile("me.ramswaroop.jbot:jbot:3.0.0")
 }
 ```
+
+__NOTE:__ When you include jbot as a dependency please make sure to include `me.ramswaroop.jbot` package for auto-scan.
+For example, you can specify `scanBasePackages` in `@SpringBootApplication` or `@ComponentScan`. See 
+[jbot-example](/jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
 
 #### Deploy to the Cloud
 
