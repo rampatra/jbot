@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>me.ramswaroop.jbot</groupId>
-            <artifactId>jbot-core</artifactId>
+            <artifactId>jbot</artifactId>
             <version>3.0.1-SNAPSHOT</version>
         </dependency>
 
