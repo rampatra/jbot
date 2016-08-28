@@ -29,8 +29,12 @@ the boilerplate code needed so that you can __make your bot live__ right away.
   
 1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git` and `$ cd jbot`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
-3. Paste the token in [application.properties](/src/main/resources/application.properties) file.  
-4. Run the application by running `JBotApplication` in your IDE or via commandline `$ mvn spring-boot:run`.  
+3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
+4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
+```
+$ cd jbot-example
+$ mvn spring-boot:run
+```
 
 You can now start talking with your bot ;)
 
@@ -66,9 +70,9 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
-All the code for your bot goes in [SlackBot](/src/main/java/me/ramswaroop/jbot/slackbot/SlackBot.java) class which
-extends [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) from the core package. You can have as many
-bots as you want, just make the class extend [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) class
+All the code for your bot goes in [SlackBot](/jbot-example/src/main/java/example/jbot/slack/SlackBot.java) class which
+extends [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) from the core package. You can have as many
+bots as you want, just make the class extend [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
 and it gets all the powers of a Slack Bot.
 
 ### Building a [Slack Integration](https://api.slack.com/) with JBot
@@ -316,8 +320,8 @@ the event and the name of the next controller method.
 
 This is your next method in the conversation. After your desired work is done, do not forget to call `nextConversation(event)`
 to jump to the next method. You can specify the next method to call in 
-[next](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java#next) attribute of 
-[Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java) annotation.
+[next](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java#next) attribute of 
+[Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java) annotation.
 
 ```java
     /**
@@ -363,8 +367,8 @@ effect for rest of the methods in a conversation.
 
 #### Usage
 
-You can directly clone this project and start coding your bot (just don't touch the 
-[core](/src/main/java/me/ramswaroop/jbot/slackbot/core) package) or you can include it as a maven/gradle dependency.
+You can directly clone this project and use [jbot-example](/jbot-example) or you can include it as a maven/gradle 
+dependency.
 
 **Maven**
 
@@ -372,7 +376,7 @@ You can directly clone this project and start coding your bot (just don't touch 
 <dependency>
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -380,7 +384,7 @@ You can directly clone this project and start coding your bot (just don't touch 
 
 ```groovy
 dependencies {
-    compile("me.ramswaroop.jbot:jbot:2.0.0")
+    compile("me.ramswaroop.jbot:jbot:3.0.0")
 }
 ```
 
@@ -392,7 +396,7 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 2. Get your [slack bot token](https://my.slack.com/services/new/bot) or 
 [slash command](https://my.slack.com/services/new/slash-commands) token or 
 [incoming webhook](https://my.slack.com/services/new/incoming-webhook/) url.      
-3. Paste the above tokens/urls in [application.properties](/src/main/resources/application.properties) file.    
+3. Paste the above tokens/urls in [application.properties](/jbot-example/src/main/resources/application.properties) file.    
 4. [Download Toolbelt](https://toolbelt.heroku.com/) for your system.  
 5. `$ heroku login` - Login to Heroku.  
 6. `$ heroku create` - Create an app on Heroku.  
