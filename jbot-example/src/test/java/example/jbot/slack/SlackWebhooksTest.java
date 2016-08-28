@@ -1,4 +1,4 @@
-package me.ramswaroop.jbot.slack;
+package example.jbot.slack;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
