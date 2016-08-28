@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>jbot-parent</artifactId>
         <groupId>me.ramswaroop.jbot</groupId>
+        <artifactId>jbot-parent</artifactId>
         <version>3.0.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
