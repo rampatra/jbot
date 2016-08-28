@@ -5,13 +5,13 @@
     <parent>
         <artifactId>jbot</artifactId>
         <groupId>me.ramswaroop.jbot</groupId>
-        <version>3.0.0</version>
+        <version>3.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
     <artifactId>jbot-core</artifactId>
     <name>JBot Core</name>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
