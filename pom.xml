@@ -10,16 +10,16 @@
     </parent>
     
     <groupId>me.ramswaroop.jbot</groupId>
-    <artifactId>jbot</artifactId>
+    <artifactId>jbot-parent</artifactId>
     <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JBot</name>
+    <name>JBot Parent</name>
     <description>LEGO for building bots. Make Slack, Facebook and Twitter bots in Java in minutes.</description>
     <url>https://github.com/ramswaroop/jbot</url>
 
     <modules>
-        <module>jbot-core</module>
+        <module>jbot</module>
     </modules>
 
     <developers>
