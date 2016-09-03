@@ -19,7 +19,6 @@ the boilerplate code needed so that you can __make your bot live__ right away.
     * [Conversations](#conversations)
     * [Usage](#usage)
     * [Deploy to the cloud](#deploy-to-the-cloud)
-    * [Documentation History](#documentation-history)
 5. [Contributions](#contributions)
 6. [Donations](#donations)
     
@@ -30,12 +29,8 @@ the boilerplate code needed so that you can __make your bot live__ right away.
   
 1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git` and `$ cd jbot`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
-3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
-4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
-```
-$ cd jbot-example
-$ mvn spring-boot:run
-```
+3. Paste the token in [application.properties](/src/main/resources/application.properties) file.  
+4. Run the application by running `JBotApplication` in your IDE or via commandline `$ mvn spring-boot:run`.  
 
 You can now start talking with your bot ;)
 
@@ -47,17 +42,8 @@ You can now start talking with your bot ;)
 * __Receiving & sending messages__ is as easy as defining a `controller` method and calling `reply()`, you don't need to 
   manually parse any events nor manually encode any messages before sending.
 * __Conversation feature__ of JBot makes talking to your bot a breeze.
-* __Well tested__ with good coverage unit tests.
+* __Well tested__ with unit tests.
 * And many other features which can't just be mentioned here.
-
-**Not satisfied?** Read on...
-
-* JBot got more than __400 stars__ in just 2 days after release.
-* It is in the [Hacker News](https://news.ycombinator.com/item?id=12239667) 50 club.
-* Chosen by [DZone daily picks](http://mailer.dzone.com/display.php?M=15184241&C=dcebb6887365120539df1fbf19a071ed&S=9043&L=658&N=4604).
-* Last but not the least, it's listed on [Slack.com](https://api.slack.com/community)
- 
-**Still not satisfied?** Open an [issue on Github](https://github.com/ramswaroop/jbot/issues) and we can chat.
 
 ### Basic Usage
 
@@ -71,9 +57,9 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
-All the code for your bot goes in [SlackBot](/jbot-example/src/main/java/example/jbot/slack/SlackBot.java) class which
-extends [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) from the core package. You can have as many
-bots as you want, just make the class extend [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
+All the code for your bot goes in [SlackBot](/src/main/java/me/ramswaroop/jbot/slackbot/SlackBot.java) class which
+extends [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) from the core package. You can have as many
+bots as you want, just make the class extend [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) class
 and it gets all the powers of a Slack Bot.
 
 ### Building a [Slack Integration](https://api.slack.com/) with JBot
@@ -108,20 +94,21 @@ slashCommandToken=X73Fv3tokenx242CdpEq
 slackIncomingWebhookUrl=https://hooks.slack.com/services/T02WEBHOOKURLV7oOYvPiHL7y6
 ```
 
-You can directly use [jbot-example](/jbot-example) or use jbot as a dependency. To make a 
-* __Slack Bot__ &rArr; Extend [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class.  
-* __Slash Command Handler__ &rArr; Annotate your [class](/jbot-example/src/main/java/example/jbot/slack/SlackSlashCommand.java)
-  with Spring's `@Controller` and have a [method](/jbot-example/src/main/java/example/jbot/slack/SlackSlashCommand.java#onReceiveSlashCommand)
+The [core](src/main/java/me/ramswaroop/jbot/slackbot/core) package contains all of JBot code. You can create
+packages outside `core` package and put your custom code there. To make a 
+* __Slack Bot__ &rArr; Extend [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java) class.  
+* __Slash Command Handler__ &rArr; Annotate your [class](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java)
+  with Spring's `@Controller` and have a [method](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java#onReceiveSlashCommand)
   with the required `@RequestMapping` path receiving a set of request params as shown in the 
   [sample](/src/main/java/me/ramswaroop/jbot/slackbot/SlackSlashCommand.java).  
 * __Slack Incoming Webhook__ &rArr; Just make a `POST` call with 
-  [RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) whenever you want to update 
+  [RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) whenever you want to update 
   your Slack users about something.
 * __Slack Outgoing Webhook__ &rArr; Same as Slash Command Handler.
 
 #### Receiving Messages
 
-For __Bots__, you receive a message as [Event](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Event.java). For
+For __Bots__, you receive a message as [Event](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Event.java). For
 almost all actions Slack fires a relevant [event](https://api.slack.com/events) for it. Unfortunately, it does not fire
 appropriate events when someone directly messages the bot (direct message) or mentions the bot on a channel 
 (like `@bot`). It just fires an event of type `message` for all the messages (directly to bot and to channels where bot
@@ -142,11 +129,11 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
-What you're doing here is annotating a method with [@Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java)
+What you're doing here is annotating a method with [@Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java)
 annotation and passing an array events to that annotation which you want to listen to. By default your controller will
 listen to `EventType.MESSAGE` events if you do not specify any events explicitly. 
 
-You can also add regular expressions to your [@Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java)
+You can also add regular expressions to your [@Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java)
 annotation like:
 
 ```java
@@ -183,9 +170,9 @@ request, no explicit `content-type` header will be set.
 
 __NOTE:__ The URL you provide must be a __HTTPS URL__ with a valid, verifiable __SSL certificate__.
 
-In __Incoming Webhooks__, your [application](/jbot-example/src/main/java/example/jbot/slack/SlackWebhooks.java) `POST` 
+In __Incoming Webhooks__, your [application](/src/main/java/me/ramswaroop/jbot/slackbot/SlackWebhooks.java) `POST` 
 data and do not receive any data apart from the acknowledgement for your sent data. You send data
-as [RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) to Slack Webhook URL.
+as [RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) to Slack Webhook URL.
 
 In __Outgoing Webhooks__, you receive a `POST` request from Slack like below:  
 
@@ -207,9 +194,9 @@ the outgoing `POST` data in case of Outgoing Webhooks.
 
 #### Sending Messages
 
-In __Bots__, you can use the `reply()` method defined in [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java)
+In __Bots__, you can use the `reply()` method defined in [Bot](/src/main/java/me/ramswaroop/jbot/slackbot/core/Bot.java)
 class to send messages to Slack. You just need to set the text you want to send in 
-[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) and everything else will be taken care 
+[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) and everything else will be taken care 
 by JBot. But you can set other fields if you want such as `id` in the message.
 
 Here is an example:
@@ -231,7 +218,7 @@ Under the hood the message sent is nothing but a json like below:
 ```
 
 For __Slash Commands__ and __Incoming Webhooks__, you can send messages as 
-[RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java). Just keep in mind to encode it
+[RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java). Just keep in mind to encode it
 before sending by just calling the `encodedMessage()` method. Below is an example:
 ```java
 @RequestMapping(value = "/slash-command",
@@ -265,14 +252,14 @@ public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
 ```
 
 __Points to Note:__ 
-* [Event](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Event.java), 
-[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) and 
-[RichMessage](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/RichMessage.java) are generic models. Not all the 
+* [Event](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Event.java), 
+[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) and 
+[RichMessage](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/RichMessage.java) are generic models. Not all the 
 time, all the attributes present in them will have values. In other words, [Slack sends different responses for different
 events](https://api.slack.com/events/hello).
 * You need a __channel id__ to send replies. Therefore, you can use `reply()` method for events which have a channel id
 in them or else you have to explicitly set the channel id in the 
-[Message](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/models/Message.java) object.
+[Message](/src/main/java/me/ramswaroop/jbot/slackbot/core/models/Message.java) object.
 
 #### Conversations
 
@@ -320,8 +307,8 @@ the event and the name of the next controller method.
 
 This is your next method in the conversation. After your desired work is done, do not forget to call `nextConversation(event)`
 to jump to the next method. You can specify the next method to call in 
-[next](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java#next) attribute of 
-[Controller](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Controller.java) annotation.
+[next](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java#next) attribute of 
+[Controller](/src/main/java/me/ramswaroop/jbot/slackbot/core/Controller.java) annotation.
 
 ```java
     /**
@@ -367,8 +354,8 @@ effect for rest of the methods in a conversation.
 
 #### Usage
 
-You can directly clone this project and use [jbot-example](/jbot-example) or you can include it as a maven/gradle 
-dependency in your project.
+You can directly clone this project and start coding your bot (just don't touch the 
+[core](/src/main/java/me/ramswaroop/jbot/slackbot/core) package) or you can include it as a maven/gradle dependency.
 
 **Maven**
 
@@ -376,7 +363,7 @@ dependency in your project.
 <dependency>
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot</artifactId>
-    <version>3.0.2</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -384,13 +371,9 @@ dependency in your project.
 
 ```groovy
 dependencies {
-    compile("me.ramswaroop.jbot:jbot:3.0.2")
+    compile("me.ramswaroop.jbot:jbot:2.0.0")
 }
 ```
-
-__NOTE:__ When you include jbot as a dependency please make sure to include `me.ramswaroop.jbot` package for auto-scan.
-For example, you can specify `scanBasePackages` in `@SpringBootApplication` or `@ComponentScan`. See 
-[jbot-example](/jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
 
 #### Deploy to the Cloud
 
@@ -400,7 +383,7 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 2. Get your [slack bot token](https://my.slack.com/services/new/bot) or 
 [slash command](https://my.slack.com/services/new/slash-commands) token or 
 [incoming webhook](https://my.slack.com/services/new/incoming-webhook/) url.      
-3. Paste the above tokens/urls in [application.properties](/jbot-example/src/main/resources/application.properties) file.    
+3. Paste the above tokens/urls in [application.properties](/src/main/resources/application.properties) file.    
 4. [Download Toolbelt](https://toolbelt.heroku.com/) for your system.  
 5. `$ heroku login` - Login to Heroku.  
 6. `$ heroku create` - Create an app on Heroku.  
@@ -409,16 +392,9 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 
 You can now start talking with your Bot, send commands to your Slash Command or play with Incoming Webhooks ;)
 
-#### Documentation History
-
-* [README-Slack-JBot-3.0.2](/#)
-* [README-Slack-JBot-2.0.0](/README-Slack-JBot-2.0.0.md)
-* [README-Slack-BotKit-1.1.0](/README-Slack-BotKit-1.1.0.md)
-
 ### Contributions
 
-If you would like like to contribute, raise an [issue on Github](https://github.com/ramswaroop/jbot/issues) and I would
-be more than happy to discuss :)
+If you would like like to contribute, raise an issue on Github and I would be more than happy to discuss :)
 
 ### Donations
 
