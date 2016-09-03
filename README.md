@@ -19,9 +19,9 @@ the boilerplate code needed so that you can __make your bot live__ right away.
     * [Conversations](#conversations)
     * [Usage](#usage)
     * [Deploy to the cloud](#deploy-to-the-cloud)
-    * [Documentation History](#documentation-history)
-5. [Contributions](#contributions)
-6. [Donations](#donations)
+5. [Documentation History](#documentation-history)
+6. [Contributions](#contributions)
+7. [Donations](#donations)
     
 
 ### Getting started
@@ -409,7 +409,7 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 
 You can now start talking with your Bot, send commands to your Slash Command or play with Incoming Webhooks ;)
 
-#### Documentation History
+### Documentation History
 
 * [README-Slack-JBot-3.0.2](https://github.com/ramswaroop/jbot)
 * [README-Slack-JBot-2.0.0](/readme/README-Slack-JBot-2.0.0.md)
