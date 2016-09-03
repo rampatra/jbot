@@ -1,4 +1,4 @@
-# BotKit [![Gitter](https://badges.gitter.im/ramswaroop/botkit.svg)](https://gitter.im/ramswaroop/botkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Bountysource](https://api.bountysource.com/badge/team?team_id=160604)](https://www.bountysource.com/teams/botkit) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
+# BotKit [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Bountysource](https://api.bountysource.com/badge/team?team_id=160604)](https://www.bountysource.com/teams/jbot) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/botkit/master/LICENSE)
 
 LEGO for building bots.
 
