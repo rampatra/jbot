@@ -411,9 +411,9 @@ You can now start talking with your Bot, send commands to your Slash Command or 
 
 #### Documentation History
 
-* [README-Slack-JBot-3.0.2](/#)
-* [README-Slack-JBot-2.0.0](/README-Slack-JBot-2.0.0.md)
-* [README-Slack-BotKit-1.1.0](/README-Slack-BotKit-1.1.0.md)
+* [README-Slack-JBot-3.0.2]()
+* [README-Slack-JBot-2.0.0](/readme/README-Slack-JBot-2.0.0.md)
+* [README-Slack-BotKit-1.1.0](/readme/README-Slack-BotKit-1.1.0.md)
 
 ### Contributions
 
