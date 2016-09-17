@@ -2,8 +2,8 @@ package example.jbot.slack;
 
 
 import me.ramswaroop.jbot.core.slack.Bot;
-import me.ramswaroop.jbot.core.slack.Controller;
-import me.ramswaroop.jbot.core.slack.EventType;
+import me.ramswaroop.jbot.core.common.Controller;
+import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.slack.SlackService;
 import me.ramswaroop.jbot.core.slack.models.Event;
 import me.ramswaroop.jbot.core.slack.models.User;

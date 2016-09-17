@@ -1,14 +1,14 @@
 package example.jbot.slack;
 
+import me.ramswaroop.jbot.core.common.Controller;
+import me.ramswaroop.jbot.core.common.EventType;
+import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.slack.Bot;
-import me.ramswaroop.jbot.core.slack.Controller;
-import me.ramswaroop.jbot.core.slack.EventType;
 import me.ramswaroop.jbot.core.slack.models.Event;
 import me.ramswaroop.jbot.core.slack.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.regex.Matcher;
@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
  * @author ramswaroop
  * @version 1.0.0, 05/06/2016
  */
-@Component
+@JBot
 public class SlackBot extends Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);

@@ -1,8 +1,8 @@
-package me.ramswaroop.jbot.core.slack;
+package me.ramswaroop.jbot.core.common;
 
 /**
- * All events supported by Slack RTM API plus
- * two events added by jbot.
+ * All events supported by Slack RTM API (including two events added 
+ * by jbot), Fb Messenger Bot API.
  *
  * @author ramswaroop
  * @version 1.0.0, 12/06/2016
@@ -18,5 +18,5 @@ public enum EventType {
     TEAM_JOIN, STAR_ADDED, STAR_REMOVED, REACTION_ADDED, REACTION_REMOVED, EMOJI_CHANGED, COMMANDS_CHANGED,
     TEAM_PLAN_CHANGE, TEAM_PREF_CHANGE, TEAM_RENAME, TEAM_DOMAIN_CHANGE, EMAIL_DOMAIN_CHANGED, TEAM_PROFILE_CHANGE,
     TEAM_PROFILE_DELETE, TEAM_PROFILE_REORDER, BOT_ADDED, BOT_CHANGED, ACCOUNTS_CHANGED, TEAM_MIGRATION_STARTED,
-    RECONNECT_URL, SUBTEAM_CREATED, SUBTEAM_UPDATED, SUBTEAM_SELF_ADDED, SUBTEAM_SELF_REMOVED, ACK;
+    RECONNECT_URL, SUBTEAM_CREATED, SUBTEAM_UPDATED, SUBTEAM_SELF_ADDED, SUBTEAM_SELF_REMOVED, ACK, SUBSCRIBE;
 }

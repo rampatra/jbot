@@ -1,4 +1,4 @@
-package me.ramswaroop.jbot.core.slack;
+package me.ramswaroop.jbot.core.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for different Event types in Slack RTM API.
+ * Annotation for different Event types in Slack RTM API, Fb Messenger Bot API.
  * 
  * @author ramswaroop
  * @version 1.0.0, 12/06/2016.

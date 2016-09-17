@@ -1,5 +1,6 @@
 package me.ramswaroop.jbot.core.slack;
 
+import me.ramswaroop.jbot.core.common.EventType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
