@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
+    private String id;
     @JsonProperty("first_name")
     private String firstName;
     @JsonProperty("last_name")
@@ -19,6 +20,14 @@ public class User {
     private String locale;
     private double timezone;
     private String gender;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
