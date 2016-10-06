@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author ramswaroop
- * @version 26/09/2016
+ * @version 06/10/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Checkout {
-    
-    private String object;
+public class PaymentEvent {
     
 }

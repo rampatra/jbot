@@ -18,5 +18,9 @@ public class Event {
     private Optin optin;
     @JsonProperty("account_linking")
     private AccountLinking accountLinking;
+    private Read read;
+    private Delivery delivery;
+    @JsonProperty("checkout_update")
+    private CheckoutUpdate checkoutUpdate;
     
 }

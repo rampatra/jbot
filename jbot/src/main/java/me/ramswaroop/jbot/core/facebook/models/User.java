@@ -17,6 +17,8 @@ public class User {
     private String lastName;
     @JsonProperty("profile_pic")
     private String profilePic;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
     private String locale;
     private double timezone;
     private String gender;
@@ -51,6 +53,14 @@ public class User {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getLocale() {

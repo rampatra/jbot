@@ -15,6 +15,10 @@ public class Payload {
     private String coordinatesLat;
     @JsonProperty("coordinates.long")
     private String coordinatesLong;
+    @JsonProperty("is_reusable")
+    private boolean isReusable;
+    @JsonProperty("attachment_id")
+    private String attachmentId;
 
     public String getUrl() {
         return url;
@@ -38,5 +42,21 @@ public class Payload {
 
     public void setCoordinatesLong(String coordinatesLong) {
         this.coordinatesLong = coordinatesLong;
+    }
+
+    public boolean isReusable() {
+        return isReusable;
+    }
+
+    public void setReusable(boolean reusable) {
+        isReusable = reusable;
+    }
+
+    public String getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(String attachmentId) {
+        this.attachmentId = attachmentId;
     }
 }
