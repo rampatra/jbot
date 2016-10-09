@@ -22,6 +22,14 @@ public class User {
     private String locale;
     private double timezone;
     private String gender;
+    @JsonProperty("shipping_address")
+    private ShippingAddress shippingAddress;
+    @JsonProperty("shipping_name")
+    private String contactName;
+    @JsonProperty("shipping_email")
+    private String contactEmail;
+    @JsonProperty("shipping_phone")
+    private String contactPhone;    
 
     public String getId() {
         return id;
