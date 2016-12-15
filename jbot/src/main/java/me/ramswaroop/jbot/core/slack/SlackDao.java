@@ -43,7 +43,7 @@ public class SlackDao {
      * Rest template to make http calls.
      */
     private RestTemplate restTemplate;
-    
+
     public RTM startRTM(String slackToken) {
         try {
             restTemplate = new RestTemplate();
@@ -56,16 +56,23 @@ public class SlackDao {
                 @Override
                 public RTM deserialize(JsonParser p, DeserializationContext ctxt) {
                     try {
+                        final ObjectMapper objectMapper = new ObjectMapper();
                         JsonNode node = p.readValueAsTree();
                         RTM rtm = new RTM();
                         rtm.setWebSocketUrl(node.get("url").asText());
-                        rtm.setUser(new ObjectMapper().treeToValue(node.get("self"), User.class));
+                        rtm.setUser(objectMapper.treeToValue(node.get("self"), User.class));
                         List<String> dmChannels = new ArrayList<>();
                         Iterator<JsonNode> iterator = node.get("ims").iterator();
                         while (iterator.hasNext()) {
                             dmChannels.add(iterator.next().get("id").asText());
                         }
                         rtm.setDmChannels(dmChannels);
+                        List<User> users = new ArrayList<>();
+                        Iterator<JsonNode> userIterator = node.get("users").iterator();
+                        while (userIterator.hasNext()) {
+                            users.add(objectMapper.treeToValue(userIterator.next(), User.class));
+                        }
+                        rtm.setUsers(users);
                         return rtm;
                     } catch (Exception e) {
                         logger.error("Error de-serializing RTM.start(): ", e);
@@ -82,6 +89,7 @@ public class SlackDao {
                 rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
                 rtm.setDmChannels(response.getBody().getDmChannels());
                 rtm.setUser(response.getBody().getUser());
+                rtm.setUsers(response.getBody().getUsers());
                 logger.debug("RTM connection successful. WebSocket URL: {}", rtm.getWebSocketUrl());
             } else {
                 logger.debug("RTM response invalid. Response: {}", response);
