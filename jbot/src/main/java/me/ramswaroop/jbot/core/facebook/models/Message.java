@@ -18,9 +18,13 @@ public class Message {
     private String mid;
     private int seq;
     private String text;
+    private Attachment attachment;
     private Attachment[] attachments;
     @JsonProperty("quick_reply")
-    private Postback quickReply;
+    private Button quickReply;
+    @JsonProperty("quick_replies")
+    private Button[] quickReplies;
+    
 
     public boolean isEcho() {
         return isEcho;
@@ -70,6 +74,14 @@ public class Message {
         this.text = text;
     }
 
+    public Attachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(Attachment attachment) {
+        this.attachment = attachment;
+    }
+
     public Attachment[] getAttachments() {
         return attachments;
     }
@@ -78,11 +90,19 @@ public class Message {
         this.attachments = attachments;
     }
 
-    public Postback getQuickReply() {
+    public Button getQuickReply() {
         return quickReply;
     }
 
-    public void setQuickReply(Postback quickReply) {
+    public void setQuickReply(Button quickReply) {
         this.quickReply = quickReply;
+    }
+
+    public Button[] getQuickReplies() {
+        return quickReplies;
+    }
+
+    public void setQuickReplies(Button[] quickReplies) {
+        this.quickReplies = quickReplies;
     }
 }

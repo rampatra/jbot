@@ -13,9 +13,19 @@ public class FbBot extends Bot {
 
     @Value("${fbBotToken}")
     private String fbToken;
-
+    
+    @Value("fbPageAccessToken")
+    private String pageAccessToken;
+    
     @Override
     public String getFbToken() {
         return fbToken;
     }
+
+    @Override
+    public String getPageAccessToken() {
+        return pageAccessToken;
+    }
+    
+    
 }

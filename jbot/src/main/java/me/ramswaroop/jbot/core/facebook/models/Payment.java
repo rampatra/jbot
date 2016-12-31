@@ -61,6 +61,7 @@ public class Payment {
 
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class PaymentCredential {
 
     private String providerType;
@@ -82,28 +83,6 @@ class PaymentCredential {
         this.chargeId = chargeId;
     }
     
-}
-
-class Amount {
-
-    private String currency;
-    private String amount;
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 }
 
 

@@ -1,5 +1,6 @@
-package me.ramswaroop.jbot.core.slack;
+package me.ramswaroop.jbot.core.common;
 
+import me.ramswaroop.jbot.core.slack.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.BinaryMessage;

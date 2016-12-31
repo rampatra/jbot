@@ -24,11 +24,11 @@ public class User {
     private String gender;
     @JsonProperty("shipping_address")
     private ShippingAddress shippingAddress;
-    @JsonProperty("shipping_name")
+    @JsonProperty("contact_name")
     private String contactName;
-    @JsonProperty("shipping_email")
+    @JsonProperty("contact_email")
     private String contactEmail;
-    @JsonProperty("shipping_phone")
+    @JsonProperty("contact_phone")
     private String contactPhone;    
 
     public String getId() {

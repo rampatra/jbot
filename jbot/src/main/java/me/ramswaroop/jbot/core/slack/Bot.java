@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.slack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.ramswaroop.jbot.core.common.BotWebSocketHandler;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.slack.models.Event;

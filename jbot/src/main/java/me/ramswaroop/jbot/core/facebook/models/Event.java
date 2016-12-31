@@ -15,7 +15,8 @@ public class Event {
     private long timestamp;
     private Message message;
     private Postback postback;
-    private Optin optin;
+    private Referral optin;
+    private Referral referral;
     @JsonProperty("account_linking")
     private AccountLinking accountLinking;
     private Read read;
@@ -23,6 +24,8 @@ public class Event {
     @JsonProperty("checkout_update")
     private CheckoutUpdate checkoutUpdate;
     private Payment payment;
+    @JsonProperty("sender_action")
+    private String senderAction;
 
     public User getSender() {
         return sender;
@@ -64,12 +67,20 @@ public class Event {
         this.postback = postback;
     }
 
-    public Optin getOptin() {
+    public Referral getOptin() {
         return optin;
     }
 
-    public void setOptin(Optin optin) {
+    public void setOptin(Referral optin) {
         this.optin = optin;
+    }
+
+    public Referral getReferral() {
+        return referral;
+    }
+
+    public void setReferral(Referral referral) {
+        this.referral = referral;
     }
 
     public AccountLinking getAccountLinking() {
@@ -110,5 +121,13 @@ public class Event {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public String getSenderAction() {
+        return senderAction;
+    }
+
+    public void setSenderAction(String senderAction) {
+        this.senderAction = senderAction;
     }
 }
