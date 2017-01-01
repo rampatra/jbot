@@ -24,6 +24,8 @@ public class Button {
     private String contentType;
     @JsonProperty("image_url")
     private String imageUrl;
+    @JsonProperty("payment_summary")
+    private PaymentSummary paymentSummary;
 
     public String getType() {
         return type;
@@ -95,5 +97,13 @@ public class Button {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public PaymentSummary getPaymentSummary() {
+        return paymentSummary;
+    }
+
+    public void setPaymentSummary(PaymentSummary paymentSummary) {
+        this.paymentSummary = paymentSummary;
     }
 }

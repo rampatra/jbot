@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payload {
-    
+
     private String url;
     @JsonProperty("coordinates.lat")
     private String coordinatesLat;
@@ -32,6 +32,11 @@ public class Payload {
     @JsonProperty("order_number")
     private String orderNumber;
     private String currency;
+    @JsonProperty("base_price")
+    private String basePrice;
+    @JsonProperty("total_price")
+    private String totalPrice;
+    private String tax;
     @JsonProperty("payment_method")
     private String paymentMethod;
     @JsonProperty("order_url")
@@ -41,8 +46,20 @@ public class Payload {
     private Button[] buttons;
     private Element[] elements;
     private Amount[] adjustments;
+    @JsonProperty("pnr_number")
+    private String pnrNumber;
     @JsonProperty("checkin_url")
     private String checkinUrl;
+    @JsonProperty("boarding_pass")
+    private BoardingPass[] boardingPass;
+    @JsonProperty("flight_info")
+    private FlightInfo[] flightInfo;
+    @JsonProperty("update_flight_info")
+    private FlightInfo updateFlightInfo;
+    private Passenger[] passengerInfo;
+    private Passenger[] passengerSegmentInfo;
+    @JsonProperty("price_info")
+    private Amount[] priceInfo;
     private long timestamp;
 
     public String getUrl() {
@@ -149,6 +166,30 @@ public class Payload {
         this.currency = currency;
     }
 
+    public String getBasePrice() {
+        return basePrice;
+    }
+
+    public void setBasePrice(String basePrice) {
+        this.basePrice = basePrice;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getTax() {
+        return tax;
+    }
+
+    public void setTax(String tax) {
+        this.tax = tax;
+    }
+
     public String getPaymentMethod() {
         return paymentMethod;
     }
@@ -205,12 +246,68 @@ public class Payload {
         this.adjustments = adjustments;
     }
 
+    public String getPnrNumber() {
+        return pnrNumber;
+    }
+
+    public void setPnrNumber(String pnrNumber) {
+        this.pnrNumber = pnrNumber;
+    }
+
     public String getCheckinUrl() {
         return checkinUrl;
     }
 
     public void setCheckinUrl(String checkinUrl) {
         this.checkinUrl = checkinUrl;
+    }
+
+    public BoardingPass[] getBoardingPass() {
+        return boardingPass;
+    }
+
+    public void setBoardingPass(BoardingPass[] boardingPass) {
+        this.boardingPass = boardingPass;
+    }
+
+    public FlightInfo[] getFlightInfo() {
+        return flightInfo;
+    }
+
+    public void setFlightInfo(FlightInfo[] flightInfo) {
+        this.flightInfo = flightInfo;
+    }
+
+    public FlightInfo getUpdateFlightInfo() {
+        return updateFlightInfo;
+    }
+
+    public void setUpdateFlightInfo(FlightInfo updateFlightInfo) {
+        this.updateFlightInfo = updateFlightInfo;
+    }
+
+    public Passenger[] getPassengerInfo() {
+        return passengerInfo;
+    }
+
+    public void setPassengerInfo(Passenger[] passengerInfo) {
+        this.passengerInfo = passengerInfo;
+    }
+
+    public Passenger[] getPassengerSegmentInfo() {
+        return passengerSegmentInfo;
+    }
+
+    public void setPassengerSegmentInfo(Passenger[] passengerSegmentInfo) {
+        this.passengerSegmentInfo = passengerSegmentInfo;
+    }
+
+    public Amount[] getPriceInfo() {
+        return priceInfo;
+    }
+
+    public void setPriceInfo(Amount[] priceInfo) {
+        this.priceInfo = priceInfo;
     }
 
     public long getTimestamp() {
