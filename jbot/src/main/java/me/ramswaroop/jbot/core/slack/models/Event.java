@@ -62,6 +62,8 @@ public class Event {
     private String domain;
     @JsonProperty("email_domain")
     private String emailDomain;
+    @JsonProperty("team")
+    private String teamId;
     private UserGroup subteam;
     @JsonProperty("subteam_id")
     private String subteamId;
@@ -319,6 +321,14 @@ public class Event {
 
     public void setEmailDomain(String emailDomain) {
         this.emailDomain = emailDomain;
+    }
+    
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
     public UserGroup getSubteam() {
