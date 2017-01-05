@@ -21,6 +21,9 @@ public class Event {
 
     private int id;
     private String type;
+    private String subtype;
+    @JsonProperty("bot_id")
+    private String botId;
     @JsonProperty("channel_id")
     private String channelId;
     @JsonProperty("user_id")
@@ -90,6 +93,22 @@ public class Event {
     public void setType(String type) {
         this.type = type;
     }
+    
+	public String getSubtype() {
+		return subtype;
+	}
+
+	public void setSubtype(String subtype) {
+		this.subtype = subtype;
+	}
+
+	public String getBotId() {
+		return botId;
+	}
+
+	public void setBotId(String botId) {
+		this.botId = botId;
+	}
 
     public String getChannelId() {
         return channelId;
