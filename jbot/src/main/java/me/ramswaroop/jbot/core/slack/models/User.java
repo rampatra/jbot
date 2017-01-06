@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String id;
+    @JsonProperty("team_id")
+    private String teamId;    
     private String name;
     private boolean deleted;
     private String color;
@@ -35,6 +37,14 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
     public String getName() {
