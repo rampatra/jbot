@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(scanBasePackages = {"me.ramswaroop.jbot", "example.jbot"})
-@PropertySource({"jbot.properties", "application.properties"})
 public class JBotApplication {
 
     /**
