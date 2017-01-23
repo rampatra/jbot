@@ -21,6 +21,9 @@ public class Event {
 
     private int id;
     private String type;
+    private String subtype;
+    @JsonProperty("bot_id")
+    private String botId;
     @JsonProperty("channel_id")
     private String channelId;
     @JsonProperty("user_id")
@@ -62,6 +65,8 @@ public class Event {
     private String domain;
     @JsonProperty("email_domain")
     private String emailDomain;
+    @JsonProperty("team")
+    private String teamId;
     private UserGroup subteam;
     @JsonProperty("subteam_id")
     private String subteamId;
@@ -88,6 +93,22 @@ public class Event {
     public void setType(String type) {
         this.type = type;
     }
+    
+	public String getSubtype() {
+		return subtype;
+	}
+
+	public void setSubtype(String subtype) {
+		this.subtype = subtype;
+	}
+
+	public String getBotId() {
+		return botId;
+	}
+
+	public void setBotId(String botId) {
+		this.botId = botId;
+	}
 
     public String getChannelId() {
         return channelId;
@@ -319,6 +340,14 @@ public class Event {
 
     public void setEmailDomain(String emailDomain) {
         this.emailDomain = emailDomain;
+    }
+    
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
     public UserGroup getSubteam() {
