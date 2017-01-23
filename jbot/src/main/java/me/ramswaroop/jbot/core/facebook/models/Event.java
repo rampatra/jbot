@@ -26,6 +26,18 @@ public class Event {
     private Payment payment;
     @JsonProperty("sender_action")
     private String senderAction;
+    @JsonProperty("setting_type")
+    private String settingType;
+    @JsonProperty("account_linking_url")
+    private String accountLinkingUrl;
+    @JsonProperty("whitelisted_domains")
+    private String[] whitelistedDomains;
+    @JsonProperty("domain_action_type")
+    private String domainActionType;
+    @JsonProperty("thread_state")
+    private String threadState;
+    @JsonProperty("payment_privacy_url")
+    private String paymentPrivacyUrl;
 
     public User getSender() {
         return sender;
@@ -129,5 +141,53 @@ public class Event {
 
     public void setSenderAction(String senderAction) {
         this.senderAction = senderAction;
+    }
+
+    public String getSettingType() {
+        return settingType;
+    }
+
+    public void setSettingType(String settingType) {
+        this.settingType = settingType;
+    }
+
+    public String getAccountLinkingUrl() {
+        return accountLinkingUrl;
+    }
+
+    public void setAccountLinkingUrl(String accountLinkingUrl) {
+        this.accountLinkingUrl = accountLinkingUrl;
+    }
+
+    public String[] getWhitelistedDomains() {
+        return whitelistedDomains;
+    }
+
+    public void setWhitelistedDomains(String[] whitelistedDomains) {
+        this.whitelistedDomains = whitelistedDomains;
+    }
+
+    public String getDomainActionType() {
+        return domainActionType;
+    }
+
+    public void setDomainActionType(String domainActionType) {
+        this.domainActionType = domainActionType;
+    }
+
+    public String getThreadState() {
+        return threadState;
+    }
+
+    public void setThreadState(String threadState) {
+        this.threadState = threadState;
+    }
+
+    public String getPaymentPrivacyUrl() {
+        return paymentPrivacyUrl;
+    }
+
+    public void setPaymentPrivacyUrl(String paymentPrivacyUrl) {
+        this.paymentPrivacyUrl = paymentPrivacyUrl;
     }
 }
