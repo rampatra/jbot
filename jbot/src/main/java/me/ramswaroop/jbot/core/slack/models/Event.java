@@ -73,10 +73,13 @@ public class Event {
     @JsonProperty("dnd_status")
     private DndStatus dndStatus;
     private String ts;
+    @JsonProperty("thread_ts")
+    private String threadTs;
     @JsonProperty("deleted_ts")
     private String deletedTs;
     @JsonProperty("event_ts")
     private String eventTs;
+    private Message message;
 
     public int getId() {
         return id;
@@ -382,6 +385,14 @@ public class Event {
         this.ts = ts;
     }
 
+    public String getThreadTs() {
+        return threadTs;
+    }
+
+    public void setThreadTs(String threadTs) {
+        this.threadTs = threadTs;
+    }
+
     public String getDeletedTs() {
         return deletedTs;
     }
@@ -464,5 +475,13 @@ public class Event {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }
