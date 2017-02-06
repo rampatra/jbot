@@ -38,6 +38,9 @@ public class Message {
     @JsonProperty("unread_count")
     private int unreadCount;
 
+    public Message() {
+    }
+    
     public Message(String text) {
         this.text = text;
     }
