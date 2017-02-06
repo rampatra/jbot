@@ -24,6 +24,7 @@ public class Message {
     private String botId;
     @JsonProperty("source_team")
     private String sourceTeam;
+    private String ts;
     @JsonProperty("thread_ts")
     private String threadTs;
     @JsonProperty("reply_count")
@@ -111,6 +112,14 @@ public class Message {
 
     public void setSourceTeam(String sourceTeam) {
         this.sourceTeam = sourceTeam;
+    }
+
+    public String getTs() {
+        return ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
     }
 
     public String getThreadTs() {
