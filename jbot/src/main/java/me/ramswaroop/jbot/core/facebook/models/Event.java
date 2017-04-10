@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
-    
+
     private User sender;
     private User recipient;
     private long timestamp;
@@ -38,6 +38,12 @@ public class Event {
     private String threadState;
     @JsonProperty("payment_privacy_url")
     private String paymentPrivacyUrl;
+    @JsonProperty("hub.mode")
+    private String mode;
+    @JsonProperty("hub.verify_token")
+    private String token;
+    @JsonProperty("hub.challenge")
+    String challenge;
 
     public User getSender() {
         return sender;
@@ -189,5 +195,29 @@ public class Event {
 
     public void setPaymentPrivacyUrl(String paymentPrivacyUrl) {
         this.paymentPrivacyUrl = paymentPrivacyUrl;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(String challenge) {
+        this.challenge = challenge;
     }
 }

@@ -115,7 +115,7 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * This method is chained with {@link SlackBot#setupMeeting(WebSocketSession, Event)}.
+     * This method will be invoked after {@link SlackBot#setupMeeting(WebSocketSession, Event)}.
      *
      * @param session
      * @param event
@@ -128,7 +128,7 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * This method is chained with {@link SlackBot#confirmTiming(WebSocketSession, Event)}.
+     * This method will be invoked after {@link SlackBot#confirmTiming(WebSocketSession, Event)}.
      *
      * @param session
      * @param event
@@ -145,7 +145,7 @@ public class SlackBot extends Bot {
     }
 
     /**
-     * This method is chained with {@link SlackBot#askTimeForMeeting(WebSocketSession, Event)}.
+     * This method will be invoked after {@link SlackBot#askTimeForMeeting(WebSocketSession, Event)}.
      *
      * @param session
      * @param event
