@@ -23,6 +23,10 @@ public class Profile {
     private String image72;
     private String image192;
     private String image512;
+    @JsonProperty("status_text")
+    private String statusText;
+    @JsonProperty("status_emoji")
+    private String statusEmoji;
 
     public String getFirstName() {
         return firstName;
@@ -118,5 +122,21 @@ public class Profile {
 
     public void setImage512(String image512) {
         this.image512 = image512;
+    }
+
+    public String getStatusText() {
+        return statusText;
+    }
+
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
+
+    public String getStatusEmoji() {
+        return statusEmoji;
+    }
+
+    public void setStatusEmoji(String statusEmoji) {
+        this.statusEmoji = statusEmoji;
     }
 }
