@@ -29,21 +29,21 @@ public abstract class BaseBot {
      * value is a list of {@link MethodWrapper}. NOTE: It does not contain methods which are part of any
      * conversation.
      */
-    private final Map<String, List<MethodWrapper>> eventToMethodsMap = new HashMap<>();
+    protected final Map<String, List<MethodWrapper>> eventToMethodsMap = new HashMap<>();
     /**
      * A Map of all methods annotated with {@link Controller} where key is the {@link Method#getName()} and
      * value is the respective {@link MethodWrapper}.
      */
-    private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
+    protected final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
     /**
      * A List of names of the methods which are part of any conversation.
      */
-    private final List<String> conversationMethodNames = new ArrayList<>();
+    protected final List<String> conversationMethodNames = new ArrayList<>();
     /**
      * A List of Queues with each Queue holding all methods for a particular conversation. Methods
      * can be chained into a conversation by {@link Controller#next()}.
      */
-    private final Map<String, Queue<MethodWrapper>> conversationQueueMap = new HashMap<>();
+    protected final Map<String, Queue<MethodWrapper>> conversationQueueMap = new HashMap<>();
 
     /**
      * Construct a map of all the controller methods to handle RTM Events.
@@ -103,77 +103,23 @@ public abstract class BaseBot {
         return conversationQueueMap.get(id) != null;
     }
 
-    protected void invokeMethods(Event event, Object[] methodArgs) {
-        try {
-            List<MethodWrapper> methodWrappers = eventToMethodsMap.get(event.getType().toUpperCase());
-            if (methodWrappers == null) return;
-
-            methodWrappers = new ArrayList<>(methodWrappers);
-            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(event, methodWrappers);
-            if (matchedMethod != null) {
-                methodWrappers = new ArrayList<>();
-                methodWrappers.add(matchedMethod);
-            }
-
-            if (methodWrappers != null) {
-                for (MethodWrapper methodWrapper : methodWrappers) {
-                    Method method = methodWrapper.getMethod();
-                    if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
-                        // build the args to be passed
-                        Object[] args = new Object[methodArgs.length + 1];
-                        for (int i = 0; i < methodArgs.length; i++) {
-                            args[i] = methodArgs[i];
-                        }
-                        args[methodArgs.length] = methodWrapper.getMatcher();
-                        method.invoke(this, args);
-                    } else {
-                        method.invoke(this, methodArgs);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error invoking controller: ", e);
-        }
-    }
-
-    protected void invokeChainedMethod(String id, Event event, Object[] methodArgs) {
-        Queue<MethodWrapper> queue = conversationQueueMap.get(id);
-
-        if (queue != null && !queue.isEmpty()) {
-            MethodWrapper methodWrapper = queue.peek();
-
-            try {
-                EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
-                for (EventType eventType : eventTypes) {
-                    if (eventType.name().equals(event.getType().toUpperCase())) {
-                        methodWrapper.getMethod().invoke(this, methodArgs);
-                        return;
-                    }
-                }
-            } catch (Exception e) {
-                logger.error("Error invoking chained method: ", e);
-            }
-        }
-    }
-
     /**
      * Search for a method whose {@link Controller#pattern()} match with the {@link Event#text}
      * in events received from Slack and also filter out the methods whose {@link Controller#pattern()} do not
      * match with slack message received ({@link Event#text}) for cases where there are no matched methods.
      *
-     * @param event
+     * @param text is the message from the user
      * @param methodWrappers
      * @return the MethodWrapper whose method pattern match with that of the slack message received, {@code null} if no
      * such method is found.
      */
-    private MethodWrapper getMethodWithMatchingPatternAndFilterUnmatchedMethods(Event event, List<MethodWrapper> methodWrappers) {
+    protected MethodWrapper getMethodWithMatchingPatternAndFilterUnmatchedMethods(String text, List<MethodWrapper> methodWrappers) {
         if (methodWrappers != null) {
             Iterator<MethodWrapper> listIterator = methodWrappers.listIterator();
 
             while (listIterator.hasNext()) {
                 MethodWrapper methodWrapper = listIterator.next();
                 String pattern = methodWrapper.getPattern();
-                String text = event.getText();
 
                 if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
                     Pattern p = Pattern.compile(pattern);

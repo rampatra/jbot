@@ -19,6 +19,12 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
+import java.util.regex.Matcher;
 
 /**
  * Base class for making Slack Bots. Any class extending
@@ -191,7 +197,30 @@ public abstract class Bot extends BaseBot {
      * @param event
      */
     private void invokeMethods(WebSocketSession session, Event event) {
-        invokeMethods(event, new Object[]{session, event}); // order of arguments must match that of controller method
+        try {
+            List<MethodWrapper> methodWrappers = eventToMethodsMap.get(event.getType().toUpperCase());
+            if (methodWrappers == null) return;
+
+            methodWrappers = new ArrayList<>(methodWrappers);
+            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(event.getText(), methodWrappers);
+            if (matchedMethod != null) {
+                methodWrappers = new ArrayList<>();
+                methodWrappers.add(matchedMethod);
+            }
+
+            if (methodWrappers != null) {
+                for (MethodWrapper methodWrapper : methodWrappers) {
+                    Method method = methodWrapper.getMethod();
+                    if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
+                        method.invoke(this, session, event, methodWrapper.getMatcher());
+                    } else {
+                        method.invoke(this, session, event);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error invoking controller: ", e);
+        }
     }
 
     /**
@@ -201,8 +230,23 @@ public abstract class Bot extends BaseBot {
      * @param event
      */
     private void invokeChainedMethod(WebSocketSession session, Event event) {
-        invokeChainedMethod(event.getChannelId(), event, new Object[]{session, event}); // order of arguments must 
-                                                                                        // match that of controller method
+        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
+
+        if (queue != null && !queue.isEmpty()) {
+            MethodWrapper methodWrapper = queue.peek();
+
+            try {
+                EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
+                for (EventType eventType : eventTypes) {
+                    if (eventType.name().equals(event.getType().toUpperCase())) {
+                        methodWrapper.getMethod().invoke(this, session, event);
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error invoking chained method: ", e);
+            }
+        }
     }
 
     /**

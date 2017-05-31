@@ -2,6 +2,7 @@ package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import me.ramswaroop.jbot.core.common.EventType;
 
 /**
  * @author ramswaroop
@@ -43,7 +44,8 @@ public class Event {
     @JsonProperty("hub.verify_token")
     private String token;
     @JsonProperty("hub.challenge")
-    String challenge;
+    private String challenge;
+    private EventType type;    
 
     public User getSender() {
         return sender;
@@ -219,5 +221,13 @@ public class Event {
 
     public void setChallenge(String challenge) {
         this.challenge = challenge;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 }

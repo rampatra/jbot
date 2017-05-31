@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -61,8 +62,71 @@ public abstract class Bot extends BaseBot {
     public ResponseEntity<String> setupWebhook(Event event) {
         if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && getFbToken().equals(event.getToken())) {
             return ResponseEntity.ok(event.getChallenge());
-        } else {
+        } else if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && !getFbToken().equals(event.getToken())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else if (event.getMessage() != null) {
+            event.setType(EventType.MESSAGE);
+            invokeMethods(event);
+            
+        }
+    }
+
+    /**
+     * Invoke the methods with matching {@link Controller#events()}
+     * and {@link Controller#pattern()} in events received from Slack.
+     *
+     * @param event
+     */
+    private void invokeMethods(Event event) {
+        try {
+            List<MethodWrapper> methodWrappers = eventToMethodsMap.get(event.getType().name().toUpperCase());
+            if (methodWrappers == null) return;
+
+            methodWrappers = new ArrayList<>(methodWrappers);
+            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(event.getMessage().getText(), methodWrappers);
+            if (matchedMethod != null) {
+                methodWrappers = new ArrayList<>();
+                methodWrappers.add(matchedMethod);
+            }
+
+            if (methodWrappers != null) {
+                for (MethodWrapper methodWrapper : methodWrappers) {
+                    Method method = methodWrapper.getMethod();
+                    if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
+                        method.invoke(this, event, methodWrapper.getMatcher());
+                    } else {
+                        method.invoke(this, event);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error invoking controller: ", e);
+        }
+    }
+
+    /**
+     * Invoke the appropriate method in a conversation.
+     *
+     * @param session
+     * @param event
+     */
+    private void invokeChainedMethod(WebSocketSession session, Event event) {
+        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
+
+        if (queue != null && !queue.isEmpty()) {
+            MethodWrapper methodWrapper = queue.peek();
+
+            try {
+                EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
+                for (EventType eventType : eventTypes) {
+                    if (eventType.name().equals(event.getType().name().toUpperCase())) {
+                        methodWrapper.getMethod().invoke(this, session, event);
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error invoking chained method: ", e);
+            }
         }
     }
 
@@ -70,7 +134,7 @@ public abstract class Bot extends BaseBot {
      * 
      * @return
      */
-    protected boolean subscribeAppToPage() {
+    public boolean subscribeAppToPage() {
         RestTemplate restTemplate = new RestTemplate();
         try {
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
