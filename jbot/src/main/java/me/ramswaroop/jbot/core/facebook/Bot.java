@@ -65,10 +65,29 @@ public abstract class Bot extends BaseBot {
         } else if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && !getFbToken().equals(event.getToken())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } else if (event.getMessage() != null) {
-            event.setType(EventType.MESSAGE);
-            invokeMethods(event);
-            
+            if (event.getMessage().isEcho() && event.getMessage().getAppId() != null) {
+                event.setType(EventType.MESSAGE_ECHO);    
+            } else {
+                event.setType(EventType.MESSAGE);
+            }
+        } else if (event.getDelivery() != null) {
+            event.setType(EventType.MESSAGE_DELIVERED);
+        } else if (event.getRead() != null) {
+            event.setType(EventType.MESSAGE_READ);
+        } else if (event.getPostback() != null) {
+            event.setType(EventType.POSTBACK_RECEIVED);
+        } else if (event.getOptin() != null) {
+            event.setType(EventType.OPT_IN);
+        } else if (event.getReferral() != null) {
+            event.setType(EventType.REFERRAL);
+        } else if (event.getAccountLinking() != null) {
+            event.setType(EventType.ACCOUNT_LINKING);
+        } else {
+            logger.error("Callback/Event type not supported: {}", event);
+            return ResponseEntity.ok("Callback not supported yet!");
         }
+        invokeMethods(event);
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -131,8 +150,10 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
+     * Invoke this method to make the bot subscribe to a page after which 
+     * your users can interact with your page or in other words, the bot.
      * 
-     * @return
+     * @return true or false depending on the operation being successful
      */
     public boolean subscribeAppToPage() {
         RestTemplate restTemplate = new RestTemplate();
