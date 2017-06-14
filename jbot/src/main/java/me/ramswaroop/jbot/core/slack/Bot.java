@@ -10,6 +10,7 @@ import me.ramswaroop.jbot.core.slack.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
@@ -138,7 +139,9 @@ public abstract class Bot extends BaseBot {
      */
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
-            reply.setType(EventType.MESSAGE.name().toLowerCase());
+            if (StringUtils.isEmpty(reply.getType())) {
+                reply.setType(EventType.MESSAGE.name().toLowerCase());
+            }
             reply.setText(encode(reply.getText()));
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
