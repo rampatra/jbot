@@ -1,8 +1,7 @@
 package me.ramswaroop.jbot.core.slack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.jbot.core.slack.models.Event;
-import me.ramswaroop.jbot.core.slack.models.Message;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,22 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
+
+import me.ramswaroop.jbot.core.slack.models.Event;
+import me.ramswaroop.jbot.core.slack.models.Message;
 
 /**
  * Base class for making Slack Bots. Any class extending
@@ -234,7 +243,9 @@ public abstract class Bot {
      */
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
-            reply.setType(EventType.MESSAGE.name().toLowerCase());
+            if (StringUtils.isEmpty(reply.getType())) {
+                reply.setType(EventType.MESSAGE.name().toLowerCase());
+            }
             reply.setText(encode(reply.getText()));
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
