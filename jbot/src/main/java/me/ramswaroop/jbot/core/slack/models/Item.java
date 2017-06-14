@@ -12,6 +12,7 @@ public class Item {
     private String channel;
     private Message message;
     private long created;
+    private String ts;
 
     public String getType() {
         return type;
@@ -43,5 +44,13 @@ public class Item {
 
     public void setCreated(long created) {
         this.created = created;
+    }
+
+    public String getTs() {
+        return this.ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
     }
 }
