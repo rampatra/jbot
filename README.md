@@ -1,4 +1,4 @@
-# JBot [![Build Status](https://travis-ci.org/ramswaroop/jbot.svg?branch=master)](https://travis-ci.org/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Gratipay Team](https://img.shields.io/gratipay/team/shields.svg?maxAge=2592000)](https://gratipay.com/JBot/) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
+# JBot [![Backers on Open Collective](https://opencollective.com/jbot/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/jbot/sponsors/badge.svg)](#sponsors) [![Build Status](https://travis-ci.org/ramswaroop/jbot.svg?branch=master)](https://travis-ci.org/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Gratipay Team](https://img.shields.io/gratipay/team/shields.svg?maxAge=2592000)](https://gratipay.com/JBot/) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
 
 LEGO for building bots.
 
@@ -415,12 +415,37 @@ You can now start talking with your Bot, send commands to your Slash Command or 
 * [README-Slack-JBot-2.0.0](/readme/README-Slack-JBot-2.0.0.md)
 * [README-Slack-BotKit-1.1.0](/readme/README-Slack-BotKit-1.1.0.md)
 
-### Contributions
-
-If you would like like to contribute, raise an [issue on Github](https://github.com/ramswaroop/jbot/issues) and I would
-be more than happy to discuss :)
 
 ### Donations
 
-[Buy me a coffee](https://www.bountysource.com/teams/jbot) so that I stay awake whole night and complete JBot soon
-enough :D
+[Buy me a coffee](https://www.bountysource.com/teams/jbot) so that I stay awake whole night and complete JBot soon enough :D
+
+## Contributors
+
+This project exists thanks to all the people who contribute. If you would like to contribute, raise an [issue on Github](https://github.com/ramswaroop/jbot/issues) and I would be more than happy to discuss :)
+<a href="graphs/contributors"><img src="https://opencollective.com/jbot/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/jbot#backer)]
+
+<a href="https://opencollective.com/jbot#backers" target="_blank"><img src="https://opencollective.com/jbot/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/jbot#sponsor)]
+
+<a href="https://opencollective.com/jbot/sponsor/0/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/1/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/2/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/3/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/4/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/5/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/6/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/7/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/8/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/jbot/sponsor/9/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/9/avatar.svg"></a>
+
+
