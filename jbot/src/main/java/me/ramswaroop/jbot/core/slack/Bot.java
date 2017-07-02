@@ -394,7 +394,7 @@ public abstract class Bot {
      * and after which your bot becomes live.
      */
     @PostConstruct
-    private void startWebSocketConnection() {
+    public void startWebSocketConnection() {
         slackService.startRTM(getSlackToken());
         if (slackService.getWebSocketUrl() != null) {
             WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
