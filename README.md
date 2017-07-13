@@ -402,7 +402,7 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 [incoming webhook](https://my.slack.com/services/new/incoming-webhook/) url.
 3. Paste the above tokens/urls in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 4. [Download Toolbelt](https://toolbelt.heroku.com/) for your system.
-5. Build the parent `$ mvn clean install`
+5. Build jbot `$ mvn clean install`
 6. Package jbot-example `$ cd jbot-example && mvn package`
 7. `$ cd ..`
 8. `$ heroku login` - Login to Heroku.
