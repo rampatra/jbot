@@ -403,7 +403,7 @@ Bokit is Heroku ready. To deploy, you need to perform the below simple steps:
 3. Paste the above tokens/urls in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 4. [Download Toolbelt](https://toolbelt.heroku.com/) for your system.
 5. Build jbot `$ mvn clean install`
-6. Package jbot-example `$ cd jbot-example && mvn package`
+6. Package jbot-example `$ cd jbot-example` and `$ mvn package`
 7. `$ cd ..`
 8. `$ heroku login` - Login to Heroku.
 9. `$ heroku create` - Create an app on Heroku.
