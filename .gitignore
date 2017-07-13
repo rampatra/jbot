@@ -85,5 +85,5 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
-# vscode
+# Visual Studio
 .vscode
