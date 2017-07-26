@@ -1,4 +1,4 @@
-# JBot [![Backers on Open Collective](https://opencollective.com/jbot/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/jbot/sponsors/badge.svg)](#sponsors) [![Build Status](https://travis-ci.org/ramswaroop/jbot.svg?branch=master)](https://travis-ci.org/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Gratipay Team](https://img.shields.io/gratipay/team/shields.svg?maxAge=2592000)](https://gratipay.com/JBot/) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
+# JBot [![Build Status](https://travis-ci.org/ramswaroop/jbot.svg?branch=master)](https://travis-ci.org/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Gratipay Team](https://img.shields.io/gratipay/team/shields.svg?maxAge=2592000)](https://gratipay.com/JBot/) <!-- [![Backers on Open Collective](https://opencollective.com/jbot/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/jbot/sponsors/badge.svg)](#sponsors) --> [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
 
 LEGO for building bots.
 
@@ -20,9 +20,7 @@ the boilerplate code needed so that you can __make your bot live__ right away.
     * [Usage](#usage)
     * [Deploy to the cloud](#deploy-to-the-cloud)
 5. [Documentation History](#documentation-history)
-6. [Contributions](#contributions)
-7. [Donations](#donations)
-    
+6. [Contributors](#contributors)
 
 ### Getting started
 
@@ -419,23 +417,19 @@ You can now start talking with your Bot, send commands to your Slash Command or 
 * [README-Slack-JBot-2.0.0](/docs/README-Slack-JBot-2.0.0.md)
 * [README-Slack-BotKit-1.1.0](/docs/README-Slack-BotKit-1.1.0.md)
 
+### Contributors
 
-### Donations
+This project exists thanks to all the awesome people who contribute. If you want to flaunt your skills or make 
+the project even better, [you can start contributing](/contributing.md) and for any queries please just 
+[raise an issue](https://github.com/ramswaroop/jbot/issues) and I would be more than happy to discuss :)
 
-[Buy me a coffee](https://www.bountysource.com/teams/jbot) so that I stay awake whole night and complete JBot soon enough :D
-
-## Contributors
-
-This project exists thanks to all the people who contribute. If you would like to contribute, raise an [issue on Github](https://github.com/ramswaroop/jbot/issues) and I would be more than happy to discuss :)
 <a href="graphs/contributors"><img src="https://opencollective.com/jbot/contributors.svg?width=890" /></a>
-
 
 ## Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/jbot#backer)]
 
 <a href="https://opencollective.com/jbot#backers" target="_blank"><img src="https://opencollective.com/jbot/backers.svg?width=890"></a>
-
 
 ## Sponsors
 
@@ -451,5 +445,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/jbot/sponsor/7/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/jbot/sponsor/8/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/jbot/sponsor/9/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/9/avatar.svg"></a>
-
-
