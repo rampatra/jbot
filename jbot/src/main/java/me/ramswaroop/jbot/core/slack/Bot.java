@@ -167,10 +167,13 @@ public abstract class Bot {
         try {
             Event event = mapper.readValue(textMessage.getPayload(), Event.class);
             if (event.getType() != null) {
-                if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())) {
-                    slackService.addDmChannel(event.getChannelId());
-                } else if (event.getType().equalsIgnoreCase(EventType.IM_CREATED.name())) {
-                    slackService.addDmChannel(event.getChannel().getId());
+                if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())
+                        || event.getType().equalsIgnoreCase(EventType.IM_CREATED.name())) {
+                    if (event.getChannelId() != null) {
+                        slackService.addDmChannel(event.getChannelId());
+                    } else if (event.getChannel() != null) {
+                        slackService.addDmChannel(event.getChannel().getId());
+                    }
                 } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
                     if (event.getText() != null && event.getText().contains(slackService.getCurrentUser().getId())) { // direct mention
                         event.setType(EventType.DIRECT_MENTION.name());
