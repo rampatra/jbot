@@ -30,7 +30,7 @@ public class SlackService {
      * @param slackToken
      */
     public void startRTM(String slackToken) {
-        RTM rtm = slackDao.startRTM(slackToken);
+        RTM rtm = getSlackDao().startRTM(slackToken);
         currentUser = rtm.getUser();
         dmChannels = rtm.getDmChannels();
         webSocketUrl = rtm.getWebSocketUrl();
@@ -72,5 +72,13 @@ public class SlackService {
 
     public void setWebSocketUrl(String webSocketUrl) {
         this.webSocketUrl = webSocketUrl;
+    }
+
+    public SlackDao getSlackDao() {
+        return slackDao;
+    }
+
+    public void setSlackDao(SlackDao slackDao) {
+        this.slackDao = slackDao;
     }
 }

@@ -76,6 +76,38 @@ extends [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) f
 bots as you want, just make the class extend [Bot](/jbot-core/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
 and it gets all the powers of a Slack Bot.
 
+### Usage as a non-Boot application
+
+```java
+public class SlackBot extends Bot {
+    private String slackToken;
+    
+    public SlackBot(String rtmUrl, String rtmToken) {
+        this.slackToken = rtmToken;
+        this.slackService = new SlackService();
+        SlackDao slackDao = new SlackDao();
+        slackDao.setRtmUrl(rtmUrl);
+        this.slackService.setSlackDao(slackDao);
+    }
+    
+    public String getSlackToken() {
+        return this.slackToken;
+    }
+
+    public Bot getSlackBot() {
+        return this;
+    }
+}
+
+public class Application {
+    public static void main(String[] args) {
+        SlackBot slackBot = new SlackBot(args[0], args[1]);
+        slackBot.startWebSocketConnection();
+        //something to stop the application terminating
+    }
+}
+```
+
 ### Building a [Slack Integration](https://api.slack.com/) with JBot
 
 You can integrate your services into Slack by any of the following ways:

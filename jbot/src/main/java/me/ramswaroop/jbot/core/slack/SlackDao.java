@@ -30,9 +30,6 @@ import java.util.List;
 public class SlackDao {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackDao.class);
-    /**
-     * Endpoint for RTM.start()
-     */
     @Value("${rtmUrl}")
     private String rtmUrl;
     /**
@@ -84,7 +81,7 @@ public class SlackDao {
             httpMessageConverters.add(jsonConverter);
             restTemplate.setMessageConverters(httpMessageConverters);
 
-            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, slackToken);
+            ResponseEntity<RTM> response = restTemplate.getForEntity(getRtmUrl(), RTM.class, slackToken);
             if (response.getBody() != null) {
                 rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
                 rtm.setDmChannels(response.getBody().getDmChannels());
@@ -99,5 +96,16 @@ public class SlackDao {
         }
 
         return rtm;
+    }
+
+    /**
+     * Endpoint for RTM.start()
+     */
+    public String getRtmUrl() {
+        return rtmUrl;
+    }
+
+    public void setRtmUrl(String rtmUrl) {
+        this.rtmUrl = rtmUrl;
     }
 }
