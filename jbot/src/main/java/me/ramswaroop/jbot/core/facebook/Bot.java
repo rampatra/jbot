@@ -3,23 +3,26 @@ package me.ramswaroop.jbot.core.facebook;
 import me.ramswaroop.jbot.core.common.BaseBot;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
+import me.ramswaroop.jbot.core.facebook.models.Callback;
+import me.ramswaroop.jbot.core.facebook.models.Entry;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
 import java.util.regex.Matcher;
 
 /**
@@ -29,6 +32,9 @@ import java.util.regex.Matcher;
 public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
+
+    @Autowired
+    private FbService fbService;
 
     @Value("${fbSubscribeUrl}")
     private String subscribeUrl;
@@ -47,46 +53,58 @@ public abstract class Bot extends BaseBot {
     /**
      * Class extending this must implement this as it's
      * required for Send API.
-     * 
+     *
      * @return facebook page access token
      */
     public abstract String getPageAccessToken();
 
     /**
-     * 
-     * @param event
+     * @param callback
      * @return
      */
     @ResponseBody
     @GetMapping("/webhook")
-    public ResponseEntity<String> setupWebhook(Event event) {
-        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && getFbToken().equals(event.getToken())) {
-            return ResponseEntity.ok(event.getChallenge());
-        } else if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && !getFbToken().equals(event.getToken())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        } else if (event.getMessage() != null) {
-            if (event.getMessage().isEcho() && event.getMessage().getAppId() != null) {
-                event.setType(EventType.MESSAGE_ECHO);    
-            } else {
-                event.setType(EventType.MESSAGE);
+    public ResponseEntity<String> setupWebhook(Callback callback) {
+        try {
+            for (Entry entry : callback.getEntry()) {
+                for (Event event : entry.getMessaging()) {
+                    if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && getFbToken().equals(event.getToken())) {
+                        return ResponseEntity.ok(event.getChallenge());
+                    } else if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && !getFbToken().equals(event.getToken())) {
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+                    } else if (event.getMessage() != null) {
+                        if (event.getMessage().isEcho() && event.getMessage().getAppId() != null) {
+                            event.setType(EventType.MESSAGE_ECHO);
+                        } else {
+                            event.setType(EventType.MESSAGE);
+                        }
+                    } else if (event.getDelivery() != null) {
+                        event.setType(EventType.MESSAGE_DELIVERED);
+                    } else if (event.getRead() != null) {
+                        event.setType(EventType.MESSAGE_READ);
+                    } else if (event.getPostback() != null) {
+                        event.setType(EventType.POSTBACK_RECEIVED);
+                    } else if (event.getOptin() != null) {
+                        event.setType(EventType.OPT_IN);
+                    } else if (event.getReferral() != null) {
+                        event.setType(EventType.REFERRAL);
+                    } else if (event.getAccountLinking() != null) {
+                        event.setType(EventType.ACCOUNT_LINKING);
+                    } else {
+                        logger.error("Callback/Event type not supported: {}", event);
+                        return ResponseEntity.ok("Callback not supported yet!");
+                    }
+                    if (isConversationOn(event.getSender().getId())) {
+                        invokeChainedMethod(event);
+                    } else {
+                        invokeMethods(event);
+                    }
+                }
             }
-        } else if (event.getDelivery() != null) {
-            event.setType(EventType.MESSAGE_DELIVERED);
-        } else if (event.getRead() != null) {
-            event.setType(EventType.MESSAGE_READ);
-        } else if (event.getPostback() != null) {
-            event.setType(EventType.POSTBACK_RECEIVED);
-        } else if (event.getOptin() != null) {
-            event.setType(EventType.OPT_IN);
-        } else if (event.getReferral() != null) {
-            event.setType(EventType.REFERRAL);
-        } else if (event.getAccountLinking() != null) {
-            event.setType(EventType.ACCOUNT_LINKING);
-        } else {
-            logger.error("Callback/Event type not supported: {}", event);
-            return ResponseEntity.ok("Callback not supported yet!");
+        } catch (Exception e) {
+            logger.error("Error in fb webhook: {}. Callback: {}", e, callback.toString());
         }
-        invokeMethods(event);
+        // fb advises to send a 200 response within 20 secs
         return ResponseEntity.ok(null);
     }
 
@@ -126,11 +144,10 @@ public abstract class Bot extends BaseBot {
     /**
      * Invoke the appropriate method in a conversation.
      *
-     * @param session
      * @param event
      */
-    private void invokeChainedMethod(WebSocketSession session, Event event) {
-        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
+    private void invokeChainedMethod(Event event) {
+        Queue<MethodWrapper> queue = conversationQueueMap.get(event.getSender().getId());
 
         if (queue != null && !queue.isEmpty()) {
             MethodWrapper methodWrapper = queue.peek();
@@ -139,7 +156,7 @@ public abstract class Bot extends BaseBot {
                 EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
                 for (EventType eventType : eventTypes) {
                     if (eventType.name().equals(event.getType().name().toUpperCase())) {
-                        methodWrapper.getMethod().invoke(this, session, event);
+                        methodWrapper.getMethod().invoke(this, event);
                         return;
                     }
                 }
@@ -150,9 +167,9 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
-     * Invoke this method to make the bot subscribe to a page after which 
+     * Invoke this method to make the bot subscribe to a page after which
      * your users can interact with your page or in other words, the bot.
-     * 
+     *
      * @return true or false depending on the operation being successful
      */
     public boolean subscribeAppToPage() {

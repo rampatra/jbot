@@ -32,7 +32,6 @@ public class Attachment {
     @JsonProperty("footer_icon")
     private String footerIcon;
     private String ts;
-
     @JsonProperty("mrkdwn_in")
     private List<String> markdownIn;
 
