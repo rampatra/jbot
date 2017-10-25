@@ -1,26 +1,26 @@
 package me.ramswaroop.jbot.core.slack;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.jbot.core.slack.models.RTM;
-import me.ramswaroop.jbot.core.slack.models.User;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import me.ramswaroop.jbot.core.slack.models.RTM;
+import me.ramswaroop.jbot.core.slack.models.User;
+import me.ramswaroop.jbot.core.slack.models.im.ImListResponse;
+import me.ramswaroop.jbot.core.slack.models.rtm.RtmConnectResponse;
+import me.ramswaroop.jbot.core.slack.models.users.UsersListResponse;
 
 /**
  * @author ramswaroop
@@ -38,66 +38,107 @@ public class SlackDao {
     /**
      * RTM object constructed from <a href="https://api.slack.com/methods/rtm.start">RTM.start()</a>.
      */
-    private RTM rtm;
+    private RTM rtm = new RTM();
     /**
      * Rest template to make http calls.
      */
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public RTM startRTM(String slackToken) {
-        try {
-            restTemplate = new RestTemplate();
-            rtm = new RTM();
-            // Custom Deserializers
-            List<HttpMessageConverter<?>> httpMessageConverters = new ArrayList<>();
-            MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-            Jackson2ObjectMapperBuilder mapperBuilder = new Jackson2ObjectMapperBuilder();
-            mapperBuilder.deserializerByType(RTM.class, new JsonDeserializer<RTM>() {
-                @Override
-                public RTM deserialize(JsonParser p, DeserializationContext ctxt) {
-                    try {
-                        final ObjectMapper objectMapper = new ObjectMapper();
-                        JsonNode node = p.readValueAsTree();
-                        RTM rtm = new RTM();
-                        rtm.setWebSocketUrl(node.get("url").asText());
-                        rtm.setUser(objectMapper.treeToValue(node.get("self"), User.class));
-                        List<String> dmChannels = new ArrayList<>();
-                        Iterator<JsonNode> iterator = node.get("ims").iterator();
-                        while (iterator.hasNext()) {
-                            dmChannels.add(iterator.next().get("id").asText());
-                        }
-                        rtm.setDmChannels(dmChannels);
-                        List<User> users = new ArrayList<>();
-                        Iterator<JsonNode> userIterator = node.get("users").iterator();
-                        while (userIterator.hasNext()) {
-                            users.add(objectMapper.treeToValue(userIterator.next(), User.class));
-                        }
-                        rtm.setUsers(users);
-                        return rtm;
-                    } catch (Exception e) {
-                        logger.error("Error de-serializing RTM.start(): ", e);
-                        return null;
-                    }
-                }
-            });
-            jsonConverter.setObjectMapper(mapperBuilder.build());
-            httpMessageConverters.add(jsonConverter);
-            restTemplate.setMessageConverters(httpMessageConverters);
 
-            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, slackToken);
-            if (response.getBody() != null) {
-                rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
-                rtm.setDmChannels(response.getBody().getDmChannels());
-                rtm.setUser(response.getBody().getUser());
-                rtm.setUsers(response.getBody().getUsers());
-                logger.debug("RTM connection successful. WebSocket URL: {}", rtm.getWebSocketUrl());
-            } else {
-                logger.debug("RTM response invalid. Response: {}", response);
-            }
-        } catch (RestClientException e) {
-            logger.error("RTM connection error. Exception: {}", e.getMessage());
-        }
+        RtmConnectResponse rtmConnectResponse = callRtmConnect(slackToken);
+        ImListResponse imListResponse = callImList(slackToken);
+        UsersListResponse usersListResponse =  callUsersList(slackToken);
+        
+    	List<String> dmChannels = imListResponse.getIms().stream().map(im -> im.getId()).collect(Collectors.toList());
+    	List<User> users = usersListResponse.getMembers();
+    	
+    	// set up the RTM parameters
+        rtm.setWebSocketUrl(rtmConnectResponse.getUrl());
+        User botUser = new User();
+        botUser.setId(rtmConnectResponse.getSelf().getId());
+        botUser.setTeamId(rtmConnectResponse.getTeam().getId());
+        botUser.setName(rtmConnectResponse.getSelf().getName());
+        rtm.setUser(botUser);
+        rtm.setDmChannels(dmChannels);
+        rtm.setUsers(users);
 
         return rtm;
     }
+
+    
+	private RtmConnectResponse callRtmConnect(String slackToken) {
+		String url = "https://slack.com/api/rtm.connect";
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("token", slackToken);
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			ResponseEntity<RtmConnectResponse> response = restTemplate.postForEntity(url, request, RtmConnectResponse.class);
+			
+			if (response.getBody() != null && response.getBody().getOk() == true) {
+				logger.info("Successfully called {}", url);
+				return response.getBody();
+			} else {
+				logger.error("Could not call {}, response was {}", url, response);
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("Could not call {}", url, e);
+			return null;
+		}
+	}
+	
+	private ImListResponse callImList(String slackToken) {
+		String url = "https://slack.com/api/im.list";
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("token", slackToken);
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			ResponseEntity<ImListResponse> response = restTemplate.postForEntity(url, request, ImListResponse.class);
+			
+			if (response.getBody() != null && response.getBody().getOk() == true) {
+				logger.info("Successfully called {}", url);
+				return response.getBody();
+			} else {
+				logger.error("Could not call {}, response was {}", url, response);
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("Could not call {}", url, e);
+			return null;
+		}
+	}
+	
+	private UsersListResponse callUsersList(String slackToken) {
+		String url = "https://slack.com/api/users.list";
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("token", slackToken);
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			ResponseEntity<UsersListResponse> response = restTemplate.postForEntity(url, request, UsersListResponse.class);
+			
+			if (response.getBody() != null && response.getBody().getOk() == true) {
+				logger.info("Successfully called {}", url);
+				return response.getBody();
+			} else {
+				logger.error("Could not call {}, response was {}", url, response);
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("Could not call {}", url, e);
+			return null;
+		}
+	}
 }
