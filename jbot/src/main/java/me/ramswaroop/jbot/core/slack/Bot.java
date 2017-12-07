@@ -1,6 +1,21 @@
 package me.ramswaroop.jbot.core.slack;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,19 +28,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import me.ramswaroop.jbot.core.slack.models.Event;
 import me.ramswaroop.jbot.core.slack.models.Message;
@@ -129,7 +132,7 @@ public abstract class Bot {
      * @see WebSocketHandler#afterConnectionEstablished
      */
     public void afterConnectionEstablished(WebSocketSession session) {
-        logger.debug("WebSocket connected: {}", session);
+        logger.info("WebSocket connected: {}", session);
     }
 
     /**
@@ -141,7 +144,7 @@ public abstract class Bot {
      * @see WebSocketHandler#afterConnectionClosed
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        logger.debug("WebSocket closed: {}, Close Status: {}", session, status.toString());
+        logger.info("WebSocket closed: {}, Close Status: {}", session, status.toString());
     }
 
     /**
@@ -401,12 +404,16 @@ public abstract class Bot {
     @PostConstruct
     private void startWebSocketConnection() {
         slackService.startRTM(getSlackToken());
-        if (slackService.getWebSocketUrl() != null) {
-            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+        String webSocketUrl = slackService.getWebSocketUrl();
+		if (webSocketUrl != null) {
+            StandardWebSocketClient client = client();
+			BotWebSocketHandler handler = handler();
+			WebSocketConnectionManager manager = new WebSocketConnectionManager(client, handler, webSocketUrl);
             manager.start();
         } else {
             logger.error("No websocket url returned by Slack.");
         }
+        
     }
 
     /**

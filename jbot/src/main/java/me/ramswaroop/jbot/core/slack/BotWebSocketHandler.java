@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
@@ -46,4 +47,11 @@ public class BotWebSocketHandler extends AbstractWebSocketHandler {
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         bot.handleTransportError(session, exception);
     }
+
+	@Override
+	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
+		logger.debug("Received Pong Message: {}", message);
+	}
+    
+    
 }

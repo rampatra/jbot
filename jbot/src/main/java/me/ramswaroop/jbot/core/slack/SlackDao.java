@@ -13,12 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import me.ramswaroop.jbot.core.slack.models.RTM;
 import me.ramswaroop.jbot.core.slack.models.User;
 import me.ramswaroop.jbot.core.slack.models.im.ImListResponse;
+import me.ramswaroop.jbot.core.slack.models.ping.Pong;
 import me.ramswaroop.jbot.core.slack.models.rtm.RtmConnectResponse;
 import me.ramswaroop.jbot.core.slack.models.users.UsersListResponse;
 
@@ -141,4 +141,5 @@ public class SlackDao {
 			return null;
 		}
 	}
+
 }
