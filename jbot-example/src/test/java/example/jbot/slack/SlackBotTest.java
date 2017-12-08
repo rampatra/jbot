@@ -245,6 +245,12 @@ public class SlackBotTest {
         new BadExtControler(bot);
     }
 
+    @Test(expected = AssertionError.class)
+    public void when_registerBadParamsExternalController_Should_RaiseException() throws Exception {
+
+        new BadParamsExtControler(bot);
+    }
+
     /**
      * Slack Bot for unit tests.
      */
@@ -383,6 +389,23 @@ public class SlackBotTest {
                 pattern = "(?i)^Bad external help$")
         public void onReceiveMessageExternalHelp(TestBot bot, WebSocketSession session,
                 Event event, Matcher matcher) {
+
+            System.out.println("Help for external controller");
+        }
+
+    }
+
+    public static class BadParamsExtControler {
+
+        public BadParamsExtControler(TestBot bot) {
+
+            bot.registerController(this);
+        }
+
+        @Controller(events = EventType.MESSAGE,
+            pattern = "(?i)^Bad external help$")
+        public void badMethod(TestBot bot, Matcher matcher, WebSocketSession session,
+            Event event) {
 
             System.out.println("Help for external controller");
         }

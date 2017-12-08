@@ -101,30 +101,30 @@ public abstract class Bot {
             if (method.isAnnotationPresent(Controller.class)) {
                 Controller controller = method.getAnnotation(Controller.class);
                 EventType[] eventTypes = controller.events();
-                String pattern = controller.pattern();
+
                 String next = controller.next();
 
                 if (!StringUtils.isEmpty(next)) {
                     conversationMethodNames.add(next);
                 }
 
+                Pattern pattern = null;
+                String patternStr = controller.pattern();
+                if (!StringUtils.isEmpty(patternStr)) {
+                    pattern = Pattern.compile(patternStr);
+                }
+
                 MethodWrapper methodWrapper = new MethodWrapper
-                    (controllerPOJO, method);
-                methodWrapper.setPattern(pattern);
-                methodWrapper.setNext(next);
+                    (controllerPOJO, method, pattern, next);
 
                 String methodName = method.getName();
 
-                if (methodNameMap.containsKey(methodName)) {
-                    throw new AssertionError(
-                            "Controller with method '" + methodName + "' " + "already exists. "
-                                    + "All controllers methods names in the same Bot must be unique.");
-                }
+                assertMethodWrapper(methodWrapper);
 
                 if (!conversationMethodNames.contains(methodName)) {
                     for (EventType eventType : eventTypes) {
                         List<MethodWrapper> methodWrappers =
-                                eventToMethodsMap.get(eventType.name());
+                            eventToMethodsMap.get(eventType.name());
 
                         if (methodWrappers == null) {
                             methodWrappers = new ArrayList<>();
@@ -283,6 +283,47 @@ public abstract class Bot {
     }
 
     /**
+     * Assert the method wrapper compliant to the bot
+     */
+    private void assertMethodWrapper(MethodWrapper methodWrapper) {
+        Method method = methodWrapper.getMethod();
+        String methodName = method.getName();
+        if (methodNameMap.containsKey(methodName)) {
+            throw new AssertionError("Problem with method " + method.toGenericString() + ": "
+                + "Controller with method '" + methodName + "' " + "already exists. " + "All "
+                + "controllers methods names in the same Bot must be unique.");
+        }
+
+        Class<?>[] methodParams = method.getParameterTypes();
+
+        boolean methodParamsGood;
+
+        if (methodWrapper.getController() == this) {
+            methodParamsGood = methodParams.length >= 2 && methodParams.length <= 3 &&
+                methodParams[0].isAssignableFrom(WebSocketSession.class) && methodParams[1]
+                .isAssignableFrom(Event.class);
+
+            if (methodParams.length == 3) {
+                methodParamsGood = methodParamsGood && methodParams[2].isAssignableFrom(Matcher
+                    .class);
+            }
+        } else {
+            methodParamsGood = methodParams.length >= 3 && methodParams.length <= 4 &&
+                methodParams[0].isAssignableFrom(this.getClass()) &&
+                methodParams[1].isAssignableFrom(WebSocketSession.class) && methodParams[2]
+                .isAssignableFrom(Event.class);
+
+            if (methodParams.length == 4) {
+                methodParamsGood = methodParamsGood && methodParams[3].isAssignableFrom(Matcher
+                    .class);
+            }
+        }
+        if (!methodParamsGood)
+            throw new AssertionError("Problem with method " + method.toGenericString() + ": "
+                + "Method parameters not compliant. See @Controller java docs.");
+    }
+
+    /**
      * Encode the text before sending to Slack.
      * Learn <a href="https://api.slack.com/docs/formatting">more on message formatting in Slack</a>
      *
@@ -378,14 +419,14 @@ public abstract class Bot {
         Method method = methodWrapper.getMethod();
         Object controller = methodWrapper.getController();
         if (controller == this) {
-            if (method.getParameterTypes()[method.getParameterCount()-1]
+            if (method.getParameterTypes()[method.getParameterCount() - 1]
                 .isAssignableFrom(Matcher.class)) {
                 method.invoke(controller, session, event, methodWrapper.getMatcher());
             } else {
                 method.invoke(controller, session, event);
             }
         } else {
-            if (method.getParameterTypes()[method.getParameterCount()-1]
+            if (method.getParameterTypes()[method.getParameterCount() - 1]
                 .isAssignableFrom(Matcher.class)) {
                 method.invoke(controller, this, session, event,
                     methodWrapper.getMatcher());
@@ -411,12 +452,11 @@ public abstract class Bot {
 
             while (listIterator.hasNext()) {
                 MethodWrapper methodWrapper = listIterator.next();
-                String pattern = methodWrapper.getPattern();
+                Pattern pattern = methodWrapper.getPattern();
                 String text = event.getText();
 
-                if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
-                    Pattern p = Pattern.compile(pattern);
-                    Matcher m = p.matcher(text);
+                if ((pattern != null) && !StringUtils.isEmpty(text)) {
+                    Matcher m = pattern.matcher(text);
                     if (m.find()) {
                         // Clone for thread safe compatibility
                         methodWrapper = new MethodWrapper(methodWrapper);
@@ -460,33 +500,31 @@ public abstract class Bot {
     private class MethodWrapper {
         private final Object controller;
         private final Method method;
-        private String pattern;
+        private final Pattern pattern;
+        private final String next;
         private Matcher matcher;
-        private String next;
 
-        public MethodWrapper(Object controller, Method method){
+        public MethodWrapper(Object controller, Method method, Pattern
+            pattern, String next) {
             super();
             this.controller = controller;
             this.method = method;
+            this.pattern = pattern;
+            this.next = next;
         }
 
-        public MethodWrapper(MethodWrapper source){
-            this(source.getController(),source.getMethod());
-            pattern = source.getPattern();
+        public MethodWrapper(MethodWrapper source) {
+            this(source.getController(), source.getMethod(), source
+                .getPattern(), source.getNext());
             matcher = source.getMatcher();
-            next = source.getNext();
         }
 
         public Method getMethod() {
             return method;
         }
 
-        public String getPattern() {
+        public Pattern getPattern() {
             return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
         }
 
         public Matcher getMatcher() {
@@ -499,10 +537,6 @@ public abstract class Bot {
 
         public String getNext() {
             return next;
-        }
-
-        public void setNext(String next) {
-            this.next = next;
         }
 
         public Object getController() {
