@@ -14,6 +14,7 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,7 +88,15 @@ public abstract class Bot {
      * Construct a map of all the controller methods to handle RTM Events.
      */
     public Bot() {
-        Method[] methods = this.getClass().getMethods();
+        registerController(this);
+    }
+
+    /**
+     * Register controller in bot
+     * @param controllerPOJO controller with methods to handle RTM Events.
+     */
+    public void registerController(Object controllerPOJO) {
+        Method[] methods = controllerPOJO.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Controller.class)) {
                 Controller controller = method.getAnnotation(Controller.class);
@@ -99,14 +108,23 @@ public abstract class Bot {
                     conversationMethodNames.add(next);
                 }
 
-                MethodWrapper methodWrapper = new MethodWrapper();
-                methodWrapper.setMethod(method);
+                MethodWrapper methodWrapper = new MethodWrapper
+                    (controllerPOJO, method);
                 methodWrapper.setPattern(pattern);
                 methodWrapper.setNext(next);
 
-                if (!conversationMethodNames.contains(method.getName())) {
+                String methodName = method.getName();
+
+                if (methodNameMap.containsKey(methodName)) {
+                    throw new AssertionError(
+                            "Controller with method '" + methodName + "' " + "already exists. "
+                                    + "All controllers methods names in the same Bot must be unique.");
+                }
+
+                if (!conversationMethodNames.contains(methodName)) {
                     for (EventType eventType : eventTypes) {
-                        List<MethodWrapper> methodWrappers = eventToMethodsMap.get(eventType.name());
+                        List<MethodWrapper> methodWrappers =
+                                eventToMethodsMap.get(eventType.name());
 
                         if (methodWrappers == null) {
                             methodWrappers = new ArrayList<>();
@@ -116,7 +134,7 @@ public abstract class Bot {
                         eventToMethodsMap.put(eventType.name(), methodWrappers);
                     }
                 }
-                methodNameMap.put(method.getName(), methodWrapper);
+                methodNameMap.put(methodName, methodWrapper);
             }
         }
     }
@@ -313,12 +331,7 @@ public abstract class Bot {
 
             if (methodWrappers != null) {
                 for (MethodWrapper methodWrapper : methodWrappers) {
-                    Method method = methodWrapper.getMethod();
-                    if (method.getParameterCount() == 3) {
-                        method.invoke(this, session, event, methodWrapper.getMatcher());
-                    } else {
-                        method.invoke(this, session, event);
-                    }
+                    invokeMethod(session, event, methodWrapper);
                 }
             }
         } catch (Exception e) {
@@ -342,12 +355,42 @@ public abstract class Bot {
                 EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
                 for (EventType eventType : eventTypes) {
                     if (eventType.name().equals(event.getType().toUpperCase())) {
-                        methodWrapper.getMethod().invoke(this, session, event);
+                        invokeMethod(session, event, methodWrapper);
                         return;
                     }
                 }
             } catch (Exception e) {
                 logger.error("Error invoking chained method: ", e);
+            }
+        }
+    }
+
+    /**
+     * Invoke concrete method
+     * @param session
+     * @param event
+     * @param methodWrapper
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    private void invokeMethod(WebSocketSession session, Event event, MethodWrapper methodWrapper)
+        throws IllegalAccessException, InvocationTargetException {
+        Method method = methodWrapper.getMethod();
+        Object controller = methodWrapper.getController();
+        if (controller == this) {
+            if (method.getParameterTypes()[method.getParameterCount()-1]
+                .isAssignableFrom(Matcher.class)) {
+                method.invoke(controller, session, event, methodWrapper.getMatcher());
+            } else {
+                method.invoke(controller, session, event);
+            }
+        } else {
+            if (method.getParameterTypes()[method.getParameterCount()-1]
+                .isAssignableFrom(Matcher.class)) {
+                method.invoke(controller, this, session, event,
+                    methodWrapper.getMatcher());
+            } else {
+                method.invoke(controller, this, session, event);
             }
         }
     }
@@ -375,6 +418,8 @@ public abstract class Bot {
                     Pattern p = Pattern.compile(pattern);
                     Matcher m = p.matcher(text);
                     if (m.find()) {
+                        // Clone for thread safe compatibility
+                        methodWrapper = new MethodWrapper(methodWrapper);
                         methodWrapper.setMatcher(m);
                         return methodWrapper;
                     } else {
@@ -413,17 +458,27 @@ public abstract class Bot {
      * Wrapper class for methods annotated with {@link Controller}.
      */
     private class MethodWrapper {
-        private Method method;
+        private final Object controller;
+        private final Method method;
         private String pattern;
         private Matcher matcher;
         private String next;
 
-        public Method getMethod() {
-            return method;
+        public MethodWrapper(Object controller, Method method){
+            super();
+            this.controller = controller;
+            this.method = method;
         }
 
-        public void setMethod(Method method) {
-            this.method = method;
+        public MethodWrapper(MethodWrapper source){
+            this(source.getController(),source.getMethod());
+            pattern = source.getPattern();
+            matcher = source.getMatcher();
+            next = source.getNext();
+        }
+
+        public Method getMethod() {
+            return method;
         }
 
         public String getPattern() {
@@ -450,6 +505,10 @@ public abstract class Bot {
             this.next = next;
         }
 
+        public Object getController() {
+            return controller;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -458,6 +517,7 @@ public abstract class Bot {
             MethodWrapper that = (MethodWrapper) o;
 
             if (!method.equals(that.method)) return false;
+            if (!controller.equals(that.controller)) return false;
             if (pattern != null ? !pattern.equals(that.pattern) : that.pattern != null) return false;
             if (matcher != null ? !matcher.equals(that.matcher) : that.matcher != null) return false;
             return next != null ? next.equals(that.next) : that.next == null;
@@ -467,6 +527,7 @@ public abstract class Bot {
         @Override
         public int hashCode() {
             int result = method.hashCode();
+            result = 31 * result + controller.hashCode();
             result = 31 * result + (pattern != null ? pattern.hashCode() : 0);
             result = 31 * result + (matcher != null ? matcher.hashCode() : 0);
             result = 31 * result + (next != null ? next.hashCode() : 0);

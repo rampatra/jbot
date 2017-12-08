@@ -1,12 +1,10 @@
 package example.jbot.slack;
 
 
-import me.ramswaroop.jbot.core.slack.Bot;
-import me.ramswaroop.jbot.core.slack.Controller;
-import me.ramswaroop.jbot.core.slack.EventType;
-import me.ramswaroop.jbot.core.slack.SlackService;
-import me.ramswaroop.jbot.core.slack.models.Event;
-import me.ramswaroop.jbot.core.slack.models.User;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,9 +20,12 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import me.ramswaroop.jbot.core.slack.Bot;
+import me.ramswaroop.jbot.core.slack.Controller;
+import me.ramswaroop.jbot.core.slack.EventType;
+import me.ramswaroop.jbot.core.slack.SlackService;
+import me.ramswaroop.jbot.core.slack.models.Event;
+import me.ramswaroop.jbot.core.slack.models.User;
 
 /**
  * @author ramswaroop
@@ -56,6 +57,8 @@ public class SlackBotTest {
         when(slackService.getDmChannels()).thenReturn(Arrays.asList("D1E79BACV", "C0NDSV5B8"));
         when(slackService.getCurrentUser()).thenReturn(user);
         when(slackService.getWebSocketUrl()).thenReturn("");
+
+        new ExtControler(bot);
     }
 
     @Test
@@ -193,12 +196,60 @@ public class SlackBotTest {
         assertThat(capture.toString(), containsString("You can always schedule one with 'setup meeting' command"));
     }
 
+    @Test public void when_MessageToExternalController_Should_InvokeOnExternalAny()
+            throws Exception {
+
+        TextMessage textMessage = new TextMessage(
+                "{\"type\": \"message\"," + "\"ts\": \"1358878749.000002\","
+                        + "\"user\": \"U023BECGF\"," + "\"text\": \"Externals"
+                    + " qwerty\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("External any with qwerty"));
+    }
+
+    @Test public void when_MessageToExternalController_Should_InvokeOnExternalHelp()
+            throws Exception {
+
+        TextMessage textMessage = new TextMessage(
+                "{\"type\": \"message\"," + "\"ts\": \"1358878749.000002\","
+                        + "\"user\": \"U023BECGF\"," + "\"text\": \"external help\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Help for external controller"));
+    }
+
+    @Test public void given_InExternalConversation_when_ConversationWork() throws Exception {
+
+        TextMessage textMessage = new TextMessage(
+                "{\"type\": \"message\"," + "\"ts\": \"1368878749.000602\","
+                        + "\"channel\": \"A1E78BACV\"," + "\"user\": \"U023BECGF\","
+                        + "\"text\": \"Start external\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("External started"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," + "\"ts\": \"1348878749.000302\","
+                + "\"channel\": \"A1E78BACV\"," + "\"user\": \"U023BECGF\","
+                + "\"text\": \"Bla-bla\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("External next step"));
+
+        textMessage = new TextMessage("{\"type\": \"message\"," + "\"ts\": \"1358878749.000002\","
+                + "\"channel\": \"A1E78BACV\"," + "\"user\": \"U023BECGF\","
+                + "\"text\": \"Stop bla-bla. :)\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("External stopped"));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void when_registerBadExternalController_Should_RaiseException() throws Exception {
+
+        new BadExtControler(bot);
+    }
 
     /**
      * Slack Bot for unit tests.
      */
     public static class TestBot extends Bot {
-        
+
         @Override
         public String getSlackToken() {
             return "slackToken";
@@ -274,5 +325,67 @@ public class SlackBotTest {
             }
             stopConversation(event);    // stop conversation
         }
+    }
+
+    public static class ExtControler {
+
+        public ExtControler(TestBot bot) {
+
+            bot.registerController(this);
+        }
+
+        @Controller(events = EventType.MESSAGE,
+                pattern = "(?i)^externals (.*)$")
+        public void onReceiveMessageExternalAny(TestBot bot, WebSocketSession session, Event event,
+                Matcher matcher) {
+
+            System.out.println("External any with " + matcher.group(1));
+        }
+
+        @Controller(events = EventType.MESSAGE,
+                pattern = "(?i)^external help$")
+        public void onReceiveMessageExternalHelp(TestBot bot, WebSocketSession session,
+                Event event) {
+
+            System.out.println("Help for external controller");
+        }
+
+        @Controller(pattern = "(?i)start external",
+                next = "externalStep")
+        public void externalStart(TestBot bot, WebSocketSession session, Event event) {
+
+            bot.startConversation(event, "externalStep"); // start conversation
+            System.out.println("External started");
+        }
+
+        @Controller(next = "externalStop")
+        public void externalStep(TestBot bot, WebSocketSession session, Event event) {
+
+            System.out.println("External next step");
+            bot.nextConversation(event);
+        }
+
+        @Controller public void externalStop(TestBot bot, WebSocketSession session, Event event) {
+
+            System.out.println("External stopped");
+            bot.stopConversation(event);
+        }
+    }
+
+    public static class BadExtControler {
+
+        public BadExtControler(TestBot bot) {
+
+            bot.registerController(this);
+        }
+
+        @Controller(events = EventType.MESSAGE,
+                pattern = "(?i)^Bad external help$")
+        public void onReceiveMessageExternalHelp(TestBot bot, WebSocketSession session,
+                Event event, Matcher matcher) {
+
+            System.out.println("Help for external controller");
+        }
+
     }
 }
