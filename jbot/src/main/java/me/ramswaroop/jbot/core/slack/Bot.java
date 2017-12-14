@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -89,6 +91,31 @@ public abstract class Bot {
      */
     public Bot() {
         registerController(this);
+    }
+
+    /**
+     * Handle application context initialized event
+     * @param event application context event
+     */
+    @EventListener
+    public void handleContextRefresh(ContextRefreshedEvent event) {
+        Map<String, Object> handlers = event.getApplicationContext()
+            .getBeansWithAnnotation(Handler.class);
+
+        handlers.forEach((beanName, bean) -> {
+            Handler handler = bean.getClass().getAnnotation(Handler.class);
+            Class<? extends Bot>[] linkTo = handler.value();
+            if (linkTo.length == 0){
+                registerController(bean);
+            } else {
+                for (Class<? extends Bot> aLinkTo : linkTo) {
+                    if (aLinkTo.equals(this.getClass())) {
+                        registerController(bean);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     /**
