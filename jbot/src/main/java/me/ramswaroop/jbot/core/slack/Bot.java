@@ -40,6 +40,7 @@ import me.ramswaroop.jbot.core.slack.models.Message;
 public abstract class Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
+    private static final String SUBTYPE_FILE_SHARE = "file_share";
     /**
      * A Map of all methods annotated with {@link Controller} where key is the {@link EventType#name()} and
      * value is a list of {@link MethodWrapper}. NOTE: It does not contain methods which are part of any
@@ -179,6 +180,8 @@ public abstract class Bot {
                         event.setType(EventType.DIRECT_MENTION.name());
                     } else if (slackService.getDmChannels().contains(event.getChannelId())) { // direct message
                         event.setType(EventType.DIRECT_MESSAGE.name());
+                    } else if (event.getSubtype().equals(SUBTYPE_FILE_SHARE)) {
+                            event.setType(EventType.FILE_SHARE_MESSAGE.name());
                     }
                 }
             } else { // slack does not send any TYPE for acknowledgement messages
