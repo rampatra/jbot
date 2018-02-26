@@ -1,12 +1,13 @@
 package me.ramswaroop.jbot.core.slack;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.ramswaroop.jbot.core.slack.models.RTM;
 import me.ramswaroop.jbot.core.slack.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ramswaroop
