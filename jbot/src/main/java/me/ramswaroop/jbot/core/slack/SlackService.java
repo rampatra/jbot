@@ -22,6 +22,7 @@ public class SlackService {
     private User currentUser;
     private List<String> dmChannels;
     private String webSocketUrl;
+    private List<User> users;
 
     /**
      * Start a RTM connection. Fetch the web socket url to connect to, current user details
@@ -34,6 +35,7 @@ public class SlackService {
         currentUser = rtm.getUser();
         dmChannels = rtm.getDmChannels();
         webSocketUrl = rtm.getWebSocketUrl();
+        users = rtm.getUsers();
     }
 
     /**
@@ -73,4 +75,16 @@ public class SlackService {
     public void setWebSocketUrl(String webSocketUrl) {
         this.webSocketUrl = webSocketUrl;
     }
+
+    /**
+     * @return list of users that are known
+     */
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+    
 }
