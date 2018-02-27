@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import me.ramswaroop.jbot.core.common.EventType;
 
 /**
+ * Model for the webhook events.
+ * 
  * @author ramswaroop
  * @version 26/09/2016
  */
@@ -15,6 +17,8 @@ public class Event {
     private User recipient;
     private long timestamp;
     private Message message;
+    @JsonProperty("messaging_type")
+    private String messagingType;
     private Postback postback;
     private Referral optin;
     private Referral referral;
@@ -77,6 +81,14 @@ public class Event {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public String getMessagingType() {
+        return messagingType;
+    }
+
+    public void setMessagingType(String messagingType) {
+        this.messagingType = messagingType;
     }
 
     public Postback getPostback() {

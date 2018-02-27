@@ -6,6 +6,7 @@ import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.facebook.models.Callback;
 import me.ramswaroop.jbot.core.facebook.models.Entry;
 import me.ramswaroop.jbot.core.facebook.models.Event;
+import me.ramswaroop.jbot.core.facebook.models.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,6 +33,9 @@ import java.util.regex.Matcher;
 public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     private FbService fbService;
@@ -63,7 +67,7 @@ public abstract class Bot extends BaseBot {
      * @return
      */
     @ResponseBody
-    @GetMapping("/webhook")
+    @PostMapping("/webhook")
     public ResponseEntity<String> setupWebhook(Callback callback) {
         try {
             for (Entry entry : callback.getEntry()) {
@@ -106,6 +110,29 @@ public abstract class Bot extends BaseBot {
         }
         // fb advises to send a 200 response within 20 secs
         return ResponseEntity.ok(null);
+    }
+
+    public final ResponseEntity<Response> reply(Event event) {
+        return restTemplate.postForEntity(fbSendUrl, event, Response.class);
+    }
+
+    /**
+     * Invoke this method to make the bot subscribe to a page after which
+     * your users can interact with your page or in other words, the bot.
+     *
+     * @return true or false depending on the operation being successful
+     */
+    @PostMapping("/subscribe")
+    public final boolean subscribeAppToPage() {
+        try {
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.set("access_token", getPageAccessToken());
+            restTemplate.postForEntity(subscribeUrl, params, String.class);
+            return true;
+        } catch (Exception e) {
+            logger.error("Error subscribing fb app to page: ", e);
+            return false;
+        }
     }
 
     /**
@@ -163,25 +190,6 @@ public abstract class Bot extends BaseBot {
             } catch (Exception e) {
                 logger.error("Error invoking chained method: ", e);
             }
-        }
-    }
-
-    /**
-     * Invoke this method to make the bot subscribe to a page after which
-     * your users can interact with your page or in other words, the bot.
-     *
-     * @return true or false depending on the operation being successful
-     */
-    public boolean subscribeAppToPage() {
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            params.set("access_token", getPageAccessToken());
-            restTemplate.postForEntity(subscribeUrl, params, String.class);
-            return true;
-        } catch (Exception e) {
-            logger.error("Error subscribing fb app to page: ", e);
-            return false;
         }
     }
 }
