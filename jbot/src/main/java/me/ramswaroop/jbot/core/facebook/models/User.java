@@ -37,95 +37,107 @@ public class User {
         return id;
     }
 
-    public void setId(String id) {
+    public User setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public User setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public User setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(String profilePic) {
+    public User setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+        return this;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public User setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
     }
 
     public String getLocale() {
         return locale;
     }
 
-    public void setLocale(String locale) {
+    public User setLocale(String locale) {
         this.locale = locale;
+        return this;
     }
 
     public Double getTimezone() {
         return timezone;
     }
 
-    public void setTimezone(Double timezone) {
+    public User setTimezone(Double timezone) {
         this.timezone = timezone;
+        return this;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public User setGender(String gender) {
         this.gender = gender;
+        return this;
     }
 
     public ShippingAddress getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(ShippingAddress shippingAddress) {
+    public User setShippingAddress(ShippingAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
+        return this;
     }
 
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
+    public User setContactName(String contactName) {
         this.contactName = contactName;
+        return this;
     }
 
     public String getContactEmail() {
         return contactEmail;
     }
 
-    public void setContactEmail(String contactEmail) {
+    public User setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
+        return this;
     }
 
     public String getContactPhone() {
         return contactPhone;
     }
 
-    public void setContactPhone(String contactPhone) {
+    public User setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
+        return this;
     }
 }

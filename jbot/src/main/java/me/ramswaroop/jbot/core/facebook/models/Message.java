@@ -32,79 +32,89 @@ public class Message {
         return isEcho;
     }
 
-    public void setEcho(Boolean echo) {
+    public Message setEcho(Boolean echo) {
         isEcho = echo;
+        return this;
     }
 
     public String getAppId() {
         return appId;
     }
 
-    public void setAppId(String appId) {
+    public Message setAppId(String appId) {
         this.appId = appId;
+        return this;
     }
 
     public String getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(String metadata) {
+    public Message setMetadata(String metadata) {
         this.metadata = metadata;
+        return this;
     }
 
     public String getMid() {
         return mid;
     }
 
-    public void setMid(String mid) {
+    public Message setMid(String mid) {
         this.mid = mid;
+        return this;
     }
 
     public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(Integer seq) {
+    public Message setSeq(Integer seq) {
         this.seq = seq;
+        return this;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public Message setText(String text) {
         this.text = text;
+        return this;
     }
 
     public Attachment getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(Attachment attachment) {
+    public Message setAttachment(Attachment attachment) {
         this.attachment = attachment;
+        return this;
     }
 
     public Attachment[] getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(Attachment[] attachments) {
+    public Message setAttachments(Attachment[] attachments) {
         this.attachments = attachments;
+        return this;
     }
 
     public Button getQuickReply() {
         return quickReply;
     }
 
-    public void setQuickReply(Button quickReply) {
+    public Message setQuickReply(Button quickReply) {
         this.quickReply = quickReply;
+        return this;
     }
 
     public Button[] getQuickReplies() {
         return quickReplies;
     }
 
-    public void setQuickReplies(Button[] quickReplies) {
+    public Message setQuickReplies(Button[] quickReplies) {
         this.quickReplies = quickReplies;
+        return this;
     }
 }

@@ -5,6 +5,7 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.facebook.Bot;
+import me.ramswaroop.jbot.core.facebook.models.Button;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
 import me.ramswaroop.jbot.core.facebook.models.Response;
@@ -37,12 +38,13 @@ public class FbBot extends Bot {
     }
     
     @Controller(events = EventType.MESSAGE)
-    public void onReceiveMessage(Event event) {
-        Event response = new Event();
-        response.setMessagingType("RESPONSE");
-        response.setRecipient(event.getSender());
-        response.setMessage(new Message());
-        response.getMessage().setText(event.getMessage().getText());
-        reply(response);
+    public void onReceiveSimpleMessage(Event event) {
+        reply(event, "Hello, I am Jbot.");
+    }
+
+    @Controller(events = EventType.MESSAGE, pattern = "(how are you?)")
+    public void onReceivePatternMessage(Event event) {
+        Button[] quickReplies = new Button[]{new Button().setTitle(""), new Button().setTitle("")};
+        reply(event, new Message().setText("I am good. How about you?").setQuickReplies(quickReplies));
     }
 }

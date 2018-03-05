@@ -6,15 +6,15 @@ import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.facebook.models.Callback;
 import me.ramswaroop.jbot.core.facebook.models.Entry;
 import me.ramswaroop.jbot.core.facebook.models.Event;
+import me.ramswaroop.jbot.core.facebook.models.Message;
 import me.ramswaroop.jbot.core.facebook.models.Response;
+import me.ramswaroop.jbot.core.facebook.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -81,9 +81,9 @@ public abstract class Bot extends BaseBot {
      * @return
      */
     @GetMapping("/webhook")
-    public ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
-                                                   @RequestParam("hub.verify_token") String verifyToken,
-                                                   @RequestParam("hub.challenge") String challenge) {
+    public final ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
+                                                         @RequestParam("hub.verify_token") String verifyToken,
+                                                         @RequestParam("hub.challenge") String challenge) {
         if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getFbToken().equals(verifyToken)) {
             return ResponseEntity.ok(challenge);
         } else {
@@ -99,7 +99,7 @@ public abstract class Bot extends BaseBot {
      */
     @ResponseBody
     @PostMapping("/webhook")
-    public ResponseEntity setupWebhookEndpoint(@RequestBody Callback callback) {
+    public final ResponseEntity setupWebhookEndpoint(@RequestBody Callback callback) {
         try {
             // Checks this is an event from a page subscription
             if (!callback.getObject().equals("page")) {
@@ -114,6 +114,8 @@ public abstract class Bot extends BaseBot {
                             event.setType(EventType.MESSAGE_ECHO);
                         } else {
                             event.setType(EventType.MESSAGE);
+                            // send typing on indicator to create a conversational experience
+                            sendTypingOnIndicator(event.getSender());
                         }
                     } else if (event.getDelivery() != null) {
                         event.setType(EventType.MESSAGE_DELIVERED);
@@ -139,14 +141,43 @@ public abstract class Bot extends BaseBot {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error in fb webhook: {}. Callback: {}", e, callback.toString());
+            logger.error("Error in fb webhook: Callback: {}, Exception: ", callback.toString(), e);
         }
         // fb advises to send a 200 response within 20 secs
         return ResponseEntity.ok("EVENT_RECEIVED");
     }
 
+    public void sendTypingOnIndicator(User recipient) {
+        restTemplate.postForEntity(fbSendUrl,
+                new Event().setRecipient(recipient).setSenderAction("typing_on"), Response.class);
+    }
+
+    public void sendTypingOffIndicator(User recipient) {
+        restTemplate.postForEntity(fbSendUrl,
+                new Event().setRecipient(recipient).setSenderAction("typing_off"), Response.class);
+    }
+
     public final ResponseEntity<Response> reply(Event event) {
+        sendTypingOffIndicator(event.getRecipient());
         return restTemplate.postForEntity(fbSendUrl, event, Response.class);
+    }
+
+    public ResponseEntity<Response> reply(Event event, String text) {
+        Event response = new Event()
+                .setMessagingType("RESPONSE")
+                .setRecipient(event.getSender())
+                .setMessage(new Message().setText(text));
+        logger.debug("Send message: {}", response.toString());
+        return reply(response);
+    }
+
+    public ResponseEntity<Response> reply(Event event, Message message) {
+        Event response = new Event()
+                .setMessagingType("RESPONSE")
+                .setRecipient(event.getSender())
+                .setMessage(message);
+        logger.debug("Send message: {}", response.toString());
+        return reply(response);
     }
 
     /**
@@ -186,14 +217,12 @@ public abstract class Bot extends BaseBot {
                 methodWrappers.add(matchedMethod);
             }
 
-            if (methodWrappers != null) {
-                for (MethodWrapper methodWrapper : methodWrappers) {
-                    Method method = methodWrapper.getMethod();
-                    if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
-                        method.invoke(this, event, methodWrapper.getMatcher());
-                    } else {
-                        method.invoke(this, event);
-                    }
+            for (MethodWrapper methodWrapper : methodWrappers) {
+                Method method = methodWrapper.getMethod();
+                if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
+                    method.invoke(this, event, methodWrapper.getMatcher());
+                } else {
+                    method.invoke(this, event);
                 }
             }
         } catch (Exception e) {
@@ -215,7 +244,7 @@ public abstract class Bot extends BaseBot {
             try {
                 EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
                 for (EventType eventType : eventTypes) {
-                    if (eventType.name().equals(event.getType().name().toUpperCase())) {
+                    if (eventType.name().equalsIgnoreCase(event.getType().name())) {
                         methodWrapper.getMethod().invoke(this, event);
                         return;
                     }

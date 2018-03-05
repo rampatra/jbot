@@ -33,79 +33,89 @@ public class Button {
         return type;
     }
 
-    public void setType(String type) {
+    public Button setType(String type) {
         this.type = type;
+        return this;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public Button setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Button setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getPayload() {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public Button setPayload(String payload) {
         this.payload = payload;
+        return this;
     }
 
     public String getWebviewHeightRatio() {
         return webviewHeightRatio;
     }
 
-    public void setWebviewHeightRatio(String webviewHeightRatio) {
+    public Button setWebviewHeightRatio(String webviewHeightRatio) {
         this.webviewHeightRatio = webviewHeightRatio;
+        return this;
     }
 
     public boolean isMessengerExtensions() {
         return messengerExtensions;
     }
 
-    public void setMessengerExtensions(boolean messengerExtensions) {
+    public Button setMessengerExtensions(boolean messengerExtensions) {
         this.messengerExtensions = messengerExtensions;
+        return this;
     }
 
     public String getFallbackUrl() {
         return fallbackUrl;
     }
 
-    public void setFallbackUrl(String fallbackUrl) {
+    public Button setFallbackUrl(String fallbackUrl) {
         this.fallbackUrl = fallbackUrl;
+        return this;
     }
 
     public String getContentType() {
         return contentType;
     }
 
-    public void setContentType(String contentType) {
+    public Button setContentType(String contentType) {
         this.contentType = contentType;
+        return this;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public Button setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 
     public PaymentSummary getPaymentSummary() {
         return paymentSummary;
     }
 
-    public void setPaymentSummary(PaymentSummary paymentSummary) {
+    public Button setPaymentSummary(PaymentSummary paymentSummary) {
         this.paymentSummary = paymentSummary;
+        return this;
     }
 }

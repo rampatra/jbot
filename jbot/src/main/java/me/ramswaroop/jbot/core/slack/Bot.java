@@ -216,14 +216,12 @@ public abstract class Bot extends BaseBot {
                 methodWrappers.add(matchedMethod);
             }
 
-            if (methodWrappers != null) {
-                for (MethodWrapper methodWrapper : methodWrappers) {
-                    Method method = methodWrapper.getMethod();
-                    if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
-                        method.invoke(this, session, event, methodWrapper.getMatcher());
-                    } else {
-                        method.invoke(this, session, event);
-                    }
+            for (MethodWrapper methodWrapper : methodWrappers) {
+                Method method = methodWrapper.getMethod();
+                if (Arrays.asList(method.getParameterTypes()).contains(Matcher.class)) {
+                    method.invoke(this, session, event, methodWrapper.getMatcher());
+                } else {
+                    method.invoke(this, session, event);
                 }
             }
         } catch (Exception e) {
@@ -246,7 +244,7 @@ public abstract class Bot extends BaseBot {
             try {
                 EventType[] eventTypes = methodWrapper.getMethod().getAnnotation(Controller.class).events();
                 for (EventType eventType : eventTypes) {
-                    if (eventType.name().equals(event.getType().toUpperCase())) {
+                    if (eventType.name().equalsIgnoreCase(event.getType())) {
                         methodWrapper.getMethod().invoke(this, session, event);
                         return;
                     }

@@ -415,7 +415,7 @@ public class Event {
             try {
                 this.channel = new ObjectMapper().treeToValue(jsonNode, Channel.class);
             } catch (JsonProcessingException e) {
-                logger.error("Error deserializing json: {}", e.getMessage());
+                logger.error("Error deserializing json: ", e);
             }
         } else if (jsonNode.isTextual()) {
             this.channelId = jsonNode.asText();
@@ -428,7 +428,7 @@ public class Event {
             try {
                 this.file = new ObjectMapper().treeToValue(jsonNode, File.class);
             } catch (JsonProcessingException e) {
-                logger.error("Error deserializing json: {}", e.getMessage());
+                logger.error("Error deserializing json: ", e);
             }
         } else if (jsonNode.isTextual()) {
             this.fileId = jsonNode.asText();
@@ -441,7 +441,7 @@ public class Event {
             try {
                 this.comment = new ObjectMapper().treeToValue(jsonNode, Comment.class);
             } catch (JsonProcessingException e) {
-                logger.error("Error deserializing json: {}", e.getMessage());
+                logger.error("Error deserializing json: ", e);
             }
         } else if (jsonNode.isTextual()) {
             this.commentId = jsonNode.asText();
@@ -454,7 +454,7 @@ public class Event {
             try {
                 this.user = new ObjectMapper().treeToValue(jsonNode, User.class);
             } catch (JsonProcessingException e) {
-                logger.error("Error deserializing json: {}", e.getMessage());
+                logger.error("Error deserializing json: ", e);
             }
         } else if (jsonNode.isTextual()) {
             this.userId = jsonNode.asText();

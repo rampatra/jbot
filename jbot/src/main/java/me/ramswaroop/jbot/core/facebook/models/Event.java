@@ -3,7 +3,11 @@ package me.ramswaroop.jbot.core.facebook.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.jbot.core.common.EventType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Model for the webhook events.
@@ -14,6 +18,8 @@ import me.ramswaroop.jbot.core.common.EventType;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Event {
+
+    private static final Logger logger = LoggerFactory.getLogger(Event.class);
 
     private User sender;
     private User recipient;
@@ -57,191 +63,225 @@ public class Event {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public Event setSender(User sender) {
         this.sender = sender;
+        return this;
     }
 
     public User getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(User recipient) {
+    public Event setRecipient(User recipient) {
         this.recipient = recipient;
+        return this;
     }
 
     public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public Event setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+        return this;
     }
 
     public Message getMessage() {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public Event setMessage(Message message) {
         this.message = message;
+        return this;
     }
 
     public String getMessagingType() {
         return messagingType;
     }
 
-    public void setMessagingType(String messagingType) {
+    public Event setMessagingType(String messagingType) {
         this.messagingType = messagingType;
+        return this;
     }
 
     public Postback getPostback() {
         return postback;
     }
 
-    public void setPostback(Postback postback) {
+    public Event setPostback(Postback postback) {
         this.postback = postback;
+        return this;
     }
 
     public Referral getOptin() {
         return optin;
     }
 
-    public void setOptin(Referral optin) {
+    public Event setOptin(Referral optin) {
         this.optin = optin;
+        return this;
     }
 
     public Referral getReferral() {
         return referral;
     }
 
-    public void setReferral(Referral referral) {
+    public Event setReferral(Referral referral) {
         this.referral = referral;
+        return this;
     }
 
     public AccountLinking getAccountLinking() {
         return accountLinking;
     }
 
-    public void setAccountLinking(AccountLinking accountLinking) {
+    public Event setAccountLinking(AccountLinking accountLinking) {
         this.accountLinking = accountLinking;
+        return this;
     }
 
     public Read getRead() {
         return read;
     }
 
-    public void setRead(Read read) {
+    public Event setRead(Read read) {
         this.read = read;
+        return this;
     }
 
     public Delivery getDelivery() {
         return delivery;
     }
 
-    public void setDelivery(Delivery delivery) {
+    public Event setDelivery(Delivery delivery) {
         this.delivery = delivery;
+        return this;
     }
 
     public CheckoutUpdate getCheckoutUpdate() {
         return checkoutUpdate;
     }
 
-    public void setCheckoutUpdate(CheckoutUpdate checkoutUpdate) {
+    public Event setCheckoutUpdate(CheckoutUpdate checkoutUpdate) {
         this.checkoutUpdate = checkoutUpdate;
+        return this;
     }
 
     public Payment getPayment() {
         return payment;
     }
 
-    public void setPayment(Payment payment) {
+    public Event setPayment(Payment payment) {
         this.payment = payment;
+        return this;
     }
 
     public String getSenderAction() {
         return senderAction;
     }
 
-    public void setSenderAction(String senderAction) {
+    public Event setSenderAction(String senderAction) {
         this.senderAction = senderAction;
+        return this;
     }
 
     public String getSettingType() {
         return settingType;
     }
 
-    public void setSettingType(String settingType) {
+    public Event setSettingType(String settingType) {
         this.settingType = settingType;
+        return this;
     }
 
     public String getAccountLinkingUrl() {
         return accountLinkingUrl;
     }
 
-    public void setAccountLinkingUrl(String accountLinkingUrl) {
+    public Event setAccountLinkingUrl(String accountLinkingUrl) {
         this.accountLinkingUrl = accountLinkingUrl;
+        return this;
     }
 
     public String[] getWhitelistedDomains() {
         return whitelistedDomains;
     }
 
-    public void setWhitelistedDomains(String[] whitelistedDomains) {
+    public Event setWhitelistedDomains(String[] whitelistedDomains) {
         this.whitelistedDomains = whitelistedDomains;
+        return this;
     }
 
     public String getDomainActionType() {
         return domainActionType;
     }
 
-    public void setDomainActionType(String domainActionType) {
+    public Event setDomainActionType(String domainActionType) {
         this.domainActionType = domainActionType;
+        return this;
     }
 
     public String getThreadState() {
         return threadState;
     }
 
-    public void setThreadState(String threadState) {
+    public Event setThreadState(String threadState) {
         this.threadState = threadState;
+        return this;
     }
 
     public String getPaymentPrivacyUrl() {
         return paymentPrivacyUrl;
     }
 
-    public void setPaymentPrivacyUrl(String paymentPrivacyUrl) {
+    public Event setPaymentPrivacyUrl(String paymentPrivacyUrl) {
         this.paymentPrivacyUrl = paymentPrivacyUrl;
+        return this;
     }
 
     public String getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public Event setMode(String mode) {
         this.mode = mode;
+        return this;
     }
 
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public Event setToken(String token) {
         this.token = token;
+        return this;
     }
 
     public String getChallenge() {
         return challenge;
     }
 
-    public void setChallenge(String challenge) {
+    public Event setChallenge(String challenge) {
         this.challenge = challenge;
+        return this;
     }
 
     public EventType getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public Event setType(EventType type) {
         this.type = type;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            logger.error("Error serializing object: ", e);
+            return null;
+        }
     }
 }
