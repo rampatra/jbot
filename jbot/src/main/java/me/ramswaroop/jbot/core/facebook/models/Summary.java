@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -8,45 +9,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 31/12/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Summary {
 
-    private double subtotal;
+    private Double subtotal;
     @JsonProperty("shipping_cost")
-    private double shippingCost;
+    private Double shippingCost;
     @JsonProperty("total_tax")
-    private double totalTax;
+    private Double totalTax;
     @JsonProperty("total_cost")
-    private double totalCost;
+    private Double totalCost;
 
-    public double getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
 
-    public double getShippingCost() {
+    public Double getShippingCost() {
         return shippingCost;
     }
 
-    public void setShippingCost(double shippingCost) {
+    public void setShippingCost(Double shippingCost) {
         this.shippingCost = shippingCost;
     }
 
-    public double getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(double totalTax) {
+    public void setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
     }
 
-    public double getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 }

@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -8,13 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 01/01/2017
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentSummary {
 
     private String currency;
     @JsonProperty("payment_type")
     private String paymentType;
     @JsonProperty("is_test_payment")
-    private boolean isTestPayment;
+    private Boolean isTestPayment;
     @JsonProperty("merchant_name")
     private String merchantName;
     @JsonProperty("requested_user_info")
@@ -38,11 +40,11 @@ public class PaymentSummary {
         this.paymentType = paymentType;
     }
 
-    public boolean isTestPayment() {
+    public Boolean isTestPayment() {
         return isTestPayment;
     }
 
-    public void setTestPayment(boolean testPayment) {
+    public void setTestPayment(Boolean testPayment) {
         isTestPayment = testPayment;
     }
 

@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * This model is also used for Optin.
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @version 26/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Referral {
     
     private String ref;

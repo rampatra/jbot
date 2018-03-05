@@ -1,12 +1,14 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * @author ramswaroop
  * @version 18/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Postback {
     
     private String payload;

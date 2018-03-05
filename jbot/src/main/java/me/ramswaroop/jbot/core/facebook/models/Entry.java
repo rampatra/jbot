@@ -1,16 +1,18 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * @author ramswaroop
  * @version 09/10/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Entry {
     
     private String id;
-    private long time;
+    private Long time;
     private Event[] messaging;
 
     public String getId() {
@@ -21,11 +23,11 @@ public class Entry {
         this.id = id;
     }
 
-    public long getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 

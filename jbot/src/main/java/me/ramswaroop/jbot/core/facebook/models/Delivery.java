@@ -1,17 +1,19 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * @author ramswaroop
  * @version 26/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Delivery {
     
     private String[] mids;
-    private long watermark;
-    private int seq;
+    private Long watermark;
+    private Integer seq;
 
     public String[] getMids() {
         return mids;
@@ -21,19 +23,19 @@ public class Delivery {
         this.mids = mids;
     }
 
-    public long getWatermark() {
+    public Long getWatermark() {
         return watermark;
     }
 
-    public void setWatermark(long watermark) {
+    public void setWatermark(Long watermark) {
         this.watermark = watermark;
     }
 
-    public int getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(int seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 }

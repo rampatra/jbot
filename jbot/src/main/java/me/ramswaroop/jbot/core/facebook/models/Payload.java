@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 18/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Payload {
 
     private String url;
@@ -16,7 +18,7 @@ public class Payload {
     @JsonProperty("coordinates.long")
     private String coordinatesLong;
     @JsonProperty("is_reusable")
-    private boolean isReusable;
+    private Boolean isReusable;
     @JsonProperty("attachment_id")
     private String attachmentId;
     @JsonProperty("template_type")
@@ -60,7 +62,7 @@ public class Payload {
     private Passenger[] passengerSegmentInfo;
     @JsonProperty("price_info")
     private Amount[] priceInfo;
-    private long timestamp;
+    private Long timestamp;
 
     public String getUrl() {
         return url;
@@ -310,11 +312,11 @@ public class Payload {
         this.priceInfo = priceInfo;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 }
