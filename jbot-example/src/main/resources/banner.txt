@@ -19,8 +19,8 @@ R                  JJ:::::::::JJ     B::::::::::::::::B   oo:::::::::::oo       
 R                    JJJJJJJJJ       BBBBBBBBBBBBBBBBB      ooooooooooo             ttttttttttt                   R
 R                                                                                                                 R
 R                                                                                                                 R
-R                                                   JBot v3.0.0                                                   R
-R                                         https://github.com/ramswaroop/jbot                                      R
+R                                                   JBot v4.0.0                                                   R
+R                                        https://github.com/ramswaroop/jbot                                       R
 R                                                                                                                 R
 R                                                                                                                 R
 RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR                          
