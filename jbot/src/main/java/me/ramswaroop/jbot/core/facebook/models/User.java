@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 17/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     private String id;
@@ -20,7 +22,7 @@ public class User {
     @JsonProperty("phone_number")
     private String phoneNumber;
     private String locale;
-    private double timezone;
+    private Double timezone;
     private String gender;
     @JsonProperty("shipping_address")
     private ShippingAddress shippingAddress;
@@ -79,11 +81,11 @@ public class User {
         this.locale = locale;
     }
 
-    public double getTimezone() {
+    public Double getTimezone() {
         return timezone;
     }
 
-    public void setTimezone(double timezone) {
+    public void setTimezone(Double timezone) {
         this.timezone = timezone;
     }
 

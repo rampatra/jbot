@@ -1,21 +1,23 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.ramswaroop.jbot.core.common.EventType;
 
 /**
  * Model for the webhook events.
- * 
+ *
  * @author ramswaroop
  * @version 26/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Event {
 
     private User sender;
     private User recipient;
-    private long timestamp;
+    private Long timestamp;
     private Message message;
     @JsonProperty("messaging_type")
     private String messagingType;
@@ -49,7 +51,7 @@ public class Event {
     private String token;
     @JsonProperty("hub.challenge")
     private String challenge;
-    private EventType type;    
+    private EventType type;
 
     public User getSender() {
         return sender;
@@ -67,11 +69,11 @@ public class Event {
         this.recipient = recipient;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

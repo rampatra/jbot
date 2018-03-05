@@ -11,14 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +50,13 @@ public abstract class Bot extends BaseBot {
     @Value("${fbSubscribeUrl}")
     private String subscribeUrl;
 
-    @Value("${fbSendUrl")
+    @Value("${fbSendUrl}")
     private String fbSendUrl;
+
+    @PostConstruct
+    private void constructFbSendUrl() {
+        this.fbSendUrl = fbSendUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+    }
 
     /**
      * Class extending this must implement this as it's
@@ -63,21 +75,42 @@ public abstract class Bot extends BaseBot {
     public abstract String getPageAccessToken();
 
     /**
+     * @param mode
+     * @param verifyToken
+     * @param challenge
+     * @return
+     */
+    @GetMapping("/webhook")
+    public ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
+                                                   @RequestParam("hub.verify_token") String verifyToken,
+                                                   @RequestParam("hub.challenge") String challenge) {
+        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getFbToken().equals(verifyToken)) {
+            return ResponseEntity.ok(challenge);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    /**
+     * Add webhook endpoint
+     *
      * @param callback
      * @return
      */
     @ResponseBody
     @PostMapping("/webhook")
-    public ResponseEntity<String> setupWebhook(Callback callback) {
+    public ResponseEntity setupWebhookEndpoint(@RequestBody Callback callback) {
         try {
+            // Checks this is an event from a page subscription
+            if (!callback.getObject().equals("page")) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             for (Entry entry : callback.getEntry()) {
                 for (Event event : entry.getMessaging()) {
-                    if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && getFbToken().equals(event.getToken())) {
-                        return ResponseEntity.ok(event.getChallenge());
-                    } else if (EventType.SUBSCRIBE.name().equalsIgnoreCase(event.getMode()) && !getFbToken().equals(event.getToken())) {
-                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-                    } else if (event.getMessage() != null) {
-                        if (event.getMessage().isEcho() && event.getMessage().getAppId() != null) {
+                    if (event.getMessage() != null) {
+                        if (event.getMessage().isEcho() != null &&
+                                event.getMessage().isEcho() &&
+                                event.getMessage().getAppId() != null) {
                             event.setType(EventType.MESSAGE_ECHO);
                         } else {
                             event.setType(EventType.MESSAGE);
@@ -109,7 +142,7 @@ public abstract class Bot extends BaseBot {
             logger.error("Error in fb webhook: {}. Callback: {}", e, callback.toString());
         }
         // fb advises to send a 200 response within 20 secs
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok("EVENT_RECEIVED");
     }
 
     public final ResponseEntity<Response> reply(Event event) {

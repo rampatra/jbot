@@ -1,6 +1,7 @@
 package me.ramswaroop.jbot.core.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -8,15 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 18/09/2016
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message {
     
     @JsonProperty("is_echo")
-    private boolean isEcho;
+    private Boolean isEcho;
     @JsonProperty("app_id")
     private String appId;
     private String metadata;
     private String mid;
-    private int seq;
+    private Integer seq;
     private String text;
     private Attachment attachment;
     private Attachment[] attachments;
@@ -26,11 +28,11 @@ public class Message {
     private Button[] quickReplies;
     
 
-    public boolean isEcho() {
+    public Boolean isEcho() {
         return isEcho;
     }
 
-    public void setEcho(boolean echo) {
+    public void setEcho(Boolean echo) {
         isEcho = echo;
     }
 
@@ -58,11 +60,11 @@ public class Message {
         this.mid = mid;
     }
 
-    public int getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(int seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 

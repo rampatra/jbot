@@ -2,7 +2,7 @@
 
 LEGO for building bots.
 
-__JBot__ is a java framework _(slightly inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to
+__JBot__ is a java framework _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to
 make Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
 the boilerplate code needed so that you can __make your bot live__ right away.
 
