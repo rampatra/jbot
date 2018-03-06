@@ -88,11 +88,11 @@ public class Payload {
         this.coordinatesLong = coordinatesLong;
     }
 
-    public boolean isReusable() {
+    public Boolean isReusable() {
         return isReusable;
     }
 
-    public void setReusable(boolean reusable) {
+    public void setReusable(Boolean reusable) {
         isReusable = reusable;
     }
 

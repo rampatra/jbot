@@ -19,7 +19,7 @@ public class Button {
     @JsonProperty("webview_height_ratio")
     private String webviewHeightRatio;
     @JsonProperty("messenger_extensions")
-    private boolean messengerExtensions;
+    private Boolean messengerExtensions;
     @JsonProperty("fallback_url")
     private String fallbackUrl;
     @JsonProperty("content_type")
@@ -74,11 +74,11 @@ public class Button {
         return this;
     }
 
-    public boolean isMessengerExtensions() {
+    public Boolean isMessengerExtensions() {
         return messengerExtensions;
     }
 
-    public Button setMessengerExtensions(boolean messengerExtensions) {
+    public Button setMessengerExtensions(Boolean messengerExtensions) {
         this.messengerExtensions = messengerExtensions;
         return this;
     }

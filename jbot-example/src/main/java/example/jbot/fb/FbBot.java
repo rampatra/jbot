@@ -1,6 +1,5 @@
 package example.jbot.fb;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
@@ -8,11 +7,7 @@ import me.ramswaroop.jbot.core.facebook.Bot;
 import me.ramswaroop.jbot.core.facebook.models.Button;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
-import me.ramswaroop.jbot.core.facebook.models.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 
 /**
  * @author ramswaroop
@@ -23,10 +18,10 @@ public class FbBot extends Bot {
 
     @Value("${fbBotToken}")
     private String fbToken;
-    
+
     @Value("${fbPageAccessToken}")
     private String pageAccessToken;
-    
+
     @Override
     public String getFbToken() {
         return fbToken;
@@ -36,7 +31,7 @@ public class FbBot extends Bot {
     public String getPageAccessToken() {
         return pageAccessToken;
     }
-    
+
     @Controller(events = EventType.MESSAGE)
     public void onReceiveSimpleMessage(Event event) {
         reply(event, "Hello, I am Jbot.");
@@ -44,7 +39,10 @@ public class FbBot extends Bot {
 
     @Controller(events = EventType.MESSAGE, pattern = "(how are you?)")
     public void onReceivePatternMessage(Event event) {
-        Button[] quickReplies = new Button[]{new Button().setTitle(""), new Button().setTitle("")};
+        Button[] quickReplies = new Button[]{
+                new Button().setContentType("text").setTitle("Great").setPayload("good"),
+                new Button().setContentType("text").setTitle("Bad").setPayload("bad")
+        };
         reply(event, new Message().setText("I am good. How about you?").setQuickReplies(quickReplies));
     }
 }
