@@ -33,16 +33,25 @@ public class FbBot extends Bot {
     }
 
     @Controller(events = EventType.MESSAGE)
-    public void onReceiveSimpleMessage(Event event) {
+    public void onReceiveMessage(Event event) {
         reply(event, "Hello, I am Jbot.");
     }
 
-    @Controller(events = EventType.MESSAGE, pattern = "(how are you?)")
+    @Controller(events = EventType.MESSAGE, pattern = "(?i)(How are you?)")
     public void onReceivePatternMessage(Event event) {
         Button[] quickReplies = new Button[]{
                 new Button().setContentType("text").setTitle("Great").setPayload("good"),
                 new Button().setContentType("text").setTitle("Bad").setPayload("bad")
         };
         reply(event, new Message().setText("I am good. How about you?").setQuickReplies(quickReplies));
+    }
+
+    @Controller(events = EventType.QUICK_REPLY, pattern = "(?i)(Great|Bad)")
+    public void onReceiveQuickReply(Event event) {
+        if ("good".equals(event.getMessage().getQuickReply().getPayload())) {
+            reply(event, "Nice to hear that!");
+        } else {
+            reply(event, "Oh, sorry to hear that.");
+        }
     }
 }

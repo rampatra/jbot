@@ -109,9 +109,10 @@ public abstract class Bot extends BaseBot {
                 for (Event event : entry.getMessaging()) {
                     if (event.getMessage() != null) {
                         if (event.getMessage().isEcho() != null &&
-                                event.getMessage().isEcho() &&
-                                event.getMessage().getAppId() != null) {
+                                event.getMessage().isEcho()) {
                             event.setType(EventType.MESSAGE_ECHO);
+                        } else if (event.getMessage().getQuickReply() != null) {
+                            event.setType(EventType.QUICK_REPLY);
                         } else {
                             event.setType(EventType.MESSAGE);
                             // send typing on indicator to create a conversational experience
