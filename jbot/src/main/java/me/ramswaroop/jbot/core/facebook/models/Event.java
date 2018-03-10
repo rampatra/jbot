@@ -59,6 +59,7 @@ public class Event {
     private String challenge;
     @JsonProperty("get_started")
     private Postback getStarted;
+    private Payload[] greeting;
     private EventType type;
 
     public User getSender() {
@@ -274,6 +275,15 @@ public class Event {
 
     public Event setGetStarted(Postback getStarted) {
         this.getStarted = getStarted;
+        return this;
+    }
+
+    public Payload[] getGreeting() {
+        return greeting;
+    }
+
+    public Event setGreeting(Payload[] greetings) {
+        this.greeting = greetings;
         return this;
     }
 

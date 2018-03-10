@@ -7,6 +7,7 @@ import me.ramswaroop.jbot.core.facebook.models.Callback;
 import me.ramswaroop.jbot.core.facebook.models.Entry;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
+import me.ramswaroop.jbot.core.facebook.models.Payload;
 import me.ramswaroop.jbot.core.facebook.models.Postback;
 import me.ramswaroop.jbot.core.facebook.models.Response;
 import me.ramswaroop.jbot.core.facebook.models.User;
@@ -107,38 +108,40 @@ public abstract class Bot extends BaseBot {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             for (Entry entry : callback.getEntry()) {
-                for (Event event : entry.getMessaging()) {
-                    if (event.getMessage() != null) {
-                        if (event.getMessage().isEcho() != null &&
-                                event.getMessage().isEcho()) {
-                            event.setType(EventType.MESSAGE_ECHO);
-                        } else if (event.getMessage().getQuickReply() != null) {
-                            event.setType(EventType.QUICK_REPLY);
+                if (entry.getMessaging() != null) {
+                    for (Event event : entry.getMessaging()) {
+                        if (event.getMessage() != null) {
+                            if (event.getMessage().isEcho() != null &&
+                                    event.getMessage().isEcho()) {
+                                event.setType(EventType.MESSAGE_ECHO);
+                            } else if (event.getMessage().getQuickReply() != null) {
+                                event.setType(EventType.QUICK_REPLY);
+                            } else {
+                                event.setType(EventType.MESSAGE);
+                                // send typing on indicator to create a conversational experience
+                                sendTypingOnIndicator(event.getSender());
+                            }
+                        } else if (event.getDelivery() != null) {
+                            event.setType(EventType.MESSAGE_DELIVERED);
+                        } else if (event.getRead() != null) {
+                            event.setType(EventType.MESSAGE_READ);
+                        } else if (event.getPostback() != null) {
+                            event.setType(EventType.POSTBACK);
+                        } else if (event.getOptin() != null) {
+                            event.setType(EventType.OPT_IN);
+                        } else if (event.getReferral() != null) {
+                            event.setType(EventType.REFERRAL);
+                        } else if (event.getAccountLinking() != null) {
+                            event.setType(EventType.ACCOUNT_LINKING);
                         } else {
-                            event.setType(EventType.MESSAGE);
-                            // send typing on indicator to create a conversational experience
-                            sendTypingOnIndicator(event.getSender());
+                            logger.error("Callback/Event type not supported: {}", event);
+                            return ResponseEntity.ok("Callback not supported yet!");
                         }
-                    } else if (event.getDelivery() != null) {
-                        event.setType(EventType.MESSAGE_DELIVERED);
-                    } else if (event.getRead() != null) {
-                        event.setType(EventType.MESSAGE_READ);
-                    } else if (event.getPostback() != null) {
-                        event.setType(EventType.POSTBACK);
-                    } else if (event.getOptin() != null) {
-                        event.setType(EventType.OPT_IN);
-                    } else if (event.getReferral() != null) {
-                        event.setType(EventType.REFERRAL);
-                    } else if (event.getAccountLinking() != null) {
-                        event.setType(EventType.ACCOUNT_LINKING);
-                    } else {
-                        logger.error("Callback/Event type not supported: {}", event);
-                        return ResponseEntity.ok("Callback not supported yet!");
-                    }
-                    if (isConversationOn(event.getSender().getId())) {
-                        invokeChainedMethod(event);
-                    } else {
-                        invokeMethods(event);
+                        if (isConversationOn(event.getSender().getId())) {
+                            invokeChainedMethod(event);
+                        } else {
+                            invokeMethods(event);
+                        }
                     }
                 }
             }
@@ -181,17 +184,38 @@ public abstract class Bot extends BaseBot {
         logger.debug("Send message: {}", response.toString());
         return reply(response);
     }
-    
+
+    /**
+     * Call this method with a {@code payload} to set the "Get Started" button.
+     * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen
+     * for more.
+     *
+     * @param payload
+     * @return
+     */
     public final ResponseEntity<Response> setGetStartedButton(String payload) {
         Event event = new Event().setGetStarted(new Postback().setPayload(payload));
         return restTemplate.postForEntity(fbMessengerProfileUrl, event, Response.class);
     }
 
     /**
+     * Call this method with a {@code greeting} to set the first message to the user. You can specify different
+     * messages for different locales. Therefore, this method receives an array of {@code greeting}.
+     * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
+     *
+     * @param greeting
+     * @return
+     */
+    public final ResponseEntity<Response> setGreetingText(Payload[] greeting) {
+        Event event = new Event().setGreeting(greeting);
+        return restTemplate.postForEntity(fbMessengerProfileUrl, event, Response.class);
+    }
+
+    /**
      * Invoke this method to make the bot subscribe to a page after which
      * your users can interact with your page or in other words, the bot.
-     * 
-     * NOTE: It seems Fb now allows the bot to subscribe to a page via the 
+     * <p>
+     * NOTE: It seems Fb now allows the bot to subscribe to a page via the
      * ui. See https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup
      */
     @PostMapping("/subscribe")

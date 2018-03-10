@@ -37,12 +37,22 @@ public class FbBot extends Bot {
         return pageAccessToken;
     }
 
+    /**
+     * Sets the "Get Started" button with a payload "hi".
+     */
     @PostConstruct
     public void setGetStartedButton() {
         setGetStartedButton("hi");
     }
 
-    @Controller(events = EventType.POSTBACK, pattern = "hi")
+    /**
+     * This method gets invoked when a user clicks on the "Get Started" button or just when someone simply types
+     * hi, hello or hey. When it is the former, the event type is {@code EventType.POSTBACK} with the payload "hi"
+     * and when latter, the event type is {@code EventType.MESSAGE}.
+     *
+     * @param event
+     */
+    @Controller(events = {EventType.MESSAGE, EventType.POSTBACK}, pattern = "(?i)(hi|hello|hey)")
     public void onReceiveMessage(Event event) {
         // quick reply buttons
         Button[] quickReplies = new Button[]{
@@ -52,15 +62,24 @@ public class FbBot extends Bot {
         reply(event, new Message().setText("Hello, I am JBot. Would you like to see more?").setQuickReplies(quickReplies));
     }
 
+    /**
+     * This method gets invoked when the user clicks on a quick reply button whose payload is either "yes" or "no".
+     *
+     * @param event
+     */
     @Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
     public void onReceiveQuickReply(Event event) {
         if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
-            reply(event, "Type: Show Buttons or Show List");
+            reply(event, "Cool! You can type: \n 1) Show Buttons \n 2) Show List \n 3) Setup meeting");
         } else {
             reply(event, "See you soon!");
         }
     }
 
+    /**
+     * 
+     * @param event
+     */
     @Controller(events = EventType.MESSAGE, pattern = "(?i)(button)")
     public void showButtons(Event event) {
         Button[] buttons = new Button[]{
@@ -71,15 +90,19 @@ public class FbBot extends Bot {
                 .setTemplateType("button").setText("These are 2 link buttons.").setButtons(buttons))));
     }
 
+    /**
+     * 
+     * @param event
+     */
     @Controller(events = EventType.MESSAGE, pattern = "(?i)(list)")
     public void showList(Event event) {
-        Element[] elements = new Element[] {
-                new Element().setTitle("").setSubtitle("").setDefaultAction(new Button().setType("")),
-                new Element().setTitle("").setSubtitle("").setDefaultAction(new Button().setType("")),
-                new Element().setTitle("").setSubtitle("").setDefaultAction(new Button().setType(""))
+        Element[] elements = new Element[]{
+                new Element().setTitle("adasd").setSubtitle("345235").setDefaultAction(new Button().setType("")),
+                new Element().setTitle("xcvxcv").setSubtitle("123213").setDefaultAction(new Button().setType("")),
+                new Element().setTitle("xcvcxv").setSubtitle("2324").setDefaultAction(new Button().setType(""))
         };
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
-                .setTemplateType("list").setTopElementStyle("compact").setText("These are 2 link buttons.")
+                .setTemplateType("list").setTopElementStyle("compact").setText("This is a list.")
                 .setElements(elements))));
     }
 
@@ -89,7 +112,7 @@ public class FbBot extends Bot {
      */
 
 
-    @Controller(pattern = "(setup meeting)", next = "confirmTiming")
+    @Controller(pattern = "(?i)(setup meeting)", next = "confirmTiming")
     public void setupMeeting(Event event) {
         startConversation(event, "confirmTiming");   // start conversation
         reply(event, "Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
