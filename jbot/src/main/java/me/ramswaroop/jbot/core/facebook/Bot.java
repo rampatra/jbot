@@ -7,6 +7,7 @@ import me.ramswaroop.jbot.core.facebook.models.Callback;
 import me.ramswaroop.jbot.core.facebook.models.Entry;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
+import me.ramswaroop.jbot.core.facebook.models.Postback;
 import me.ramswaroop.jbot.core.facebook.models.Response;
 import me.ramswaroop.jbot.core.facebook.models.User;
 import org.slf4j.Logger;
@@ -46,12 +47,16 @@ public abstract class Bot extends BaseBot {
     @Value("${fbSendUrl}")
     private String fbSendUrl;
 
+    @Value("${fbMessengerProfileUrl}")
+    private String fbMessengerProfileUrl;
+
     @Autowired
     protected RestTemplate restTemplate;
 
     @PostConstruct
     private void constructFbSendUrl() {
-        this.fbSendUrl = fbSendUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbSendUrl = fbSendUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbMessengerProfileUrl = fbMessengerProfileUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
     }
 
     /**
@@ -176,24 +181,24 @@ public abstract class Bot extends BaseBot {
         logger.debug("Send message: {}", response.toString());
         return reply(response);
     }
+    
+    public final ResponseEntity<Response> setGetStartedButton(String payload) {
+        Event event = new Event().setGetStarted(new Postback().setPayload(payload));
+        return restTemplate.postForEntity(fbMessengerProfileUrl, event, Response.class);
+    }
 
     /**
      * Invoke this method to make the bot subscribe to a page after which
      * your users can interact with your page or in other words, the bot.
-     *
-     * @return true or false depending on the operation being successful
+     * 
+     * NOTE: It seems Fb now allows the bot to subscribe to a page via the 
+     * ui. See https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup
      */
     @PostMapping("/subscribe")
-    public final boolean subscribeAppToPage() {
-        try {
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            params.set("access_token", getPageAccessToken());
-            restTemplate.postForEntity(subscribeUrl, params, String.class);
-            return true;
-        } catch (Exception e) {
-            logger.error("Error subscribing fb app to page: ", e);
-            return false;
-        }
+    public final void subscribeAppToPage() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("access_token", getPageAccessToken());
+        restTemplate.postForEntity(subscribeUrl, params, String.class);
     }
 
     /**
@@ -291,7 +296,7 @@ public abstract class Bot extends BaseBot {
 
     /**
      * Match the pattern with different attributes based on the event type.
-     * 
+     *
      * @param event
      * @return the pattern string
      */

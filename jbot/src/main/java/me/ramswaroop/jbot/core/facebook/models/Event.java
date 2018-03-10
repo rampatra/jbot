@@ -272,8 +272,9 @@ public class Event {
         return getStarted;
     }
 
-    public void setGetStarted(Postback getStarted) {
+    public Event setGetStarted(Postback getStarted) {
         this.getStarted = getStarted;
+        return this;
     }
 
     public EventType getType() {

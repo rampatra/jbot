@@ -29,71 +29,80 @@ public class Element {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Element setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(String subtitle) {
+    public Element setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+        return this;
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public Element setQuantity(Integer quantity) {
         this.quantity = quantity;
+        return this;
     }
 
     public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public Element setPrice(Double price) {
         this.price = price;
+        return this;
     }
 
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public Element setCurrency(String currency) {
         this.currency = currency;
+        return this;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public Element setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 
     public String getItemUrl() {
         return itemUrl;
     }
 
-    public void setItemUrl(String itemUrl) {
+    public Element setItemUrl(String itemUrl) {
         this.itemUrl = itemUrl;
+        return this;
     }
 
     public Button getDefaultAction() {
         return defaultAction;
     }
 
-    public void setDefaultAction(Button defaultAction) {
+    public Element setDefaultAction(Button defaultAction) {
         this.defaultAction = defaultAction;
+        return this;
     }
 
     public Button[] getButtons() {
         return buttons;
     }
 
-    public void setButtons(Button[] buttons) {
+    public Element setButtons(Button[] buttons) {
         this.buttons = buttons;
+        return this;
     }
 }

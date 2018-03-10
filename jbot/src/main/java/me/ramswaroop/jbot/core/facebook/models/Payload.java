@@ -68,32 +68,36 @@ public class Payload {
         return url;
     }
 
-    public void setUrl(String url) {
+    public Payload setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     public String getCoordinatesLat() {
         return coordinatesLat;
     }
 
-    public void setCoordinatesLat(String coordinatesLat) {
+    public Payload setCoordinatesLat(String coordinatesLat) {
         this.coordinatesLat = coordinatesLat;
+        return this;
     }
 
     public String getCoordinatesLong() {
         return coordinatesLong;
     }
 
-    public void setCoordinatesLong(String coordinatesLong) {
+    public Payload setCoordinatesLong(String coordinatesLong) {
         this.coordinatesLong = coordinatesLong;
+        return this;
     }
 
     public Boolean isReusable() {
         return isReusable;
     }
 
-    public void setReusable(Boolean reusable) {
+    public Payload setReusable(Boolean reusable) {
         isReusable = reusable;
+        return this;
     }
 
     public Boolean getReusable() {
@@ -104,223 +108,251 @@ public class Payload {
         return attachmentId;
     }
 
-    public void setAttachmentId(String attachmentId) {
+    public Payload setAttachmentId(String attachmentId) {
         this.attachmentId = attachmentId;
+        return this;
     }
 
     public String getTemplateType() {
         return templateType;
     }
 
-    public void setTemplateType(String templateType) {
+    public Payload setTemplateType(String templateType) {
         this.templateType = templateType;
+        return this;
     }
 
     public String getIntroMessage() {
         return introMessage;
     }
 
-    public void setIntroMessage(String introMessage) {
+    public Payload setIntroMessage(String introMessage) {
         this.introMessage = introMessage;
+        return this;
     }
 
     public String getLocale() {
         return locale;
     }
 
-    public void setLocale(String locale) {
+    public Payload setLocale(String locale) {
         this.locale = locale;
+        return this;
     }
 
     public String getTopElementStyle() {
         return topElementStyle;
     }
 
-    public void setTopElementStyle(String topElementStyle) {
+    public Payload setTopElementStyle(String topElementStyle) {
         this.topElementStyle = topElementStyle;
+        return this;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public Payload setText(String text) {
         this.text = text;
+        return this;
     }
 
     public String getRecipientName() {
         return recipientName;
     }
 
-    public void setRecipientName(String recipientName) {
+    public Payload setRecipientName(String recipientName) {
         this.recipientName = recipientName;
+        return this;
     }
 
     public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(String orderNumber) {
+    public Payload setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+        return this;
     }
 
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public Payload setCurrency(String currency) {
         this.currency = currency;
+        return this;
     }
 
     public String getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(String basePrice) {
+    public Payload setBasePrice(String basePrice) {
         this.basePrice = basePrice;
+        return this;
     }
 
     public String getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public Payload setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+        return this;
     }
 
     public String getTax() {
         return tax;
     }
 
-    public void setTax(String tax) {
+    public Payload setTax(String tax) {
         this.tax = tax;
+        return this;
     }
 
     public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public Payload setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+        return this;
     }
 
     public String getOrderUrl() {
         return orderUrl;
     }
 
-    public void setOrderUrl(String orderUrl) {
+    public Payload setOrderUrl(String orderUrl) {
         this.orderUrl = orderUrl;
+        return this;
     }
 
     public ShippingAddress getAddress() {
         return address;
     }
 
-    public void setAddress(ShippingAddress address) {
+    public Payload setAddress(ShippingAddress address) {
         this.address = address;
+        return this;
     }
 
     public Summary getSummary() {
         return summary;
     }
 
-    public void setSummary(Summary summary) {
+    public Payload setSummary(Summary summary) {
         this.summary = summary;
+        return this;
     }
 
     public Button[] getButtons() {
         return buttons;
     }
 
-    public void setButtons(Button[] buttons) {
+    public Payload setButtons(Button[] buttons) {
         this.buttons = buttons;
+        return this;
     }
 
     public Element[] getElements() {
         return elements;
     }
 
-    public void setElements(Element[] elements) {
+    public Payload setElements(Element[] elements) {
         this.elements = elements;
+        return this;
     }
 
     public Amount[] getAdjustments() {
         return adjustments;
     }
 
-    public void setAdjustments(Amount[] adjustments) {
+    public Payload setAdjustments(Amount[] adjustments) {
         this.adjustments = adjustments;
+        return this;
     }
 
     public String getPnrNumber() {
         return pnrNumber;
     }
 
-    public void setPnrNumber(String pnrNumber) {
+    public Payload setPnrNumber(String pnrNumber) {
         this.pnrNumber = pnrNumber;
+        return this;
     }
 
     public String getCheckinUrl() {
         return checkinUrl;
     }
 
-    public void setCheckinUrl(String checkinUrl) {
+    public Payload setCheckinUrl(String checkinUrl) {
         this.checkinUrl = checkinUrl;
+        return this;
     }
 
     public BoardingPass[] getBoardingPass() {
         return boardingPass;
     }
 
-    public void setBoardingPass(BoardingPass[] boardingPass) {
+    public Payload setBoardingPass(BoardingPass[] boardingPass) {
         this.boardingPass = boardingPass;
+        return this;
     }
 
     public FlightInfo[] getFlightInfo() {
         return flightInfo;
     }
 
-    public void setFlightInfo(FlightInfo[] flightInfo) {
+    public Payload setFlightInfo(FlightInfo[] flightInfo) {
         this.flightInfo = flightInfo;
+        return this;
     }
 
     public FlightInfo getUpdateFlightInfo() {
         return updateFlightInfo;
     }
 
-    public void setUpdateFlightInfo(FlightInfo updateFlightInfo) {
+    public Payload setUpdateFlightInfo(FlightInfo updateFlightInfo) {
         this.updateFlightInfo = updateFlightInfo;
+        return this;
     }
 
     public Passenger[] getPassengerInfo() {
         return passengerInfo;
     }
 
-    public void setPassengerInfo(Passenger[] passengerInfo) {
+    public Payload setPassengerInfo(Passenger[] passengerInfo) {
         this.passengerInfo = passengerInfo;
+        return this;
     }
 
     public Passenger[] getPassengerSegmentInfo() {
         return passengerSegmentInfo;
     }
 
-    public void setPassengerSegmentInfo(Passenger[] passengerSegmentInfo) {
+    public Payload setPassengerSegmentInfo(Passenger[] passengerSegmentInfo) {
         this.passengerSegmentInfo = passengerSegmentInfo;
+        return this;
     }
 
     public Amount[] getPriceInfo() {
         return priceInfo;
     }
 
-    public void setPriceInfo(Amount[] priceInfo) {
+    public Payload setPriceInfo(Amount[] priceInfo) {
         this.priceInfo = priceInfo;
+        return this;
     }
 
     public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public Payload setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+        return this;
     }
 }

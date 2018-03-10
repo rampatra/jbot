@@ -18,15 +18,17 @@ public class Attachment {
         return type;
     }
 
-    public void setType(String type) {
+    public Attachment setType(String type) {
         this.type = type;
+        return this;
     }
 
     public Payload getPayload() {
         return payload;
     }
 
-    public void setPayload(Payload payload) {
+    public Attachment setPayload(Payload payload) {
         this.payload = payload;
+        return this;
     }
 }
