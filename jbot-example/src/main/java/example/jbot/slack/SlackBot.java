@@ -53,7 +53,7 @@ public class SlackBot extends Bot {
      */
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
     public void onReceiveDM(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Hi, I am " + slackService.getCurrentUser().getName()));
+        reply(session, event,"Hi, I am " + slackService.getCurrentUser().getName());
     }
 
     /**
@@ -66,10 +66,10 @@ public class SlackBot extends Bot {
      */
     @Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
     public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
-        reply(session, event, new Message("First group: " + matcher.group(0) + "\n" +
+        reply(session, event,"First group: " + matcher.group(0) + "\n" +
                 "Second group: " + matcher.group(1) + "\n" +
                 "Third group: " + matcher.group(2) + "\n" +
-                "Fourth group: " + matcher.group(3)));
+                "Fourth group: " + matcher.group(3));
     }
 
     /**
@@ -80,7 +80,7 @@ public class SlackBot extends Bot {
      */
     @Controller(events = EventType.PIN_ADDED)
     public void onPinAdded(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Thanks for the pin! You can find all pinned items under channel details."));
+        reply(session, event,"Thanks for the pin! You can find all pinned items under channel details.");
     }
 
     /**
@@ -111,7 +111,7 @@ public class SlackBot extends Bot {
     @Controller(pattern = "(setup meeting)", next = "confirmTiming")
     public void setupMeeting(WebSocketSession session, Event event) {
         startConversation(event, "confirmTiming");   // start conversation
-        reply(session, event, new Message("Cool! At what time (ex. 15:30) do you want me to set up the meeting?"));
+        reply(session, event,"Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
     }
 
     /**
@@ -122,8 +122,8 @@ public class SlackBot extends Bot {
      */
     @Controller(next = "askTimeForMeeting")
     public void confirmTiming(WebSocketSession session, Event event) {
-        reply(session, event, new Message("Your meeting is set at " + event.getText() +
-                ". Would you like to repeat it tomorrow?"));
+        reply(session, event,"Your meeting is set at " + event.getText() +
+                ". Would you like to repeat it tomorrow?");
         nextConversation(event);    // jump to next question in conversation
     }
 
@@ -136,10 +136,10 @@ public class SlackBot extends Bot {
     @Controller(next = "askWhetherToRepeat")
     public void askTimeForMeeting(WebSocketSession session, Event event) {
         if (event.getText().contains("yes")) {
-            reply(session, event, new Message("Okay. Would you like me to set a reminder for you?"));
+            reply(session, event,"Okay. Would you like me to set a reminder for you?");
             nextConversation(event);    // jump to next question in conversation  
         } else {
-            reply(session, event, new Message("No problem. You can always schedule one with 'setup meeting' command."));
+            reply(session, event,"No problem. You can always schedule one with 'setup meeting' command.");
             stopConversation(event);    // stop conversation only if user says no
         }
     }
@@ -153,9 +153,9 @@ public class SlackBot extends Bot {
     @Controller
     public void askWhetherToRepeat(WebSocketSession session, Event event) {
         if (event.getText().contains("yes")) {
-            reply(session, event, new Message("Great! I will remind you tomorrow before the meeting."));
+            reply(session, event,"Great! I will remind you tomorrow before the meeting.");
         } else {
-            reply(session, event, new Message("Oh! my boss is smart enough to remind himself :)"));
+            reply(session, event,"Okay, don't forget to attend the meeting tomorrow :)");
         }
         stopConversation(event);    // stop conversation
     }

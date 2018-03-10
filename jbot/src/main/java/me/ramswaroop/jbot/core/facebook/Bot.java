@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -41,17 +40,14 @@ public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    private FbService fbService;
-
     @Value("${fbSubscribeUrl}")
     private String subscribeUrl;
 
     @Value("${fbSendUrl}")
     private String fbSendUrl;
+
+    @Autowired
+    protected RestTemplate restTemplate;
 
     @PostConstruct
     private void constructFbSendUrl() {
@@ -123,7 +119,7 @@ public abstract class Bot extends BaseBot {
                     } else if (event.getRead() != null) {
                         event.setType(EventType.MESSAGE_READ);
                     } else if (event.getPostback() != null) {
-                        event.setType(EventType.POSTBACK_RECEIVED);
+                        event.setType(EventType.POSTBACK);
                     } else if (event.getOptin() != null) {
                         event.setType(EventType.OPT_IN);
                     } else if (event.getReferral() != null) {
@@ -201,6 +197,43 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
+     * Call this method to start a conversation.
+     *
+     * @param event
+     */
+    public final void startConversation(Event event, String methodName) {
+        startConversation(event.getSender().getId(), methodName);
+    }
+
+    /**
+     * Call this method to jump to the next method in a conversation.
+     *
+     * @param event
+     */
+    public final void nextConversation(Event event) {
+        nextConversation(event.getSender().getId());
+    }
+
+    /**
+     * Call this method to stop the end the conversation.
+     *
+     * @param event
+     */
+    public final void stopConversation(Event event) {
+        stopConversation(event.getSender().getId());
+    }
+
+    /**
+     * Check whether a conversation is up in a particular slack channel.
+     *
+     * @param event
+     * @return true if a conversation is on, false otherwise.
+     */
+    public final boolean isConversationOn(Event event) {
+        return isConversationOn(event.getSender().getId());
+    }
+
+    /**
      * Invoke the methods with matching {@link Controller#events()}
      * and {@link Controller#pattern()} in events received from Slack.
      *
@@ -212,7 +245,7 @@ public abstract class Bot extends BaseBot {
             if (methodWrappers == null) return;
 
             methodWrappers = new ArrayList<>(methodWrappers);
-            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(event.getMessage().getText(), methodWrappers);
+            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(getPatternFromEventType(event), methodWrappers);
             if (matchedMethod != null) {
                 methodWrappers = new ArrayList<>();
                 methodWrappers.add(matchedMethod);
@@ -253,6 +286,25 @@ public abstract class Bot extends BaseBot {
             } catch (Exception e) {
                 logger.error("Error invoking chained method: ", e);
             }
+        }
+    }
+
+    /**
+     * Match the pattern with different attributes based on the event type.
+     * 
+     * @param event
+     * @return the pattern string
+     */
+    private String getPatternFromEventType(Event event) {
+        switch (event.getType()) {
+            case MESSAGE:
+                return event.getMessage().getText();
+            case QUICK_REPLY:
+                return event.getMessage().getQuickReply().getPayload();
+            case POSTBACK:
+                return event.getPostback().getPayload();
+            default:
+                return event.getMessage().getText();
         }
     }
 }

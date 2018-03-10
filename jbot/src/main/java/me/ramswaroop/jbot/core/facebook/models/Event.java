@@ -57,6 +57,8 @@ public class Event {
     private String token;
     @JsonProperty("hub.challenge")
     private String challenge;
+    @JsonProperty("get_started")
+    private Postback getStarted;
     private EventType type;
 
     public User getSender() {
@@ -264,6 +266,14 @@ public class Event {
     public Event setChallenge(String challenge) {
         this.challenge = challenge;
         return this;
+    }
+
+    public Postback getGetStarted() {
+        return getStarted;
+    }
+
+    public void setGetStarted(Postback getStarted) {
+        this.getStarted = getStarted;
     }
 
     public EventType getType() {

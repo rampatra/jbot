@@ -159,6 +159,10 @@ public abstract class Bot extends BaseBot {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
+    
+    public final void reply(WebSocketSession session, Event event, String text) {
+        reply(session, event, new Message(text));
+    }
 
     /**
      * Call this method to start a conversation.

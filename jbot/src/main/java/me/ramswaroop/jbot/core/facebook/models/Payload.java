@@ -96,6 +96,10 @@ public class Payload {
         isReusable = reusable;
     }
 
+    public Boolean getReusable() {
+        return isReusable;
+    }
+
     public String getAttachmentId() {
         return attachmentId;
     }
