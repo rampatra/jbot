@@ -1,4 +1,4 @@
-package example.jbot.fb;
+package example.jbot.facebook;
 
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
@@ -137,7 +137,7 @@ public class FbBot extends Bot {
     public void showGithubLink(Event event) {
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
                 .setTemplateType("button").setText("Bye. Happy coding!").setButtons(new Button[]{new Button()
-                        .setType("web_url").setTitle("See code").setUrl("https://github.com/ramswaroop/jbot")}))));
+                        .setType("web_url").setTitle("View code").setUrl("https://github.com/ramswaroop/jbot")}))));
     }
 
 

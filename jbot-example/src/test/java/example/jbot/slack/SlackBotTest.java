@@ -59,7 +59,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_DirectMention_Should_InvokeOnDirectMention() throws Exception {
+    public void When_DirectMention_Then_InvokeOnDirectMention() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1358878749.000002\"," +
                 "\"user\": \"U023BECGF\"," +
@@ -69,7 +69,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_DirectMessage_Should_InvokeOnDirectMessage() throws Exception {
+    public void When_DirectMessage_Then_InvokeOnDirectMessage() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1358878749.000002\"," +
                 "\"channel\": \"D1E79BACV\"," +
@@ -80,7 +80,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_MessageWithPattern_Should_InvokeOnReceiveMessageWithPattern() throws Exception {
+    public void When_MessageWithPattern_Then_InvokeOnReceiveMessageWithPattern() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1358878749.000002\"," +
                 "\"channel\": \"A1E78BACV\"," +
@@ -94,7 +94,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_DirectMessageWithPattern_Should_InvokeOnDirectMessage() throws Exception {
+    public void When_DirectMessageWithPattern_Then_InvokeOnDirectMessage() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1358878749.000002\"," +
                 "\"channel\": \"D1E79BACV\"," +
@@ -105,7 +105,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_DirectMessage_Should_InvokeOnPinAdded() throws Exception {
+    public void When_DirectMessage_Then_InvokeOnPinAdded() {
         TextMessage textMessage = new TextMessage("{\"type\":\"pin_added\"," +
                 "\"user\":\"U0MCAEX8A\",\"channel_id\":\"C0NDSV5B8\"," +
                 "\"item\":{\"type\":\"message\",\"channel\":\"C0NDSV5B8\"," +
@@ -121,7 +121,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_DirectMessage_Should_InvokeOnFileShared() throws Exception {
+    public void When_DirectMessage_Then_InvokeOnFileShared() {
         TextMessage textMessage = new TextMessage("{\"type\":\"file_shared\"," +
                 "\"file_id\":\"F219AF6VD\"," +
                 "\"user_id\":\"U0MCAEX8A\"," +
@@ -132,7 +132,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void when_ConversationPattern_Should_StartConversation() throws Exception {
+    public void When_ConversationPattern_Then_StartConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1158878749.000002\"," +
                 "\"channel\": \"A1E78BACV\"," +
@@ -167,7 +167,7 @@ public class SlackBotTest {
     }
 
     @Test
-    public void given_InConversation_when_AnswerNo_Should_StopConversation() throws Exception {
+    public void Given_InConversation_When_AnswerNo_Then_StopConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1368878749.000602\"," +
                 "\"channel\": \"A1E78BACV\"," +
@@ -270,7 +270,7 @@ public class SlackBotTest {
             if (event.getText().contains("yes")) {
                 System.out.println("Great! I will remind you tomorrow before the meeting.");
             } else {
-                System.out.println("Oh! my boss is smart enough to remind himself :)");
+                System.out.println("Okay, don't forget to attend the meeting tomorrow :)");
             }
             stopConversation(event);    // stop conversation
         }

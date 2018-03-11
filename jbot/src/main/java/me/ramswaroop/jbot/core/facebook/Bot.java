@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -109,6 +110,7 @@ public abstract class Bot extends BaseBot {
             if (!callback.getObject().equals("page")) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+            logger.debug("Callback from fb: {}", callback);
             for (Entry entry : callback.getEntry()) {
                 if (entry.getMessaging() != null) {
                     for (Event event : entry.getMessaging()) {
@@ -139,7 +141,7 @@ public abstract class Bot extends BaseBot {
                             logger.debug("Callback/Event type not supported: {}", event);
                             return ResponseEntity.ok("Callback not supported yet!");
                         }
-                        if (isConversationOn(event.getSender().getId())) {
+                        if (isConversationOn(event)) {
                             invokeChainedMethod(event);
                         } else {
                             invokeMethods(event);
@@ -154,12 +156,12 @@ public abstract class Bot extends BaseBot {
         return ResponseEntity.ok("EVENT_RECEIVED");
     }
 
-    public void sendTypingOnIndicator(User recipient) {
+    private void sendTypingOnIndicator(User recipient) {
         restTemplate.postForEntity(fbSendUrl,
                 new Event().setRecipient(recipient).setSenderAction("typing_on"), Response.class);
     }
 
-    public void sendTypingOffIndicator(User recipient) {
+    private void sendTypingOffIndicator(User recipient) {
         restTemplate.postForEntity(fbSendUrl,
                 new Event().setRecipient(recipient).setSenderAction("typing_off"), Response.class);
     }
@@ -197,7 +199,7 @@ public abstract class Bot extends BaseBot {
      * <p>
      * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
-     * @param payload
+     * @param payload for "Get Started" button
      * @return
      */
     public final ResponseEntity<Response> setGetStartedButton(String payload) {
@@ -212,7 +214,7 @@ public abstract class Bot extends BaseBot {
      * <p>
      * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
-     * @param greeting
+     * @param greeting an array of Payload consisting of text and locale
      * @return
      */
     public final ResponseEntity<Response> setGreetingText(Payload[] greeting) {
