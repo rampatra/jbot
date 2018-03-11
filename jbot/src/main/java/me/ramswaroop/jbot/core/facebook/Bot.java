@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -134,7 +136,7 @@ public abstract class Bot extends BaseBot {
                         } else if (event.getAccountLinking() != null) {
                             event.setType(EventType.ACCOUNT_LINKING);
                         } else {
-                            logger.error("Callback/Event type not supported: {}", event);
+                            logger.debug("Callback/Event type not supported: {}", event);
                             return ResponseEntity.ok("Callback not supported yet!");
                         }
                         if (isConversationOn(event.getSender().getId())) {
@@ -146,7 +148,7 @@ public abstract class Bot extends BaseBot {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error in fb webhook: Callback: {}, Exception: ", callback.toString(), e);
+            logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
         }
         // fb advises to send a 200 response within 20 secs
         return ResponseEntity.ok("EVENT_RECEIVED");
@@ -162,33 +164,38 @@ public abstract class Bot extends BaseBot {
                 new Event().setRecipient(recipient).setSenderAction("typing_off"), Response.class);
     }
 
-    public final ResponseEntity<Response> reply(Event event) {
+    public final ResponseEntity<String> reply(Event event) {
         sendTypingOffIndicator(event.getRecipient());
-        return restTemplate.postForEntity(fbSendUrl, event, Response.class);
+        logger.debug("Send message: {}", event.toString());
+        try {
+            return restTemplate.postForEntity(fbSendUrl, event, String.class);
+        } catch (HttpClientErrorException e) {
+            logger.error("Send message error: Response body: {} \nException: ", e.getResponseBodyAsString(), e);
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
     }
 
-    public ResponseEntity<Response> reply(Event event, String text) {
+    public ResponseEntity<String> reply(Event event, String text) {
         Event response = new Event()
                 .setMessagingType("RESPONSE")
                 .setRecipient(event.getSender())
                 .setMessage(new Message().setText(text));
-        logger.debug("Send message: {}", response.toString());
         return reply(response);
     }
 
-    public ResponseEntity<Response> reply(Event event, Message message) {
+    public ResponseEntity<String> reply(Event event, Message message) {
         Event response = new Event()
                 .setMessagingType("RESPONSE")
                 .setRecipient(event.getSender())
                 .setMessage(message);
-        logger.debug("Send message: {}", response.toString());
         return reply(response);
     }
 
     /**
-     * Call this method with a {@code payload} to set the "Get Started" button.
-     * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen
-     * for more.
+     * Call this method with a {@code payload} to set the "Get Started" button. A user sees this button
+     * when it first starts a conversation with the bot.
+     * <p>
+     * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
      * @param payload
      * @return
@@ -199,8 +206,10 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
-     * Call this method with a {@code greeting} to set the first message to the user. You can specify different
-     * messages for different locales. Therefore, this method receives an array of {@code greeting}.
+     * Call this method to set the "Greeting Text". A user sees this when it opens up the chat window for the
+     * first time. You can specify different messages for different locales. Therefore, this method receives an
+     * array of {@code greeting}.
+     * <p>
      * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
      * @param greeting
@@ -274,7 +283,8 @@ public abstract class Bot extends BaseBot {
             if (methodWrappers == null) return;
 
             methodWrappers = new ArrayList<>(methodWrappers);
-            MethodWrapper matchedMethod = getMethodWithMatchingPatternAndFilterUnmatchedMethods(getPatternFromEventType(event), methodWrappers);
+            MethodWrapper matchedMethod =
+                    getMethodWithMatchingPatternAndFilterUnmatchedMethods(getPatternFromEventType(event), methodWrappers);
             if (matchedMethod != null) {
                 methodWrappers = new ArrayList<>();
                 methodWrappers.add(matchedMethod);

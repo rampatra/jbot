@@ -101,8 +101,9 @@ public abstract class Bot extends BaseBot {
      * @param textMessage
      * @throws Exception
      */
-    public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
+    public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
         ObjectMapper mapper = new ObjectMapper();
+        logger.debug("Response from Slack: {}", textMessage.getPayload());
         try {
             Event event = mapper.readValue(textMessage.getPayload(), Event.class);
             if (event.getType() != null) {
@@ -130,7 +131,7 @@ public abstract class Bot extends BaseBot {
                 invokeMethods(session, event);
             }
         } catch (Exception e) {
-            logger.error("Error handling response from Slack: {}. \nException: ", textMessage.getPayload(), e);
+            logger.error("Error handling response from Slack: {} \nException: ", textMessage.getPayload(), e);
         }
     }
 
