@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -25,8 +26,9 @@ import static org.junit.Assert.assertThat;
  * @author ramswaroop
  * @version 11/03/2018
  */
-@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
+@ActiveProfiles("facebook")
+@RunWith(MockitoJUnitRunner.class)
 public class FbBotTest {
 
     @Mock

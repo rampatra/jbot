@@ -1,9 +1,9 @@
 package example.jbot.slack;
 
 
-import me.ramswaroop.jbot.core.slack.Bot;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
+import me.ramswaroop.jbot.core.slack.Bot;
 import me.ramswaroop.jbot.core.slack.SlackService;
 import me.ramswaroop.jbot.core.slack.models.Event;
 import me.ramswaroop.jbot.core.slack.models.User;
@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -30,8 +31,9 @@ import static org.mockito.Mockito.when;
  * @author ramswaroop
  * @version 20/06/2016
  */
-@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
+@ActiveProfiles("slack")
+@RunWith(MockitoJUnitRunner.class)
 public class SlackBotTest {
 
     @Mock
@@ -198,7 +200,7 @@ public class SlackBotTest {
      * Slack Bot for unit tests.
      */
     public static class TestBot extends Bot {
-        
+
         @Override
         public String getSlackToken() {
             return "slackToken";
