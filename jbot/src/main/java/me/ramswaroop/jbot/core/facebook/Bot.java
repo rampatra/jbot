@@ -275,7 +275,7 @@ public abstract class Bot extends BaseBot {
 
     /**
      * Invoke the methods with matching {@link Controller#events()}
-     * and {@link Controller#pattern()} in events received from Slack.
+     * and {@link Controller#pattern()} in events received from Slack/Facebook.
      *
      * @param event
      */

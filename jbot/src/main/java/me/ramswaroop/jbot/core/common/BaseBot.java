@@ -104,9 +104,9 @@ public abstract class BaseBot {
     }
 
     /**
-     * Search for a method whose {@link Controller#pattern()} match with the {@link Event#text}
-     * in events received from Slack and also filter out the methods whose {@link Controller#pattern()} do not
-     * match with slack message received ({@link Event#text}) for cases where there are no matched methods.
+     * Search for a method whose {@link Controller#pattern()} match with the {@code Event} text or payload
+     * received from Slack/Facebook and also filter out the methods in {@code methodWrappers} whose 
+     * {@link Controller#pattern()} do not match.
      *
      * @param text is the message from the user
      * @param methodWrappers
@@ -121,7 +121,11 @@ public abstract class BaseBot {
                 MethodWrapper methodWrapper = listIterator.next();
                 String pattern = methodWrapper.getPattern();
 
-                if (!StringUtils.isEmpty(pattern) && !StringUtils.isEmpty(text)) {
+                if (!StringUtils.isEmpty(pattern)) {
+                    if (StringUtils.isEmpty(text)) {
+                        listIterator.remove();
+                        continue;
+                    }
                     Pattern p = Pattern.compile(pattern);
                     Matcher m = p.matcher(text);
                     if (m.find()) {
