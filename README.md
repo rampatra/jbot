@@ -27,7 +27,18 @@ the boilerplate code needed so that you can make your bot live right away.
 
 ## JBot for Slack
 
+**Running your SlackBot is just 4 easy steps:**
+  
+1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git`.  
+2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
+3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
+4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
+```bash
+$ cd jbot-example
+$ mvn spring-boot:run
+```
 
+You can now start talking with your bot ;)
 
 ## JBot for Facebook
 

@@ -1,11 +1,3 @@
-# JBot [![Build Status](https://travis-ci.org/ramswaroop/jbot.svg?branch=master)](https://travis-ci.org/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Gitter](https://badges.gitter.im/ramswaroop/jbot.svg)](https://gitter.im/ramswaroop/jbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
-
-LEGO for building bots.
-
-__JBot__ is a java framework _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to 
-make Slack _(Facebook and Twitter coming soon)_ bots in minutes. It provides all
-the boilerplate code needed so that you can __make your bot live__ right away.
-
 ## SlackBot
 
 ### Table of Contents
@@ -25,11 +17,11 @@ the boilerplate code needed so that you can __make your bot live__ right away.
 
 **Running your SlackBot is just 4 easy steps:**
   
-1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git` and `$ cd jbot`.  
+1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
-3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
+3. Paste the token in [application.properties](../../jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
-```
+```bash
 $ cd jbot-example
 $ mvn spring-boot:run
 ```
@@ -48,9 +40,9 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 }
 ```
 
-All the code for your bot goes in [SlackBot](/jbot-example/src/main/java/example/jbot/slack/SlackBot.java) class which
-extends [Bot](/jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) from the core package. You can have as many
-bots as you want, just make the class extend [Bot](/jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
+All the code for your bot goes in [SlackBot](../../jbot-example/src/main/java/example/jbot/slack/SlackBot.java) class which
+extends [Bot](../../jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) from the core package. You can have as many
+bots as you want, just make the class extend [Bot](../../jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
 and it gets all the powers of a Slack Bot.
 
 ### Building a [Slack Integration](https://api.slack.com/) with JBot
@@ -97,13 +89,13 @@ You can directly use [jbot-example](../../jbot-example) or use jbot as a depende
 * __Slack Outgoing Webhook__ &rArr; Same as Slash Command Handler.
 
 
-Since JBot 4.0.0, there is a new property which helps turn specific services on/off. You can set the property in
+Since `JBot 4.0.0`, there is a new property which helps turn specific services on/off. You can set the property in
 [application.properties](../../jbot-example/src/main/resources/application.properties) file:
-```
+```.properties
 spring.profiles.active=slack,facebook
 ```
 To use Jbot for Slack only, remove "facebook" from the profiles. Note: You must have `@Profile` defined in your Slack
-bot classes. See [jbot-example](../../jbot-example/src/main/java/example/jbot/slack/SlackBot.java)
+bot classes. See [SlackBot](../../jbot-example/src/main/java/example/jbot/slack/SlackBot.java) in jbot-example.
 
 #### Receiving Messages
 
