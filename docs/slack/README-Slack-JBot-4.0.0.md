@@ -8,9 +8,9 @@
     * [Receiving messages](#receiving-messages)
     * [Sending messages](#sending-messages)
     * [Conversations](#conversations)
-    * [Usage](#usage)
-    * [Deploy to the cloud](#deploy-to-the-cloud)
-4. [Documentation History](#documentation-history)
+4. [Usage](#usage)
+5. [Deploy to the cloud](#deploy-to-the-cloud)
+6. [Documentation History](#documentation-history)
     
 
 ### Getting started
@@ -336,14 +336,14 @@ to jump to the next method. You can specify the next method to call in
     }
 ```
 
-To end the conversation, call `stopConversation(event)` inside your controller method.
-
 **NOTE:**
 * Only the first method in a conversation can define a `pattern`. `pattern` attribute in `Controller` annotation has no
 effect for rest of the methods in a conversation.
 * The first method in the conversation need not call `nextConversation(event)` but rest of the methods do need to.
+* `next` attribute in `@Controller` should have the name of the next method in the conversation that needs to be invoked.
+* To end the conversation, call `stopConversation(event)` inside your controller method.
 
-#### Usage
+### Usage
 
 You can directly clone this project and use [jbot-example](../../jbot-example) or you can include it as a maven/gradle 
 dependency in your project.
@@ -370,7 +370,7 @@ __NOTE:__ When you include jbot as a dependency please make sure to include `me.
 For example, you can specify `scanBasePackages` in `@SpringBootApplication` or `@ComponentScan`. See 
 [jbot-example](../../jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
 
-#### Deploy to the Cloud
+### Deploy to the Cloud
 
 JBot is Heroku ready. To deploy, you need to perform the below simple steps: 
 

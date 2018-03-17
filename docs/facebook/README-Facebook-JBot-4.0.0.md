@@ -10,9 +10,9 @@
     * [Conversations](#conversations)
     * [Get Started Button](#get-started-button)
     * [Greeting Text](#greeting-text)
-    * [Usage](#usage)
-    * [Deploying in Production](#deploying-in-production)
-4. [Documentation History](#documentation-history)
+4. [Usage](#usage)
+5. [Deploying in Production](#deploying-in-production)
+6. [Documentation History](#documentation-history)
 
 ### Getting started
 
@@ -38,7 +38,9 @@ generate a secure public address if you're running locally on your machine.
 7. Specify the address created above in "Callback Url" field under "Webooks" setting and give the verify token 
 as `fb_token_for_jbot` and click "Verify and Save".
 
-You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button.
+You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. _If you're
+too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
+[JBot facebook page](https://www.facebook.com/jbotframework/) and clicking on the "Send Message" button._
 
 ### Basic Usage
 
@@ -303,7 +305,7 @@ setGreetingText(new Payload[]{new Payload().setLocale("default").setText("JBot i
 You can define different `greeting` text for different locales. 
 [Learn more](https://developers.facebook.com/docs/messenger-platform/reference/messenger-profile-api/greeting).
 
-#### Usage
+### Usage
 
 You can directly clone this project and use [jbot-example](../../jbot-example) or you can include it as a maven/gradle 
 dependency in your project.
@@ -330,7 +332,7 @@ __NOTE:__ When you include jbot as a dependency please make sure to include `me.
 For example, you can specify `scanBasePackages` in `@SpringBootApplication` or `@ComponentScan`. See 
 [jbot-example](../../jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
 
-#### Deploying in Production
+### Deploying in Production
 
 You can use `supervisord` or similar tools for deploying this app in production. Here is a sample `supervisord.conf`
 for this application:
