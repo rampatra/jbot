@@ -137,7 +137,7 @@ public void onReceiveMessage(WebSocketSession session, Event event, Matcher matc
 }
 ```
 
-You can __optionally__ have the `matcher` as a formal parameter in the method if you want to work on the values sent 
+You can __optionally__ have a `matcher` as a formal parameter in the method if you want to work on the values sent 
 by the user. But do keep the order of parameters as shown above.
 
 In __Slash Commands__, you receive a `GET` or `POST` request as below:
@@ -254,11 +254,11 @@ in them or else you have to explicitly set the channel id in the
 
 #### Conversations
 
-This is the most wonderful feature of jbot, with this you can literally talk to your bot and have a conversation. See 
+This is a differentiating feature of JBot, with this you can literally talk to your bot and have a conversation. See 
 below for an example as to how your bot sets up a meeting for your team by asking some simple questions one after the 
 other.
 
-![Conversation feature in JBot](http://i.imgur.com/nMchYK5.gif)
+![Conversation feature of JBot](http://i.imgur.com/nMchYK5.gif)
 
 ```java
 
