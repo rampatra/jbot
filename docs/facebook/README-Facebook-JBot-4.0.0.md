@@ -22,7 +22,7 @@
 2. Create a [facebook app](https://developers.facebook.com/docs/apps/register#create-app) and a 
 [page](https://www.facebook.com/pages/create).
 3. Generate a Page Access Token for the page (inside app's messenger settings).
-    [![generate_fb_token](../../extras/fb_generate_token_640.gif)](../../extras/fb_generate_token.gif)
+    [![generate_fb_token](../../extras/fb-generate-token-640.gif)](../../extras/fb-generate-token.gif)
 4. Paste the token created above in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 5. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
@@ -30,11 +30,11 @@
     $ mvn spring-boot:run
     ```
 6. Setup webhook to receive messages and other events. 
-    [![setup_webhook](../../extras/fb_setup_webhook_640.gif)](../../extras/fb_setup_webhook.gif)
+    [![setup_webhook](../../extras/fb-setup-webhook-640.gif)](../../extras/fb-setup-webhook.gif)
 
     You need to have a secure public address to setup webhook. You may use [localtunnel.me](https://localtunnel.me) to 
 generate a secure public address if you're running locally on your machine.
-    ![localtunnel_demo](../../extras/localtunnel_demo.gif)
+    ![localtunnel_demo](../../extras/localtunnel-demo.gif)
 7. Specify the address created above in "Callback Url" field under "Webooks" setting and give the verify token 
 as `fb_token_for_jbot` and click "Verify and Save".
 
@@ -86,7 +86,7 @@ Luckily, with JBot, you don't have to worry about defining your own handler to h
 event etc. To receive events from Fb, you just have to define methods with `@Controller` annotation (from here on, we
 will call them as `@Controller`).
 
-Here is a simple example which gets invoked when your bot receives an event of type `MESSAGE` or `POSTBACK` from 
+i. Here is a simple example which gets invoked when your bot receives an event of type `MESSAGE` or `POSTBACK` from 
 facebook.
 ```java
 @Controller(events = {EventType.MESSAGE, EventType.POSTBACK})
@@ -97,7 +97,7 @@ public void onReceiveMessage(Event event) {
 }
 ```
 
-Another example which adds a `pattern` to the `@Controller`. Adding a pattern will restrict the method to be invoked
+ii. Another example which adds a `pattern` to the `@Controller`. Adding a pattern will restrict the method to be invoked
 only when the event text or event payload (depending on the event type) matches the pattern defined. You can specify a
 regular expression in `pattern`.
 ```java
@@ -139,13 +139,13 @@ Like receiving, for sending messages to users from your bot you need to make `PO
 you can simply reply by calling the `reply()` method from within your `@Controller` method. There are various overloaded
 versions of the `reply()` method to suit your needs.
 
-The simplest example is like,
+i. The **simplest** example is like,
 ```java
 reply(event, "Hi, I am Jbot.");
 ```
 It takes an event object and a string which is the reply text.
 
-Another example in which JBot replies with two quick reply buttons:
+ii. Another example in which JBot replies with **two quick reply buttons**:
 ```java
 // quick reply buttons
 Button[] quickReplies = new Button[]{
@@ -167,7 +167,17 @@ public void onReceiveQuickReply(Event event) {
 }
 ```
 
-The last example shows JBot replying with a list of 3 items:
+iii. In this example, JBot replies with **two standard buttons**:
+```java
+Button[] buttons = new Button[]{
+        new Button().setType("web_url").setUrl("http://blog.ramswaroop.me").setTitle("JBot Docs"),
+        new Button().setType("web_url").setUrl("https://goo.gl/uKrJWX").setTitle("Buttom Template")
+};
+reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
+        .setTemplateType("button").setText("These are 2 link buttons.").setButtons(buttons))));
+``` 
+
+iv. The last example shows JBot replying with a **list of three items**:
 ```java
 Element[] elements = new Element[]{
         new Element().setTitle("AnimateScroll").setSubtitle("A jQuery Plugin for Animating Scroll.")
@@ -188,8 +198,12 @@ reply(event, new Message().setAttachment(new Attachment().setType("template").se
 ```
 
 Here is a screencast which shows all the examples we discussed:
+
 ![fbbot demo](../../extras/fbbot-demo.gif)
 
+You should have a look at [Facebook's Send API](https://developers.facebook.com/docs/messenger-platform/reference/send-api)
+for all kinds of replies the bot can send. For example, you can even send a receipt to your user, airline boarding pass 
+and much more.
 
 #### Conversations
 
