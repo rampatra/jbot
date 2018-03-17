@@ -8,6 +8,8 @@
     * [Receiving messages](#receiving-messages)
     * [Sending messages](#sending-messages)
     * [Conversations](#conversations)
+    * [Getting Started Button](#getting-started-button)
+    * [Greeting Text](#greeting-text)
     * [Usage](#usage)
     * [Deploying in Production](#deploying-in-production)
 4. [Documentation History](#documentation-history)
@@ -77,7 +79,55 @@ server. You also need to provide a "Verify Token" which can be found in
 
 #### Receiving Messages
 
+Facebook sends [Event](../../jbot/src/main/java/me/ramswaroop/jbot/core/facebook/models/Event.java) to `/webhook` for 
+all the events your page has subscribed to. It sends as `POST` request to your `/webhook` endpoint.
 
+Luckily, with JBot, you don't have to worry about defining your own handler to handle those `POST` calls, parsing the 
+event etc. To receive events from Fb, you just have to define methods with `@Controller` annotation (from here on, we
+will refer them as `@Controller`).
+
+Here is a simple example which gets invoked when your bot receives an event of type `MESSAGE` or `POSTBACK`.
+```java
+@Controller(events = {EventType.MESSAGE, EventType.POSTBACK})
+public void onReceiveMessage(Event event) {
+    if ("hi".equals(event.getMessage().getText())) {
+        reply(event, "Hi, I am JBot.");
+    }
+}
+```
+
+Another example which adds a `pattern` to the `@Controller`. Adding a pattern will restrict the method to be invoked
+only when the event text or event payload (depending on the event type) matches the pattern defined. You can specify a
+regular expression in `pattern`.
+```java
+@Controller(events = {EventType.MESSAGE, EventType.POSTBACK}, pattern = "^(?i)(hi|hello|hey)$")
+public void onGetStarted(Event event) {
+    // quick reply buttons
+    Button[] quickReplies = new Button[]{
+            new Button().setContentType("text").setTitle("Sure").setPayload("yes"),
+            new Button().setContentType("text").setTitle("Nope").setPayload("no")
+    };
+    reply(event, new Message().setText("Hello, I am JBot. Would you like to see more?").setQuickReplies(quickReplies));
+}
+```
+
+One thing to note here, the `pattern` will be matched against the `text` or `payload` depending on the event type 
+received. For the below example, the event received will be of type `QUICK_REPLY` and the `pattern` in this case will be
+matched against the `payload` attribute in `QuickReply` and not against the `text` attribute.
+```java
+@Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
+public void onReceiveQuickReply(Event event) {
+    if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
+        reply(event, "Cool! You can type: \n 1) Show Buttons \n 2) Show List \n 3) Setup meeting");
+    } else {
+        reply(event, "See you soon!");
+    }
+}
+```
+
+You can see all the [webhook events](https://developers.facebook.com/docs/messenger-platform/reference/webhook-events) 
+that the messenger platform currently supports. You may see that there is no specific `QUICK_REPLY` event type listed
+there. This is an extra event added by JBot to make your task easier.
 
 #### Sending Messages
 

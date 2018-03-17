@@ -9,8 +9,7 @@ the boilerplate code needed so that you can make your bot live right away.
 ## Why use JBot?
 
 * Provides you with __all the boilerplate code__ which handles underlying websocket connections and other complexities.
-* Supports a few __extra events__ in addition to all the [events supported by Slack RTM API](https://api.slack.com/events)
-  which makes your work a lot more easier.
+* Supports __extra events__ in addition to all the events supported by Slack/Facebook which makes your work a lot more easier.
 * __Receiving & sending messages__ is as easy as defining a `@Controller` and calling `reply()`.
 * __Conversation feature__ of JBot makes talking to your bot a breeze. This feature makes JBot different than rest of the Java frameworks out there.
 * __Well tested__ with good coverage unit tests.
@@ -23,7 +22,7 @@ the boilerplate code needed so that you can make your bot live right away.
 * Chosen by [DZone daily picks](http://mailer.dzone.com/display.php?M=15184241&C=dcebb6887365120539df1fbf19a071ed&S=9043&L=658&N=4604).
 * Last but not the least, it's listed on [Slack.com](https://api.slack.com/community)
 
-**Still not satisfied?** Open an [issue on Github](https://github.com/ramswaroop/jbot/issues) and we can chat.
+**Still worried?** Open an [issue on Github](https://github.com/ramswaroop/jbot/issues) and we can discuss.
 
 ## JBot for Slack
 
