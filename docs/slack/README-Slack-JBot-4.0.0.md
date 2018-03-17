@@ -1,4 +1,4 @@
-## SlackBot
+## Slack Bot
 
 ### Table of Contents
 1. [Getting started](#getting-started)
@@ -21,10 +21,10 @@
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
 3. Paste the token in [application.properties](../../jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
-```bash
-$ cd jbot-example
-$ mvn spring-boot:run
-```
+    ```bash
+    $ cd jbot-example
+    $ mvn spring-boot:run
+    ```
 
 You can now start talking with your bot ;)
 
@@ -389,7 +389,7 @@ You can now start talking with your Bot, send commands to your Slash Command or 
 
 ### Documentation History
 
-* [README-Slack-JBot-4.0.0](/README-Slack-JBot-4.0.0.md)
+* [README-Slack-JBot-4.0.0](/README-Slack-JBot-4.0.0.md) _(Current)_
 * [README-Slack-JBot-3.0.2](/README-Slack-JBot-3.0.2.md)
 * [README-Slack-JBot-2.0.0](/README-Slack-JBot-2.0.0.md)
 * [README-Slack-BotKit-1.1.0](/README-Slack-BotKit-1.1.0.md)
