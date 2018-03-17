@@ -4,7 +4,7 @@
 1. [Getting started](#getting-started)
 2. [Basic Usage](#basic-usage)
 3. [Building a Slack Integration with JBot](#building-a-slack-integration-with-jbot)
-    * [Setting up your app](#setting-up-your-app)
+    * [Setting up your bot](#setting-up-your-bot)
     * [Receiving messages](#receiving-messages)
     * [Sending messages](#sending-messages)
     * [Conversations](#conversations)
@@ -30,8 +30,8 @@ You can now start talking with your bot ;)
 
 ### Basic Usage
 
-The main function of a Bot is to receive and reply messages. With this kit, receiving messages is as easy as just
-writing a simple controller and replying to it by calling the `reply()` method as shown below:
+The main function of a Bot is to receive and reply messages. With JBot, receiving messages is as easy as just
+writing a simple `@Controller` and replying to it by calling the `reply()` method as shown below:
 
 ```java
 @Controller(events = EventType.MESSAGE)
@@ -43,7 +43,7 @@ public void onReceiveDM(WebSocketSession session, Event event) {
 All the code for your bot goes in [SlackBot](../../jbot-example/src/main/java/example/jbot/slack/SlackBot.java) class which
 extends [Bot](../../jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) from the core package. You can have as many
 bots as you want, just make the class extend [Bot](../../jbot/src/main/java/me/ramswaroop/jbot/core/slack/Bot.java) class
-and it gets all the powers of a Slack Bot.
+and it gets all the powers of a Slack Bot. Though it is recommended to have separate JBot instances for different bots.
 
 ### Building a [Slack Integration](https://api.slack.com/) with JBot
 
@@ -368,7 +368,7 @@ dependencies {
 
 __NOTE:__ When you include jbot as a dependency please make sure to include `me.ramswaroop.jbot` package for auto-scan.
 For example, you can specify `scanBasePackages` in `@SpringBootApplication` or `@ComponentScan`. See 
-[jbot-example](/jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
+[jbot-example](../../jbot-example/src/main/java/example/jbot/JBotApplication.java) to learn more.
 
 #### Deploy to the Cloud
 
