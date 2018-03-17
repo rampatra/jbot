@@ -1,11 +1,11 @@
 package me.ramswaroop.jbot.core.common;
 
 /**
- * All events supported by Slack RTM API (including two events added 
- * by jbot), Fb Messenger Bot API.
+ * All events supported by Slack RTM API, Fb Messenger Bot API. This 
+ * also includes extra events added by JBot.
  *
  * @author ramswaroop
- * @version 1.0.0, 12/06/2016
+ * @version 1.0.1, 06/03/2018
  */
 public enum EventType {
     
