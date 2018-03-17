@@ -38,8 +38,9 @@ generate a secure public address if you're running locally on your machine.
 7. Specify the address created above in "Callback Url" field under "Webooks" setting and give the verify token 
 as `fb_token_for_jbot` and click "Verify and Save".
 
-You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. _If you're
-too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
+You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. 
+
+_If you're too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
 [JBot facebook page](https://www.facebook.com/jbotframework/) and clicking on the "Send Message" button._
 
 ### Basic Usage

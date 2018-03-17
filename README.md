@@ -60,8 +60,9 @@ Read the detailed [Slack documentation](/docs/slack/README-Slack-JBot-4.0.0.md) 
 7. Specify the address created above in "Callback Url" field under "Webooks" setting and give the verify token 
 as `fb_token_for_jbot` and click "Verify and Save".
 
-You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. _If you're
-too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
+You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. 
+
+_If you're too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
 [JBot facebook page](https://www.facebook.com/jbotframework/) and clicking on the "Send Message" button._
 
 Read the detailed [Facebook documentation](/docs/facebook/README-Facebook-JBot-4.0.0.md) to learn more.
