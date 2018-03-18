@@ -99,7 +99,6 @@ public abstract class Bot extends BaseBot {
      *
      * @param session websocket session between bot and slack
      * @param textMessage websocket message received from slack
-     * @throws Exception
      */
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
         ObjectMapper mapper = new ObjectMapper();
