@@ -28,7 +28,7 @@ public class SlackService {
      * Start a RTM connection. Fetch the web socket url to connect to, current user details
      * and list of channel ids where the current user has had conversation.
      *
-     * @param slackToken
+     * @param slackToken slack token which you get from slack for the integration you create
      */
     public void startRTM(String slackToken) {
         RTM rtm = slackDao.startRTM(slackToken);

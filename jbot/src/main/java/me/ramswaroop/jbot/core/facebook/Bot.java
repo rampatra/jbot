@@ -81,7 +81,7 @@ public abstract class Bot extends BaseBot {
      * @param mode
      * @param verifyToken
      * @param challenge
-     * @return
+     * @return if verify token is valid then 200 OK with challenge in the body or else forbidden error
      */
     @GetMapping("/webhook")
     public final ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
@@ -98,7 +98,7 @@ public abstract class Bot extends BaseBot {
      * Add webhook endpoint
      *
      * @param callback
-     * @return
+     * @return 200 OK response
      */
     @ResponseBody
     @PostMapping("/webhook")
@@ -198,7 +198,7 @@ public abstract class Bot extends BaseBot {
      * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
      * @param payload for "Get Started" button
-     * @return
+     * @return response from facebook
      */
     public final ResponseEntity<Response> setGetStartedButton(String payload) {
         Event event = new Event().setGetStarted(new Postback().setPayload(payload));
@@ -213,7 +213,7 @@ public abstract class Bot extends BaseBot {
      * See https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen for more.
      *
      * @param greeting an array of Payload consisting of text and locale
-     * @return
+     * @return response from facebook
      */
     public final ResponseEntity<Response> setGreetingText(Payload[] greeting) {
         Event event = new Event().setGreeting(greeting);
@@ -237,7 +237,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to start a conversation.
      *
-     * @param event
+     * @param event received from facebook
      */
     public final void startConversation(Event event, String methodName) {
         startConversation(event.getSender().getId(), methodName);
@@ -246,7 +246,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to jump to the next method in a conversation.
      *
-     * @param event
+     * @param event received from facebook
      */
     public final void nextConversation(Event event) {
         nextConversation(event.getSender().getId());
@@ -255,7 +255,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to stop the end the conversation.
      *
-     * @param event
+     * @param event received from facebook
      */
     public final void stopConversation(Event event) {
         stopConversation(event.getSender().getId());
@@ -264,7 +264,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Check whether a conversation is up in a particular slack channel.
      *
-     * @param event
+     * @param event received from facebook
      * @return true if a conversation is on, false otherwise.
      */
     public final boolean isConversationOn(Event event) {
@@ -275,7 +275,7 @@ public abstract class Bot extends BaseBot {
      * Invoke the methods with matching {@link Controller#events()}
      * and {@link Controller#pattern()} in events received from Slack/Facebook.
      *
-     * @param event
+     * @param event received from facebook
      */
     private void invokeMethods(Event event) {
         try {
@@ -306,7 +306,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Invoke the appropriate method in a conversation.
      *
-     * @param event
+     * @param event received from facebook
      */
     private void invokeChainedMethod(Event event) {
         Queue<MethodWrapper> queue = conversationQueueMap.get(event.getSender().getId());
@@ -331,7 +331,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Match the pattern with different attributes based on the event type.
      *
-     * @param event
+     * @param event received from facebook
      * @return the pattern string
      */
     private String getPatternFromEventType(Event event) {

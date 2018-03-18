@@ -48,7 +48,7 @@ public abstract class Bot extends BaseBot {
      * Class extending this must implement this as it's
      * required to make the initial RTM.start() call.
      *
-     * @return
+     * @return the slack token of the bot
      */
     public abstract String getSlackToken();
 
@@ -56,7 +56,7 @@ public abstract class Bot extends BaseBot {
      * An instance of the Bot is required by
      * the {@link BotWebSocketHandler} class.
      *
-     * @return
+     * @return the Bot instance overriding this method
      */
     public abstract Bot getSlackBot();
 
@@ -64,7 +64,7 @@ public abstract class Bot extends BaseBot {
      * Invoked after a successful web socket connection is
      * established. You can override this method in the child classes.
      *
-     * @param session
+     * @param session websocket session between bot and slack
      * @see WebSocketHandler#afterConnectionEstablished
      */
     public void afterConnectionEstablished(WebSocketSession session) {
@@ -75,8 +75,8 @@ public abstract class Bot extends BaseBot {
      * Invoked after the web socket connection is closed.
      * You can override this method in the child classes.
      *
-     * @param session
-     * @param status
+     * @param session websocket session between bot and slack
+     * @param status websocket close status
      * @see WebSocketHandler#afterConnectionClosed
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
@@ -86,19 +86,19 @@ public abstract class Bot extends BaseBot {
     /**
      * Handle an error from the underlying WebSocket message transport.
      *
-     * @param session
-     * @param exception
+     * @param session websocket session between bot and slack
+     * @param exception thrown because of transport error
      * @see WebSocketHandler#handleTransportError
      */
     public void handleTransportError(WebSocketSession session, Throwable exception) {
-        logger.error("Transport Error: {}", exception);
+        logger.error("Transport Error: ", exception);
     }
 
     /**
      * Invoked when a new Slack event(WebSocket text message) arrives.
      *
-     * @param session
-     * @param textMessage
+     * @param session websocket session between bot and slack
+     * @param textMessage websocket message received from slack
      * @throws Exception
      */
     public final void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
@@ -139,9 +139,9 @@ public abstract class Bot extends BaseBot {
      * Method to send a reply back to Slack after receiving an {@link Event}.
      * Learn <a href="https://api.slack.com/rtm">more on sending responses to Slack.</a>
      *
-     * @param session
-     * @param event
-     * @param reply
+     * @param session websocket session between bot and slack
+     * @param event received from slack
+     * @param reply the message to send to slack
      */
     public final void reply(WebSocketSession session, Event event, Message reply) {
         try {
@@ -168,7 +168,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to start a conversation.
      *
-     * @param event
+     * @param event received from slack
      */
     public final void startConversation(Event event, String methodName) {
         startConversation(event.getChannelId(), methodName);
@@ -177,7 +177,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to jump to the next method in a conversation.
      *
-     * @param event
+     * @param event received from slack
      */
     public final void nextConversation(Event event) {
         nextConversation(event.getChannelId());
@@ -186,7 +186,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Call this method to stop the end the conversation.
      *
-     * @param event
+     * @param event received from slack
      */
     public final void stopConversation(Event event) {
         stopConversation(event.getChannelId());
@@ -195,7 +195,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Check whether a conversation is up in a particular slack channel.
      *
-     * @param event
+     * @param event received from slack
      * @return true if a conversation is on, false otherwise.
      */
     public final boolean isConversationOn(Event event) {
@@ -206,8 +206,8 @@ public abstract class Bot extends BaseBot {
      * Invoke the methods with matching {@link Controller#events()}
      * and {@link Controller#pattern()} in events received from Slack.
      *
-     * @param session
-     * @param event
+     * @param session websocket session between bot and slack
+     * @param event received from slack
      */
     private void invokeMethods(WebSocketSession session, Event event) {
         try {
@@ -237,8 +237,8 @@ public abstract class Bot extends BaseBot {
     /**
      * Invoke the appropriate method in a conversation.
      *
-     * @param session
-     * @param event
+     * @param session websocket session between bot and slack
+     * @param event received from slack
      */
     private void invokeChainedMethod(WebSocketSession session, Event event) {
         Queue<MethodWrapper> queue = conversationQueueMap.get(event.getChannelId());
@@ -264,8 +264,8 @@ public abstract class Bot extends BaseBot {
      * Encode the text before sending to Slack.
      * Learn <a href="https://api.slack.com/docs/formatting">more on message formatting in Slack</a>
      *
-     * @param message
-     * @return encoded text.
+     * @param message to encode
+     * @return encoded message
      */
     private String encode(String message) {
         return message == null ? null : message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
