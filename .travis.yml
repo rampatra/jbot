@@ -3,4 +3,8 @@ jdk:
   - oraclejdk8
 sudo: false
 install: true
-script: mvn clean install -Dmaven.javadoc.skip=true -B -V
+script: 
+  cd jbot; 
+  mvn clean install -Dmaven.javadoc.skip=true -B -V;
+  cd ../jbot-example;
+  mvn clean install -Dmaven.javadoc.skip=true -B -V;

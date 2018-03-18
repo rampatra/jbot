@@ -14,11 +14,11 @@ public class Channel {
     private long created;
     private String creator;
     @JsonProperty("is_im")
-    boolean isIm;
+    private boolean isIm;
     @JsonProperty("is_org_shared")
-    boolean isOrgShared;
+    private boolean isOrgShared;
     @JsonProperty("is_user_deleted")
-    boolean isUserDeleted;
+    private boolean isUserDeleted;
 
     public String getId() {
         return id;

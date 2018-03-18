@@ -7,6 +7,7 @@ import me.ramswaroop.jbot.core.slack.models.RichMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +25,7 @@ import javax.annotation.PostConstruct;
  * @version 1.0.0, 21/06/2016
  */
 @Component
+@Profile("slack")
 public class SlackWebhooks {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackWebhooks.class);

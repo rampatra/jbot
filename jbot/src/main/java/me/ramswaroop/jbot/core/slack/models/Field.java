@@ -12,6 +12,8 @@ public class Field {
     private String value;
     @JsonProperty("short_enough")
     private boolean shortEnough;
+    @JsonProperty("short")
+    private boolean shortField;
 
     public String getTitle() {
         return title;
@@ -35,5 +37,13 @@ public class Field {
 
     public void setShortEnough(boolean shortEnough) {
         this.shortEnough = shortEnough;
+    }
+
+    public boolean isShort() {
+        return shortField;
+    }
+
+    public void setShort(boolean shortField) {
+        this.shortField = shortField;
     }
 }
