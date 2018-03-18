@@ -5,7 +5,7 @@
     <parent>
         <groupId>me.ramswaroop.jbot</groupId>
         <artifactId>jbot-parent</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0</version>
         <relativePath>..</relativePath>
     </parent>
 
