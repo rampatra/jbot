@@ -13,8 +13,6 @@ import me.ramswaroop.jbot.core.facebook.models.Payload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @author ramswaroop
  * @version 17/09/2016
