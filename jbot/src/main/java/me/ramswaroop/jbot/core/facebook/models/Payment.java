@@ -25,40 +25,45 @@ public class Payment {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public Payment setPayload(String payload) {
         this.payload = payload;
+        return this;
     }
 
     public User getRequestedUserInfo() {
         return requestedUserInfo;
     }
 
-    public void setRequestedUserInfo(User requestedUserInfo) {
+    public Payment setRequestedUserInfo(User requestedUserInfo) {
         this.requestedUserInfo = requestedUserInfo;
+        return this;
     }
 
     public PaymentCredential getPaymentCredential() {
         return paymentCredential;
     }
 
-    public void setPaymentCredential(PaymentCredential paymentCredential) {
+    public Payment setPaymentCredential(PaymentCredential paymentCredential) {
         this.paymentCredential = paymentCredential;
+        return this;
     }
 
     public Amount getAmount() {
         return amount;
     }
 
-    public void setAmount(Amount amount) {
+    public Payment setAmount(Amount amount) {
         this.amount = amount;
+        return this;
     }
 
     public String getShippingOptionId() {
         return shippingOptionId;
     }
 
-    public void setShippingOptionId(String shippingOptionId) {
+    public Payment setShippingOptionId(String shippingOptionId) {
         this.shippingOptionId = shippingOptionId;
+        return this;
     }
 
 }
@@ -74,16 +79,18 @@ class PaymentCredential {
         return providerType;
     }
 
-    public void setProviderType(String providerType) {
+    public PaymentCredential setProviderType(String providerType) {
         this.providerType = providerType;
+        return this;
     }
 
     public String getChargeId() {
         return chargeId;
     }
 
-    public void setChargeId(String chargeId) {
+    public PaymentCredential setChargeId(String chargeId) {
         this.chargeId = chargeId;
+        return this;
     }
     
 }

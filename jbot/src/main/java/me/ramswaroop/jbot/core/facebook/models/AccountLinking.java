@@ -20,15 +20,17 @@ public class AccountLinking {
         return status;
     }
 
-    public void setStatus(String status) {
+    public AccountLinking setStatus(String status) {
         this.status = status;
+        return this;
     }
 
     public String getAuthorizationCode() {
         return authorizationCode;
     }
 
-    public void setAuthorizationCode(String authorizationCode) {
+    public AccountLinking setAuthorizationCode(String authorizationCode) {
         this.authorizationCode = authorizationCode;
+        return this;
     }
 }

@@ -18,15 +18,17 @@ public class Field {
         return label;
     }
 
-    public void setLabel(String label) {
+    public Field setLabel(String label) {
         this.label = label;
+        return this;
     }
 
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public Field setValue(String value) {
         this.value = value;
+        return this;
     }
 }

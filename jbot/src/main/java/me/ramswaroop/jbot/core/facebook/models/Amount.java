@@ -21,39 +21,44 @@ public class Amount {
         return name;
     }
 
-    public void setName(String name) {
+    public Amount setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public Amount setCurrency(String currency) {
         this.currency = currency;
+        return this;
     }
 
     public String getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public Amount setAmount(String amount) {
         this.amount = amount;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Amount setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
+    public Amount setLabel(String label) {
         this.label = label;
+        return this;
     }
 }

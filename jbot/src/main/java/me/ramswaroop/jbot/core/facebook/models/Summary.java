@@ -24,31 +24,35 @@ public class Summary {
         return subtotal;
     }
 
-    public void setSubtotal(Double subtotal) {
+    public Summary setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+        return this;
     }
 
     public Double getShippingCost() {
         return shippingCost;
     }
 
-    public void setShippingCost(Double shippingCost) {
+    public Summary setShippingCost(Double shippingCost) {
         this.shippingCost = shippingCost;
+        return this;
     }
 
     public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(Double totalTax) {
+    public Summary setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
+        return this;
     }
 
     public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(Double totalCost) {
+    public Summary setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
+        return this;
     }
 }

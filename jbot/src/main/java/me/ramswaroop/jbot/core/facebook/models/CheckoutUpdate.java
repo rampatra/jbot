@@ -20,15 +20,17 @@ public class CheckoutUpdate {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public CheckoutUpdate setPayload(String payload) {
         this.payload = payload;
+        return this;
     }
 
     public ShippingAddress getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(ShippingAddress shippingAddress) {
+    public CheckoutUpdate setShippingAddress(ShippingAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
+        return this;
     }
 }

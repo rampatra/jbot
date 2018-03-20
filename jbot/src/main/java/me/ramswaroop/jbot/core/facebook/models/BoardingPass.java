@@ -36,79 +36,89 @@ public class BoardingPass {
         return passengerName;
     }
 
-    public void setPassengerName(String passengerName) {
+    public BoardingPass setPassengerName(String passengerName) {
         this.passengerName = passengerName;
+        return this;
     }
 
     public String getPnrNumber() {
         return pnrNumber;
     }
 
-    public void setPnrNumber(String pnrNumber) {
+    public BoardingPass setPnrNumber(String pnrNumber) {
         this.pnrNumber = pnrNumber;
+        return this;
     }
 
     public String getTravelClass() {
         return travelClass;
     }
 
-    public void setTravelClass(String travelClass) {
+    public BoardingPass setTravelClass(String travelClass) {
         this.travelClass = travelClass;
+        return this;
     }
 
     public String getSeat() {
         return seat;
     }
 
-    public void setSeat(String seat) {
+    public BoardingPass setSeat(String seat) {
         this.seat = seat;
+        return this;
     }
 
     public String getLogoImageUrl() {
         return logoImageUrl;
     }
 
-    public void setLogoImageUrl(String logoImageUrl) {
+    public BoardingPass setLogoImageUrl(String logoImageUrl) {
         this.logoImageUrl = logoImageUrl;
+        return this;
     }
 
     public String getHeaderImageUrl() {
         return headerImageUrl;
     }
 
-    public void setHeaderImageUrl(String headerImageUrl) {
+    public BoardingPass setHeaderImageUrl(String headerImageUrl) {
         this.headerImageUrl = headerImageUrl;
+        return this;
     }
 
     public String getQrCode() {
         return qrCode;
     }
 
-    public void setQrCode(String qrCode) {
+    public BoardingPass setQrCode(String qrCode) {
         this.qrCode = qrCode;
+        return this;
     }
 
     public String getAboveBarCodeImageUrl() {
         return aboveBarCodeImageUrl;
     }
 
-    public void setAboveBarCodeImageUrl(String aboveBarCodeImageUrl) {
+    public BoardingPass setAboveBarCodeImageUrl(String aboveBarCodeImageUrl) {
         this.aboveBarCodeImageUrl = aboveBarCodeImageUrl;
+        return this;
     }
 
     public Field[] getAuxiliaryFields() {
         return auxiliaryFields;
     }
 
-    public void setAuxiliaryFields(Field[] auxiliaryFields) {
+    public BoardingPass setAuxiliaryFields(Field[] auxiliaryFields) {
         this.auxiliaryFields = auxiliaryFields;
+        return this;
     }
 
     public Field[] getSecondaryFields() {
         return secondaryFields;
     }
 
-    public void setSecondaryFields(Field[] secondaryFields) {
+    public BoardingPass setSecondaryFields(Field[] secondaryFields) {
         this.secondaryFields = secondaryFields;
+        return this;
     }
 }

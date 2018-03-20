@@ -27,47 +27,53 @@ public class Passenger {
         return name;
     }
 
-    public void setName(String name) {
+    public Passenger setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getTicketNumber() {
         return ticketNumber;
     }
 
-    public void setTicketNumber(String ticketNumber) {
+    public Passenger setTicketNumber(String ticketNumber) {
         this.ticketNumber = ticketNumber;
+        return this;
     }
 
     public String getPassengerId() {
         return passengerId;
     }
 
-    public void setPassengerId(String passengerId) {
+    public Passenger setPassengerId(String passengerId) {
         this.passengerId = passengerId;
+        return this;
     }
 
     public String getSegmentId() {
         return segmentId;
     }
 
-    public void setSegmentId(String segmentId) {
+    public Passenger setSegmentId(String segmentId) {
         this.segmentId = segmentId;
+        return this;
     }
 
     public String getSeat() {
         return seat;
     }
 
-    public void setSeat(String seat) {
+    public Passenger setSeat(String seat) {
         this.seat = seat;
+        return this;
     }
 
     public String getSeatType() {
         return seatType;
     }
 
-    public void setSeatType(String seatType) {
+    public Passenger setSeatType(String seatType) {
         this.seatType = seatType;
+        return this;
     }
 }

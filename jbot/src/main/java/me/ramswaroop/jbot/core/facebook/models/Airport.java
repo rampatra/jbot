@@ -22,31 +22,35 @@ public class Airport {
         return airportCode;
     }
 
-    public void setAirportCode(String airportCode) {
+    public Airport setAirportCode(String airportCode) {
         this.airportCode = airportCode;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public Airport setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getTerminal() {
         return terminal;
     }
 
-    public void setTerminal(String terminal) {
+    public Airport setTerminal(String terminal) {
         this.terminal = terminal;
+        return this;
     }
 
     public String getGate() {
         return gate;
     }
 
-    public void setGate(String gate) {
+    public Airport setGate(String gate) {
         this.gate = gate;
+        return this;
     }
 }

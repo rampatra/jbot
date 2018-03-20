@@ -19,23 +19,26 @@ public class Delivery {
         return mids;
     }
 
-    public void setMids(String[] mids) {
+    public Delivery setMids(String[] mids) {
         this.mids = mids;
+        return this;
     }
 
     public Long getWatermark() {
         return watermark;
     }
 
-    public void setWatermark(Long watermark) {
+    public Delivery setWatermark(Long watermark) {
         this.watermark = watermark;
+        return this;
     }
 
     public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(Integer seq) {
+    public Delivery setSeq(Integer seq) {
         this.seq = seq;
+        return this;
     }
 }

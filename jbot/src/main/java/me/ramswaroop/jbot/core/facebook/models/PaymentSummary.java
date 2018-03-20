@@ -28,47 +28,53 @@ public class PaymentSummary {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public PaymentSummary setCurrency(String currency) {
         this.currency = currency;
+        return this;
     }
 
     public String getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(String paymentType) {
+    public PaymentSummary setPaymentType(String paymentType) {
         this.paymentType = paymentType;
+        return this;
     }
 
     public Boolean isTestPayment() {
         return isTestPayment;
     }
 
-    public void setTestPayment(Boolean testPayment) {
+    public PaymentSummary setTestPayment(Boolean testPayment) {
         isTestPayment = testPayment;
+        return this;
     }
 
     public String getMerchantName() {
         return merchantName;
     }
 
-    public void setMerchantName(String merchantName) {
+    public PaymentSummary setMerchantName(String merchantName) {
         this.merchantName = merchantName;
+        return this;
     }
 
     public String[] getRequestedUserInfo() {
         return requestedUserInfo;
     }
 
-    public void setRequestedUserInfo(String[] requestedUserInfo) {
+    public PaymentSummary setRequestedUserInfo(String[] requestedUserInfo) {
         this.requestedUserInfo = requestedUserInfo;
+        return this;
     }
 
     public Amount[] getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(Amount[] priceList) {
+    public PaymentSummary setPriceList(Amount[] priceList) {
         this.priceList = priceList;
+        return this;
     }
 }

@@ -18,15 +18,17 @@ public class PaymentEvent {
         return object;
     }
 
-    public void setObject(String object) {
+    public PaymentEvent setObject(String object) {
         this.object = object;
+        return this;
     }
 
     public Entry[] getEntry() {
         return entry;
     }
 
-    public void setEntry(Entry[] entry) {
+    public PaymentEvent setEntry(Entry[] entry) {
         this.entry = entry;
+        return this;
     }
 }

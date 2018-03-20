@@ -18,15 +18,17 @@ public class Read {
         return watermark;
     }
 
-    public void setWatermark(Long watermark) {
+    public Read setWatermark(Long watermark) {
         this.watermark = watermark;
+        return this;
     }
 
     public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(Integer seq) {
+    public Read setSeq(Integer seq) {
         this.seq = seq;
+        return this;
     }
 }

@@ -22,23 +22,26 @@ public class Referral {
         return ref;
     }
 
-    public void setRef(String ref) {
+    public Referral setRef(String ref) {
         this.ref = ref;
+        return this;
     }
 
     public String getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public Referral setSource(String source) {
         this.source = source;
+        return this;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public Referral setType(String type) {
         this.type = type;
+        return this;
     }
 }

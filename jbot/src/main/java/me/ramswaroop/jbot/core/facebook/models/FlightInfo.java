@@ -33,64 +33,72 @@ public class FlightInfo {
         return flightNumber;
     }
 
-    public void setFlightNumber(String flightNumber) {
+    public FlightInfo setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+        return this;
     }
 
     public Airport getDepartureAirport() {
         return departureAirport;
     }
 
-    public void setDepartureAirport(Airport departureAirport) {
+    public FlightInfo setDepartureAirport(Airport departureAirport) {
         this.departureAirport = departureAirport;
+        return this;
     }
 
     public Airport getArrivalAirport() {
         return arrivalAirport;
     }
 
-    public void setArrivalAirport(Airport arrivalAirport) {
+    public FlightInfo setArrivalAirport(Airport arrivalAirport) {
         this.arrivalAirport = arrivalAirport;
+        return this;
     }
 
     public FlightSchedule getFlightSchedule() {
         return flightSchedule;
     }
 
-    public void setFlightSchedule(FlightSchedule flightSchedule) {
+    public FlightInfo setFlightSchedule(FlightSchedule flightSchedule) {
         this.flightSchedule = flightSchedule;
+        return this;
     }
 
     public String getConnectionId() {
         return connectionId;
     }
 
-    public void setConnectionId(String connectionId) {
+    public FlightInfo setConnectionId(String connectionId) {
         this.connectionId = connectionId;
+        return this;
     }
 
     public String getSegmentId() {
         return segmentId;
     }
 
-    public void setSegmentId(String segmentId) {
+    public FlightInfo setSegmentId(String segmentId) {
         this.segmentId = segmentId;
+        return this;
     }
 
     public String getAircraftType() {
         return aircraftType;
     }
 
-    public void setAircraftType(String aircraftType) {
+    public FlightInfo setAircraftType(String aircraftType) {
         this.aircraftType = aircraftType;
+        return this;
     }
 
     public String getTravelClass() {
         return travelClass;
     }
 
-    public void setTravelClass(String travelClass) {
+    public FlightInfo setTravelClass(String travelClass) {
         this.travelClass = travelClass;
+        return this;
     }
 }
 
@@ -109,23 +117,26 @@ class FlightSchedule {
         return boardingTime;
     }
 
-    public void setBoardingTime(String boardingTime) {
+    public FlightSchedule setBoardingTime(String boardingTime) {
         this.boardingTime = boardingTime;
+        return this;
     }
 
     public String getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public FlightSchedule setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
+        return this;
     }
 
     public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(String arrivalTime) {
+    public FlightSchedule setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
+        return this;
     }
 }
