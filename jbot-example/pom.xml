@@ -5,22 +5,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
-        <relativePath/>
+        <groupId>me.ramswaroop.jbot</groupId>
+        <artifactId>jbot-parent</artifactId>
+        <version>4.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>jbot-example</artifactId>
-    <name>JBot Example</name>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>JBot Example</name>
+    <description>A sample Slack/Facebook bot using JBot.</description>
+    
     <dependencies>
         <dependency>
             <groupId>me.ramswaroop.jbot</groupId>
             <artifactId>jbot</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
