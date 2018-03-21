@@ -26,6 +26,8 @@
 4. Paste the token created above in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 5. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
+    $ cd jbot
+    $ mvn clean install
     $ cd jbot-example
     $ mvn spring-boot:run
     ```

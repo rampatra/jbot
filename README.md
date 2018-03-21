@@ -3,8 +3,8 @@
 Make bots in Java.
 
 __JBot__ is a java framework _(inspired by [Howdyai's Botkit](https://github.com/howdyai/botkit))_ to
-make Slack, Facebook bots _(Twitter coming soon)_ in minutes. It provides all
-the boilerplate code needed so that you can make your bot live right away.
+make Slack and Facebook bots in minutes. It provides all the boilerplate code needed so that you
+can make your bot live right away.
 
 ## Why use JBot?
 
@@ -33,7 +33,7 @@ the boilerplate code needed so that you can make your bot live right away.
 3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
-    $ cd JBot
+    $ cd jbot
     $ mvn clean install
     $ cd jbot-example
     $ mvn spring-boot:run
@@ -54,7 +54,7 @@ Read the detailed [Slack documentation](/docs/slack/README-Slack-JBot-4.0.0.md) 
 4. Paste the token created above in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 5. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
-    $ cd JBot
+    $ cd jbot
     $ mvn clean install
     $ cd jbot-example
     $ mvn spring-boot:run
