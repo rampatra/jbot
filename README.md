@@ -33,6 +33,8 @@ the boilerplate code needed so that you can make your bot live right away.
 3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
+    $ cd JBot
+    $ mvn clean install
     $ cd jbot-example
     $ mvn spring-boot:run
     ```
@@ -52,6 +54,8 @@ Read the detailed [Slack documentation](/docs/slack/README-Slack-JBot-4.0.0.md) 
 4. Paste the token created above in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 5. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
+    $ cd JBot
+    $ mvn clean install
     $ cd jbot-example
     $ mvn spring-boot:run
     ```
