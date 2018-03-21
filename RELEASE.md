@@ -32,7 +32,9 @@ Follow the below steps to release JBot to OSSRH:
     </servers>
     ```
     
-3. Currently, the release of `jbot` is tied to its parent pom so we have to release `jbot-parent`.
+3. We use maven multi-module for `jbot` with `jbot-parent` being the parent and `jbot` and `jbot-example` the child 
+modules. With multi-module, building/releasing the parent will build/release the parent as well as the child modules.
+To release:
 
     Do `$ cd JBot` and then `$ mvn release:clean release:prepare`
     
@@ -43,11 +45,76 @@ Follow the below steps to release JBot to OSSRH:
     What is the new development version for "JBot Parent"? (me.ramswaroop.jbot:jbot-parent) 4.0.1-SNAPSHOT: : 
     ```
 
-4. Finally, run `$ mvn release:perform` to release `jbot-parent` (which also releases `jbot`).
+4. Finally, run `$ mvn release:perform` to release `jbot-parent` (which also releases `jbot` and `jbot-example`).
 
 5. Goto [Sonatype](https://oss.sonatype.org/index.html#stagingRepositories), check the staging repository and if 
 everything looks good, go ahead and close it. Refresh the table and then select the repo and click on "Release".
 
-_Future Enhancements: Make the release process of jbot and jbot-parent separate._
+### FAQ about Maven multi-module
 
+1. What is the structure of the parent pom and the child pom?
     
+    The parent pom will have the groupId, artifactId, version and packaging defined as well as it should have the 
+    modules tag defining all the child modules.
+    
+    The child pom will have the parent tag stating the co-ordinates of the parent pom as well as the tags defining its
+    own co-ordinates (unlike inheritance in maven).
+    
+    See below for an example:
+
+    <table>
+    <tr>
+    <th> Parent pom </th>
+    <th> Child pom </th>
+    </tr>
+    <tr>
+    <td>
+    
+    ```xml
+    <project>
+        <groupId>me.ramswaroop.jbot</groupId>
+        <artifactId>jbot-parent</artifactId>
+        <version>4.0.2-SNAPSHOT</version>
+        <packaging>pom</packaging>
+        
+        <modules>
+            <module>jbot</module>
+            <module>jbot-example</module>
+        </modules>
+    </project>
+    ```
+    
+    </td>
+    <td>
+    
+    ```xml
+    <project>
+        <parent>
+            <groupId>me.ramswaroop.jbot</groupId>
+            <artifactId>jbot-parent</artifactId>
+            <version>4.0.2-SNAPSHOT</version>
+        </parent>
+        
+        <artifactId>jbot</artifactId>
+        <version>4.0.2-SNAPSHOT</version>
+        <packaging>jar</packaging>
+    </project>
+    ```
+    </td>
+    </tr>
+    </table>
+    
+2. What is the benefit of multi-module in maven?
+    
+    There are various advantages of multi-module, the most important being the ability to build/release all modules at
+    once. You can build/release all modules by just building/releasing the parent module.
+    
+3. Can child modules have different versions than the parent?
+
+    I had different versions in parent and child modules but when I released jbot-parent `4.0.1`, the version of
+    `jbot-example` also changed to `4.0.1`. So, the answer is no. There may be some way but I am not aware of one.
+    
+4. What about dependencies?
+
+    This is another advantage of multi-module. You can declare common dependencies across modules in the parent pom 
+    only but this isn't mandatory.

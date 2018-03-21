@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <name>JBot Parent</name>
-    <description>Make Slack, Facebook and Twitter bots in Java in minutes.</description>
+    <description>Make Slack and Facebook bots in Java in minutes.</description>
     <url>https://github.com/ramswaroop/jbot</url>
 
     <modules>
