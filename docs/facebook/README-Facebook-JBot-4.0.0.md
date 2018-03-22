@@ -22,7 +22,9 @@
 2. Create a [facebook app](https://developers.facebook.com/docs/apps/register#create-app) and a 
 [page](https://www.facebook.com/pages/create).
 3. Generate a Page Access Token for the page (inside app's messenger settings).
+    
     [![generate_fb_token](../../extras/fb-generate-token-640.gif)](../../extras/fb-generate-token.gif)
+    
 4. Paste the token created above in [application.properties](/jbot-example/src/main/resources/application.properties) file.
 5. Run the example application by running `JBotApplication` in your IDE or via commandline: 
     ```bash
@@ -33,9 +35,12 @@
     ```
 6. Setup webhook to receive messages and other events. You need to have a secure public address to setup webhook. You may use [localtunnel.me](https://localtunnel.me) to 
 generate a secure public address if you're running locally on your machine.
+    
     ![localtunnel_demo](../../extras/localtunnel-demo.gif)
+    
 7. Specify the address created above in "Callback Url" field under "Webooks" setting and give the verify token 
 as `fb_token_for_jbot` and click "Verify and Save".
+
     [![setup_webhook](../../extras/fb-setup-webhook-640.gif)](../../extras/fb-setup-webhook.gif)
     
 You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. 
