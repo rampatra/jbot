@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
 /**
+ * A simple Facebook Bot. You can create multiple bots by just
+ * extending {@link Bot} class like this one. Though it is
+ * recommended to create only bot per jbot instance.
+ * 
  * @author ramswaroop
  * @version 17/09/2016
  */
