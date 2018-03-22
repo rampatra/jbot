@@ -375,5 +375,5 @@ stdout_logfile=/tmp/jbot.log
 
 ### Documentation History
 
-* [README-facebook-JBot-4.0.0](/README-Facebook-JBot-4.0.0.md) _(Current)_
+* [README-facebook-JBot-4.0.0](./README-Facebook-JBot-4.0.0.md) _(Current)_
 
