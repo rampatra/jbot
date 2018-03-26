@@ -270,7 +270,7 @@ public abstract class Bot extends BaseBot {
         return message == null ? null : message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
-    private StandardWebSocketClient client() {
+    protected StandardWebSocketClient client() {
         return new StandardWebSocketClient();
     }
 
