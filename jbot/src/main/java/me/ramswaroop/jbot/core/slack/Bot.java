@@ -119,7 +119,7 @@ public abstract class Bot extends BaseBot {
                         event.setType(EventType.DIRECT_MENTION.name());
                     } else if (slackService.getDmChannels().contains(event.getChannelId())) { // direct message
                         event.setType(EventType.DIRECT_MESSAGE.name());
-                    } else if (event.getSubtype().equals(SUBTYPE_FILE_SHARE)) {
+                    } else if (event.getSubtype() != null && event.getSubtype().equals(SUBTYPE_FILE_SHARE)) {
                             event.setType(EventType.FILE_SHARE_MESSAGE.name());
                     }
                 }

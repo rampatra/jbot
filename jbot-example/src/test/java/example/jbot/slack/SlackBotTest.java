@@ -134,6 +134,18 @@ public class SlackBotTest {
     }
 
     @Test
+    public void When_DirectMessage_Then_InvokeOnFileSharedMessageSubtype() {
+        TextMessage textMessage = new TextMessage("{\"type\":\"message\"," +
+                "\"subtype\":\"file_share\"," +
+                "\"file_id\":\"F219AF6VD\"," +
+                "\"user_id\":\"U0MCAEX8A\"," +
+                "\"file\":{\"id\":\"F219AF6VD\"}," +
+                "\"event_ts\":\"1471213812.962298\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("File shared message subtype"));
+    }
+
+    @Test
     public void When_ConversationPattern_Then_StartConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1158878749.000002\"," +
@@ -237,6 +249,11 @@ public class SlackBotTest {
         @Controller(events = EventType.FILE_SHARED)
         public void onFileShared(WebSocketSession session, Event event) {
             System.out.println("File shared.");
+        }
+
+        @Controller(events = EventType.FILE_SHARE_MESSAGE)
+        public void onFileSharedMessage(WebSocketSession session, Event event) {
+            System.out.println("File shared message subtype.");
         }
 
         /**
