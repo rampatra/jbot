@@ -3,4 +3,4 @@ jdk:
   - oraclejdk8
 sudo: false
 install: true
-script: mvn clean install -Dmaven.javadoc.skip=true -B -V
+script: mvn clean install

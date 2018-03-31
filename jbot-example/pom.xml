@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
-        <relativePath/>
+        <groupId>me.ramswaroop.jbot</groupId>
+        <artifactId>jbot-parent</artifactId>
+        <version>4.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>jbot-example</artifactId>
-    <name>JBot Example</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>4.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>JBot Example</name>
+    <description>A sample Slack/Facebook bot using JBot.</description>
+    
     <dependencies>
         <dependency>
             <groupId>me.ramswaroop.jbot</groupId>
             <artifactId>jbot</artifactId>
-            <version>3.0.2</version>
+            <version>4.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>

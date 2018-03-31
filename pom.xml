@@ -11,15 +11,16 @@
     
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot-parent</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>4.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>JBot Parent</name>
-    <description>LEGO for building bots. Make Slack, Facebook and Twitter bots in Java in minutes.</description>
+    <description>Make Slack and Facebook bots in Java in minutes.</description>
     <url>https://github.com/ramswaroop/jbot</url>
 
     <modules>
         <module>jbot</module>
+        <module>jbot-example</module>
     </modules>
 
     <developers>
@@ -34,8 +35,8 @@
 
     <licenses>
         <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <name>GPL-3.0</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
         </license>
     </licenses>
 
@@ -43,7 +44,7 @@
         <url>https://github.com/ramswaroop/jbot</url>
         <connection>scm:git:git://github.com/ramswaroop/jbot.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/ramswaroop/jbot.git</developerConnection>
-        <tag>master</tag>
+        <tag>jbot-parent-4.0.0</tag>
     </scm>
 
     <distributionManagement>
