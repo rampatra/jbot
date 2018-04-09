@@ -151,6 +151,13 @@ public abstract class Bot extends BaseBot {
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
             }
+            if (reply.getThreadTs() == null) {
+                if (event.getThreadTs() != null) {
+                    reply.setThreadTs(event.getThreadTs());
+                } else if (event.getTs() != null) {
+                    reply.setThreadTs(event.getTs());
+                }
+            }
             session.sendMessage(new TextMessage(reply.toJSONString()));
             if (logger.isDebugEnabled()) {  // For debugging purpose only
                 logger.debug("Reply (Message): {}", reply.toJSONString());
