@@ -13,10 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.rule.OutputCapture;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -31,8 +29,6 @@ import static org.mockito.Mockito.when;
  * @author ramswaroop
  * @version 20/06/2016
  */
-@SpringBootTest
-@ActiveProfiles("slack")
 @RunWith(MockitoJUnitRunner.class)
 public class SlackBotTest {
 
@@ -57,7 +53,6 @@ public class SlackBotTest {
         // set rtm
         when(slackService.getDmChannels()).thenReturn(Arrays.asList("D1E79BACV", "C0NDSV5B8"));
         when(slackService.getCurrentUser()).thenReturn(user);
-        when(slackService.getWebSocketUrl()).thenReturn("");
     }
 
     @Test
