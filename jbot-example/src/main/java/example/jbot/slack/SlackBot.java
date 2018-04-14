@@ -4,11 +4,11 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.slack.Bot;
+import me.ramswaroop.jbot.core.slack.SlackProperties;
 import me.ramswaroop.jbot.core.slack.SlackService;
 import me.ramswaroop.jbot.core.slack.models.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -28,15 +28,11 @@ public class SlackBot extends Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
-    /**
-     * Slack token from application.properties file. You can get your slack token
-     * next <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
-     */
     private final String slackToken;
 
-    SlackBot(SlackService slackService, @Value("${slackBotToken}") String slackToken) {
+    SlackBot(SlackService slackService, SlackProperties slackProperties) {
         super(slackService);
-        this.slackToken = slackToken;
+        this.slackToken = slackProperties.getSlackBotToken();
     }
 
     @Override

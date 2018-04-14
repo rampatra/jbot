@@ -2,11 +2,12 @@ package example.jbot.slack;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import me.ramswaroop.jbot.core.slack.SlackProperties;
 import me.ramswaroop.jbot.core.slack.models.Attachment;
 import me.ramswaroop.jbot.core.slack.models.RichMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -30,13 +31,11 @@ public class SlackWebhooks {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackWebhooks.class);
 
-    /**
-     * The Url you get while configuring a new incoming webhook
-     * on Slack. You can setup a new incoming webhook
-     * <a href="https://my.slack.com/services/new/incoming-webhook/">here</a>.
-     */
-    @Value("${slackIncomingWebhookUrl}")
-    private String slackIncomingWebhookUrl;
+    private final SlackProperties slackProperties;
+
+    SlackWebhooks(SlackProperties slackProperties) {
+        this.slackProperties = slackProperties;
+    }
 
     /**
      * Make a POST call to the incoming webhook url.
@@ -60,7 +59,7 @@ public class SlackWebhooks {
 
         // Always remember to send the encoded message to Slack
         try {
-            restTemplate.postForEntity(slackIncomingWebhookUrl, richMessage.encodedMessage(), String.class);
+            restTemplate.postForEntity(slackProperties.getSlackIncomingWebhookUrl(), richMessage.encodedMessage(), String.class);
         } catch (RestClientException e) {
             logger.error("Error posting to Slack Incoming Webhook: ", e);
         }

@@ -9,7 +9,6 @@ import me.ramswaroop.jbot.core.slack.models.RTM;
 import me.ramswaroop.jbot.core.slack.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -30,10 +29,8 @@ import java.util.List;
 public class SlackDao {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackDao.class);
-    /**
-     * Endpoint for RTM.start()
-     */
-    private final String rtmUrl;
+
+    private final SlackProperties slackProperties;
     /**
      * Rest template to make http calls.
      */
@@ -43,8 +40,8 @@ public class SlackDao {
      */
     private RTM rtm;
 
-    SlackDao(@Value("${rtmUrl}") String rtmUrl, RestTemplate restTemplate) {
-        this.rtmUrl = rtmUrl;
+    SlackDao(SlackProperties slackProperties, RestTemplate restTemplate) {
+        this.slackProperties = slackProperties;
         this.restTemplate = restTemplate;
     }
 
@@ -87,7 +84,7 @@ public class SlackDao {
             httpMessageConverters.add(jsonConverter);
             restTemplate.setMessageConverters(httpMessageConverters);
 
-            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, slackToken);
+            ResponseEntity<RTM> response = restTemplate.getForEntity(slackProperties.getRtmUrl(), RTM.class, slackToken);
             if (response.hasBody()) {
                 rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
                 rtm.setDmChannels(response.getBody().getDmChannels());
