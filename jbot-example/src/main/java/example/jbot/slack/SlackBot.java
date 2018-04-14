@@ -4,6 +4,7 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.slack.Bot;
+import me.ramswaroop.jbot.core.slack.SlackService;
 import me.ramswaroop.jbot.core.slack.models.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +32,12 @@ public class SlackBot extends Bot {
      * Slack token from application.properties file. You can get your slack token
      * next <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
      */
-    @Value("${slackBotToken}")
-    private String slackToken;
+    private final String slackToken;
+
+    SlackBot(SlackService slackService, @Value("${slackBotToken}") String slackToken) {
+        super(slackService);
+        this.slackToken = slackToken;
+    }
 
     @Override
     public String getSlackToken() {
@@ -139,7 +144,7 @@ public class SlackBot extends Bot {
     public void askTimeForMeeting(WebSocketSession session, Event event) {
         if (event.getText().contains("yes")) {
             reply(session, event, "Okay. Would you like me to set a reminder for you?");
-            nextConversation(event);    // jump to next question in conversation  
+            nextConversation(event);    // jump to next question in conversation
         } else {
             reply(session, event, "No problem. You can always schedule one with 'setup meeting' command.");
             stopConversation(event);    // stop conversation only if user says no

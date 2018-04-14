@@ -41,8 +41,11 @@ public abstract class Bot extends BaseBot {
     /**
      * Service to access Slack APIs.
      */
-    @Autowired
-    protected SlackService slackService;
+    protected final SlackService slackService;
+
+    protected Bot(SlackService slackService) {
+        this.slackService = slackService;
+    }
 
     /**
      * Class extending this must implement this as it's
@@ -159,7 +162,7 @@ public abstract class Bot extends BaseBot {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
-    
+
     public final void reply(WebSocketSession session, Event event, String text) {
         reply(session, event, new Message(text));
     }

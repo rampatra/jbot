@@ -196,6 +196,10 @@ public class SlackBotTest {
      */
     public static class TestBot extends Bot {
 
+        protected TestBot(SlackService slackService) {
+            super(slackService);
+        }
+
         @Override
         public String getSlackToken() {
             return "slackToken";

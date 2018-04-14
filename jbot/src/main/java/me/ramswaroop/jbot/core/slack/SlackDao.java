@@ -33,20 +33,23 @@ public class SlackDao {
     /**
      * Endpoint for RTM.start()
      */
-    @Value("${rtmUrl}")
-    private String rtmUrl;
+    private final String rtmUrl;
+    /**
+     * Rest template to make http calls.
+     */
+    private final RestTemplate restTemplate;
     /**
      * RTM object constructed from <a href="https://api.slack.com/methods/rtm.start">RTM.start()</a>.
      */
     private RTM rtm;
-    /**
-     * Rest template to make http calls.
-     */
-    private RestTemplate restTemplate;
+
+    SlackDao(@Value("${rtmUrl}") String rtmUrl, RestTemplate restTemplate) {
+        this.rtmUrl = rtmUrl;
+        this.restTemplate = restTemplate;
+    }
 
     public RTM startRTM(String slackToken) {
         try {
-            restTemplate = new RestTemplate();
             rtm = new RTM();
             // Custom Deserializers
             List<HttpMessageConverter<?>> httpMessageConverters = new ArrayList<>();
@@ -85,7 +88,7 @@ public class SlackDao {
             restTemplate.setMessageConverters(httpMessageConverters);
 
             ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, slackToken);
-            if (response.getBody() != null) {
+            if (response.hasBody()) {
                 rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
                 rtm.setDmChannels(response.getBody().getDmChannels());
                 rtm.setUser(response.getBody().getUser());
