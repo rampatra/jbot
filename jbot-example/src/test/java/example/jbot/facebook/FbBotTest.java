@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.facebook.Bot;
+import me.ramswaroop.jbot.core.facebook.FacebookProperties;
 import me.ramswaroop.jbot.core.facebook.models.Callback;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import org.junit.Rule;
@@ -11,10 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.rule.OutputCapture;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -26,8 +25,6 @@ import static org.junit.Assert.assertThat;
  * @author ramswaroop
  * @version 11/03/2018
  */
-@SpringBootTest
-@ActiveProfiles("facebook")
 @RunWith(MockitoJUnitRunner.class)
 public class FbBotTest {
 
@@ -39,7 +36,7 @@ public class FbBotTest {
 
     @Rule
     public OutputCapture capture = new OutputCapture();
-    
+
     @Test
     public void When_PostbackInCallback_Then_InvokeOnReceivePostback() throws IOException {
         Callback callback = new ObjectMapper().readValue("{\"object\":\"page\",\"entry\":[{\"id\":" +
@@ -128,6 +125,10 @@ public class FbBotTest {
      * Facebook Bot for unit tests.
      */
     public static class TestBot extends Bot {
+        public TestBot(FacebookProperties facebookProperties, RestTemplate restTemplate) {
+            super(facebookProperties, restTemplate);
+        }
+
         @Override
         public String getFbToken() {
             return "fb_token";
@@ -142,7 +143,7 @@ public class FbBotTest {
         public void onReceivePostback(Event event) {
             reply(event, "Postback with payload `hi|hello|hey` received from facebook.");
         }
-        
+
         @Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
         public void onReceiveQuickReply(Event event) {
             if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
