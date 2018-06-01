@@ -292,4 +292,17 @@ public abstract class Bot extends BaseBot {
             logger.error("No websocket url returned by Slack.");
         }
     }
+
+    /**
+     * Method to reconnect to websocket
+     *
+     */
+    public void reconnect() {
+    	if (slackService.getWebSocketUrl() != null) {
+            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+            manager.start();
+        } else {
+            logger.error("No websocket url returned by Slack. RTM must first be initialized.");
+        }
+    }
 }
