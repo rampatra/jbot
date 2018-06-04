@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
+    private static final String SUBTYPE_FILE_SHARE = "file_share";
 
     /**
      * Service to access Slack APIs.
@@ -118,6 +119,8 @@ public abstract class Bot extends BaseBot {
                         event.setType(EventType.DIRECT_MENTION.name());
                     } else if (slackService.getDmChannels().contains(event.getChannelId())) { // direct message
                         event.setType(EventType.DIRECT_MESSAGE.name());
+                    } else if (event.getSubtype() != null && event.getSubtype().equals(SUBTYPE_FILE_SHARE)) {
+                            event.setType(EventType.FILE_SHARE_MESSAGE.name());
                     }
                 }
             } else { // slack does not send any TYPE for acknowledgement messages
@@ -159,7 +162,7 @@ public abstract class Bot extends BaseBot {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
-    
+
     public final void reply(WebSocketSession session, Event event, String text) {
         reply(session, event, new Message(text));
     }
