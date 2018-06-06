@@ -159,7 +159,7 @@ public abstract class Bot extends BaseBot {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
-    
+
     public final void reply(WebSocketSession session, Event event, String text) {
         reply(session, event, new Message(text));
     }
@@ -285,24 +285,19 @@ public abstract class Bot extends BaseBot {
     @PostConstruct
     private void startWebSocketConnection() {
         slackService.startRTM(getSlackToken());
-        if (slackService.getWebSocketUrl() != null) {
-            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-            manager.start();
-        } else {
-            logger.error("No websocket url returned by Slack.");
-        }
+        openConnection();
     }
 
+
     /**
-     * Method to reconnect to websocket
-     *
+     * Open websocket connection using the existing slackService
      */
-    public void reconnect() {
-    	if (slackService.getWebSocketUrl() != null) {
-            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-            manager.start();
-        } else {
-            logger.error("No websocket url returned by Slack. RTM must first be initialized.");
-        }
+    public void openConnection() {
+      if (slackService.getWebSocketUrl() != null) {
+          WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+          manager.start();
+      } else {
+          logger.error("No websocket url returned by Slack.");
+      }
     }
 }
