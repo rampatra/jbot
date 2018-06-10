@@ -159,7 +159,7 @@ public abstract class Bot extends BaseBot {
             logger.error("Error sending event: {}. Exception: {}", event.getText(), e.getMessage());
         }
     }
-    
+
     public final void reply(WebSocketSession session, Event event, String text) {
         reply(session, event, new Message(text));
     }
@@ -283,8 +283,15 @@ public abstract class Bot extends BaseBot {
      * and after which your bot becomes live.
      */
     @PostConstruct
-    private void startWebSocketConnection() {
+    private void startRTMAndWebSocketConnection() {
         slackService.startRTM(getSlackToken());
+        startWebSocketConnection();
+    }
+
+    /**
+     * Starts websocket connection using the existing slackService.
+     */
+    public void startWebSocketConnection() {
         if (slackService.getWebSocketUrl() != null) {
             WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
             manager.start();
