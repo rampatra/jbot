@@ -289,7 +289,7 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
-     * Starts websocket connection using the existing slackService
+     * Starts websocket connection using the existing slackService.
      */
     public void startWebSocketConnection() {
         if (slackService.getWebSocketUrl() != null) {
