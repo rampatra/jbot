@@ -78,6 +78,7 @@ public class Event {
     @JsonProperty("event_ts")
     private String eventTs;
     private Message message;
+    private Attachment[] attachments;
 
     public int getId() {
         return id;
@@ -481,5 +482,13 @@ public class Event {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public Attachment[] getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Attachment[] attachments) {
+        this.attachments = attachments;
     }
 }
