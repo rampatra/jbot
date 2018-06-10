@@ -283,21 +283,20 @@ public abstract class Bot extends BaseBot {
      * and after which your bot becomes live.
      */
     @PostConstruct
-    private void startWebSocketConnection() {
+    private void startRTMAndWebSocketConnection() {
         slackService.startRTM(getSlackToken());
-        openConnection();
+        startWebSocketConnection();
     }
 
-
     /**
-     * Open websocket connection using the existing slackService
+     * Starts websocket connection using the existing slackService
      */
-    public void openConnection() {
-      if (slackService.getWebSocketUrl() != null) {
-          WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-          manager.start();
-      } else {
-          logger.error("No websocket url returned by Slack.");
-      }
+    public void startWebSocketConnection() {
+        if (slackService.getWebSocketUrl() != null) {
+            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+            manager.start();
+        } else {
+            logger.error("No websocket url returned by Slack.");
+        }
     }
 }
