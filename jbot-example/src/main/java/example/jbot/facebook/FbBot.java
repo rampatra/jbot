@@ -4,20 +4,21 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.facebook.Bot;
+import me.ramswaroop.jbot.core.facebook.FacebookProperties;
 import me.ramswaroop.jbot.core.facebook.models.Attachment;
 import me.ramswaroop.jbot.core.facebook.models.Button;
 import me.ramswaroop.jbot.core.facebook.models.Element;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
 import me.ramswaroop.jbot.core.facebook.models.Payload;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * A simple Facebook Bot. You can create multiple bots by just
  * extending {@link Bot} class like this one. Though it is
  * recommended to create only bot per jbot instance.
- * 
+ *
  * @author ramswaroop
  * @version 17/09/2016
  */
@@ -25,31 +26,23 @@ import org.springframework.context.annotation.Profile;
 @Profile("facebook")
 public class FbBot extends Bot {
 
-    /**
-     * Set this property in {@code application.properties}.
-     */
-    @Value("${fbBotToken}")
-    private String fbToken;
-
-    /**
-     * Set this property in {@code application.properties}.
-     */
-    @Value("${fbPageAccessToken}")
-    private String pageAccessToken;
+    FbBot(FacebookProperties facebookProperties, RestTemplate restTemplate) {
+        super(facebookProperties, restTemplate);
+    }
 
     @Override
     public String getFbToken() {
-        return fbToken;
+        return facebookProperties.getBotToken();
     }
 
     @Override
     public String getPageAccessToken() {
-        return pageAccessToken;
+        return facebookProperties.getPageAccessToken();
     }
 
     /**
      * Sets the "Get Started" button with a payload "hi". It also set the "Greeting Text" which the user sees when it
-     * opens up the chat window. Uncomment the {@code @PostConstruct} annotation only after you have verified your 
+     * opens up the chat window. Uncomment the {@code @PostConstruct} annotation only after you have verified your
      * webhook.
      */
     //@PostConstruct
@@ -185,7 +178,7 @@ public class FbBot extends Bot {
     public void askTimeForMeeting(Event event) {
         if (event.getMessage().getText().contains("yes")) {
             reply(event, "Okay. Would you like me to set a reminder for you?");
-            nextConversation(event);    // jump to next question in conversation  
+            nextConversation(event);    // jump to next question in conversation
         } else {
             reply(event, "No problem. You can always schedule one with 'setup meeting' command.");
             stopConversation(event);    // stop conversation only if user says no

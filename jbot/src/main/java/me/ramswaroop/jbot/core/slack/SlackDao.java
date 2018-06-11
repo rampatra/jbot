@@ -9,7 +9,6 @@ import me.ramswaroop.jbot.core.slack.models.RTM;
 import me.ramswaroop.jbot.core.slack.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -30,23 +29,24 @@ import java.util.List;
 public class SlackDao {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackDao.class);
+
+    private final SlackProperties slackProperties;
     /**
-     * Endpoint for RTM.start()
+     * Rest template to make http calls.
      */
-    @Value("${rtmUrl}")
-    private String rtmUrl;
+    private final RestTemplate restTemplate;
     /**
      * RTM object constructed from <a href="https://api.slack.com/methods/rtm.start">RTM.start()</a>.
      */
     private RTM rtm;
-    /**
-     * Rest template to make http calls.
-     */
-    private RestTemplate restTemplate;
+
+    SlackDao(SlackProperties slackProperties, RestTemplate restTemplate) {
+        this.slackProperties = slackProperties;
+        this.restTemplate = restTemplate;
+    }
 
     public RTM startRTM(String slackToken) {
         try {
-            restTemplate = new RestTemplate();
             rtm = new RTM();
             // Custom Deserializers
             List<HttpMessageConverter<?>> httpMessageConverters = new ArrayList<>();
@@ -84,8 +84,8 @@ public class SlackDao {
             httpMessageConverters.add(jsonConverter);
             restTemplate.setMessageConverters(httpMessageConverters);
 
-            ResponseEntity<RTM> response = restTemplate.getForEntity(rtmUrl, RTM.class, slackToken);
-            if (response.getBody() != null) {
+            ResponseEntity<RTM> response = restTemplate.getForEntity(slackProperties.getRtmUrl(), RTM.class, slackToken);
+            if (response.hasBody()) {
                 rtm.setWebSocketUrl(response.getBody().getWebSocketUrl());
                 rtm.setDmChannels(response.getBody().getDmChannels());
                 rtm.setUser(response.getBody().getUser());

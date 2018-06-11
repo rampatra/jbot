@@ -2,11 +2,12 @@ package example.jbot.slack;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import me.ramswaroop.jbot.core.slack.SlackProperties;
 import me.ramswaroop.jbot.core.slack.models.Attachment;
 import me.ramswaroop.jbot.core.slack.models.RichMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,11 @@ public class SlackSlashCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackSlashCommand.class);
 
-    /**
-     * The token you get while creating a new Slash Command. You
-     * should paste the token in application.properties file.
-     */
-    @Value("${slashCommandToken}")
-    private String slackToken;
+    private final SlackProperties slackProperties;
 
+    SlackSlashCommand(SlackProperties slackProperties) {
+        this.slackProperties = slackProperties;
+    }
 
     /**
      * Slash Command handler. When a user types for example "/app help"
@@ -65,7 +64,7 @@ public class SlackSlashCommand {
                                              @RequestParam("text") String text,
                                              @RequestParam("response_url") String responseUrl) {
         // validate token
-        if (!token.equals(slackToken)) {
+        if (!token.equals(slackProperties.getSlashCommandToken())) {
             return new RichMessage("Sorry! You're not lucky enough to use our slack command.");
         }
 
@@ -77,7 +76,7 @@ public class SlackSlashCommand {
         attachments[0] = new Attachment();
         attachments[0].setText("I will perform all tasks for you.");
         richMessage.setAttachments(attachments);
-        
+
         // For debugging purpose only
         if (logger.isDebugEnabled()) {
             try {
@@ -86,7 +85,7 @@ public class SlackSlashCommand {
                 logger.debug("Error parsing RichMessage: ", e);
             }
         }
-        
+
         return richMessage.encodedMessage(); // don't forget to send the encoded message to Slack
     }
 }

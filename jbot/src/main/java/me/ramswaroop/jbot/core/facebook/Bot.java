@@ -13,8 +13,6 @@ import me.ramswaroop.jbot.core.facebook.models.Response;
 import me.ramswaroop.jbot.core.facebook.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -43,22 +41,23 @@ public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
-    @Value("${fbSubscribeUrl}")
-    private String subscribeUrl;
+    protected final RestTemplate restTemplate;
 
-    @Value("${fbSendUrl}")
     private String fbSendUrl;
 
-    @Value("${fbMessengerProfileUrl}")
     private String fbMessengerProfileUrl;
 
-    @Autowired
-    protected RestTemplate restTemplate;
+    protected final FacebookProperties facebookProperties;
+
+    public Bot(FacebookProperties facebookProperties, RestTemplate restTemplate) {
+        this.facebookProperties = facebookProperties;
+        this.restTemplate = restTemplate;
+    }
 
     @PostConstruct
     private void constructFbSendUrl() {
-        fbSendUrl = fbSendUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
-        fbMessengerProfileUrl = fbMessengerProfileUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbSendUrl = facebookProperties.getSendUrl().replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbMessengerProfileUrl = facebookProperties.getMessengerProfileUrl().replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
     }
 
     /**
@@ -231,7 +230,7 @@ public abstract class Bot extends BaseBot {
     public final void subscribeAppToPage() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set("access_token", getPageAccessToken());
-        restTemplate.postForEntity(subscribeUrl, params, String.class);
+        restTemplate.postForEntity(facebookProperties.getSubscribeUrl(), params, String.class);
     }
 
     /**
