@@ -36,7 +36,7 @@ Follow the below steps to release JBot to OSSRH:
 modules. With multi-module, building/releasing the parent will build/release the parent as well as the child modules.
 To release:
 
-    Do `$ cd JBot` and then `$ mvn release:clean release:prepare`
+    Do `$ cd JBot` and then `$ mvn release:clean release:prepare` (you can use this option to see if all okay: `-DdryRun=true`)
     
     Provide answers to the questions below:
     ```
