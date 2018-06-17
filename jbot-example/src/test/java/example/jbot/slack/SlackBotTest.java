@@ -55,7 +55,7 @@ public class SlackBotTest {
         user.setName("SlackBot");
         user.setId("UEADGH12S");
         // set rtm
-        when(slackService.getDmChannels()).thenReturn(Arrays.asList("D1E79BACV", "C0NDSV5B8"));
+        when(slackService.getImChannelIds()).thenReturn(Arrays.asList("D1E79BACV", "C0NDSV5B8"));
         when(slackService.getCurrentUser()).thenReturn(user);
         when(slackService.getWebSocketUrl()).thenReturn("");
     }

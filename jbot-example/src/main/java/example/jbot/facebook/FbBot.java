@@ -4,12 +4,7 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.facebook.Bot;
-import me.ramswaroop.jbot.core.facebook.models.Attachment;
-import me.ramswaroop.jbot.core.facebook.models.Button;
-import me.ramswaroop.jbot.core.facebook.models.Element;
-import me.ramswaroop.jbot.core.facebook.models.Event;
-import me.ramswaroop.jbot.core.facebook.models.Message;
-import me.ramswaroop.jbot.core.facebook.models.Payload;
+import me.ramswaroop.jbot.core.facebook.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 

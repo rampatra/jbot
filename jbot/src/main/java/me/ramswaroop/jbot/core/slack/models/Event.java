@@ -37,6 +37,7 @@ public class Event {
     @JsonProperty("pinned_to")
     private String[] pinnedTo;
     private Channel channel;
+    private Channel[] ims;
     private Item item;
     private Bot bot;
     private File file;
@@ -79,6 +80,8 @@ public class Event {
     private String eventTs;
     private Message message;
     private Attachment[] attachments;
+    @JsonProperty("response_metadata")
+    private ResponseMetadata responseMetadata;
 
     public int getId() {
         return id;
@@ -174,6 +177,14 @@ public class Event {
 
     public void setChannel(Channel channel) {
         this.channel = channel;
+    }
+
+    public Channel[] getIms() {
+        return ims;
+    }
+
+    public void setIms(Channel[] ims) {
+        this.ims = ims;
     }
 
     public Item getItem() {
@@ -490,5 +501,13 @@ public class Event {
 
     public void setAttachments(Attachment[] attachments) {
         this.attachments = attachments;
+    }
+
+    public ResponseMetadata getResponseMetadata() {
+        return responseMetadata;
+    }
+
+    public void setResponseMetadata(ResponseMetadata responseMetadata) {
+        this.responseMetadata = responseMetadata;
     }
 }
