@@ -322,7 +322,7 @@ dependency in your project.
 <dependency>
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot</artifactId>
-    <version>4.0.1</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -330,7 +330,7 @@ dependency in your project.
 
 ```groovy
 dependencies {
-    compile("me.ramswaroop.jbot:jbot:4.0.1")
+    compile("me.ramswaroop.jbot:jbot:4.1.0")
 }
 ```
 
