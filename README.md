@@ -1,4 +1,4 @@
-# JBot [![Build Status](https://travis-ci.org/rampatra/jbot.svg?branch=master)](https://travis-ci.org/rampatra/jbot) [![Codacy](https://api.codacy.com/project/badge/Grade/569b52fd935042538309d8f45e9d8b70)](https://www.codacy.com/app/ramswaroop/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Facebook](https://img.shields.io/badge/social-fb-blue.svg)](https://www.facebook.com/jbotframework/) [![Backers on Open Collective](https://opencollective.com/jbot/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/jbot/sponsors/badge.svg)](#sponsors) [![MIT license](https://img.shields.io/badge/license-GPL_3.0-yellow.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
+# JBot [![Build Status](https://travis-ci.org/rampatra/jbot.svg?branch=master)](https://travis-ci.org/rampatra/jbot) [![Codacy](https://api.codacy.com/project/badge/Grade/569b52fd935042538309d8f45e9d8b70)](https://www.codacy.com/app/rampatra/jbot) [![Javadocs](http://www.javadoc.io/badge/me.ramswaroop.jbot/jbot.svg?color=orange)](http://www.javadoc.io/doc/me.ramswaroop.jbot/jbot) [![Facebook](https://img.shields.io/badge/social-fb-blue.svg)](https://www.facebook.com/jbotframework/) [![Backers on Open Collective](https://opencollective.com/jbot/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/jbot/sponsors/badge.svg)](#sponsors) [![MIT license](https://img.shields.io/badge/license-GPL_3.0-yellow.svg)](https://raw.githubusercontent.com/ramswaroop/jbot/master/LICENSE)
 
 Make bots in Java.
 
@@ -22,13 +22,13 @@ can make your bot live right away.
 * Chosen by [DZone daily picks](http://mailer.dzone.com/display.php?M=15184241&C=dcebb6887365120539df1fbf19a071ed&S=9043&L=658&N=4604).
 * Last but not the least, it's listed on [Slack.com](https://api.slack.com/community)
 
-**Still worried?** Open an [issue on Github](https://github.com/ramswaroop/jbot/issues) and we can discuss.
+**Still worried?** Open an [issue on Github](https://github.com/rampatra/jbot/issues) and we can discuss.
 
 ## JBot for Slack
 
 **Running your SlackBot is just 4 easy steps:**
   
-1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git`.  
+1. Clone this project `$ git clone git@github.com:rampatra/jbot.git`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
 3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
@@ -47,7 +47,7 @@ Read the detailed [Slack documentation](/docs/slack/README-Slack-JBot-4.0.0.md) 
 
 **Similar to Slack, Facebook is simple too but has few extra steps:**
 
-1. Clone this project `$ git clone git@github.com:ramswaroop/jbot.git`.
+1. Clone this project `$ git clone git@github.com:rampatra/jbot.git`.
 2. Create a [facebook app](https://developers.facebook.com/docs/apps/register#create-app) and a 
 [page](https://www.facebook.com/pages/create).
 3. Generate a Page Access Token for the page (inside app's messenger settings).
@@ -75,7 +75,7 @@ Read the detailed [Facebook documentation](/docs/facebook/README-Facebook-JBot-4
 
 This project exists thanks to all the awesome people who contribute. If you want to flaunt your skills or make 
 the project even better, [you can start contributing](/CONTRIBUTING.md) and for any queries please just 
-[raise an issue](https://github.com/ramswaroop/jbot/issues) and I would be more than happy to discuss :)
+[raise an issue](https://github.com/rampatra/jbot/issues) and I would be more than happy to discuss :)
 
 <a href="graphs/contributors"><img src="https://opencollective.com/jbot/contributors.svg?width=890" /></a>
 
