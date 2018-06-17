@@ -32,11 +32,11 @@ public abstract class BaseBot {
      * A Map of all methods annotated with {@link Controller} where key is the {@link Method#getName()} and
      * value is the respective {@link MethodWrapper}.
      */
-    protected final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
+    private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
     /**
      * A List of names of the methods which are part of any conversation.
      */
-    protected final List<String> conversationMethodNames = new ArrayList<>();
+    private final List<String> conversationMethodNames = new ArrayList<>();
     /**
      * A List of Queues with each Queue holding all methods for a particular conversation. Methods
      * can be chained into a conversation by {@link Controller#next()}.
@@ -81,23 +81,23 @@ public abstract class BaseBot {
         }
     }
 
-    public void startConversation(String id, String methodName) {
+    protected void startConversation(String id, String methodName) {
         if (!StringUtils.isEmpty(id)) {
             Queue<MethodWrapper> queue = formConversationQueue(new LinkedList<>(), methodName);
             conversationQueueMap.put(id, queue);
         }
     }
 
-    public void nextConversation(String id) {
+    protected void nextConversation(String id) {
         Queue<MethodWrapper> queue = conversationQueueMap.get(id);
         if (queue != null) queue.poll();
     }
 
-    public void stopConversation(String id) {
+    protected void stopConversation(String id) {
         conversationQueueMap.remove(id);
     }
 
-    public boolean isConversationOn(String id) {
+    protected boolean isConversationOn(String id) {
         return conversationQueueMap.get(id) != null;
     }
 

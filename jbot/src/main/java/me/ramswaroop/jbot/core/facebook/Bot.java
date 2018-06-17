@@ -164,7 +164,7 @@ public abstract class Bot extends BaseBot {
                 new Event().setRecipient(recipient).setSenderAction("typing_off"), Response.class);
     }
 
-    public final ResponseEntity<String> reply(Event event) {
+    protected final ResponseEntity<String> reply(Event event) {
         sendTypingOffIndicator(event.getRecipient());
         logger.debug("Send message: {}", event.toString());
         try {
@@ -175,7 +175,7 @@ public abstract class Bot extends BaseBot {
         }
     }
 
-    public ResponseEntity<String> reply(Event event, String text) {
+    protected ResponseEntity<String> reply(Event event, String text) {
         Event response = new Event()
                 .setMessagingType("RESPONSE")
                 .setRecipient(event.getSender())
@@ -183,7 +183,7 @@ public abstract class Bot extends BaseBot {
         return reply(response);
     }
 
-    public ResponseEntity<String> reply(Event event, Message message) {
+    protected ResponseEntity<String> reply(Event event, Message message) {
         Event response = new Event()
                 .setMessagingType("RESPONSE")
                 .setRecipient(event.getSender())
@@ -200,7 +200,7 @@ public abstract class Bot extends BaseBot {
      * @param payload for "Get Started" button
      * @return response from facebook
      */
-    public final ResponseEntity<Response> setGetStartedButton(String payload) {
+    protected final ResponseEntity<Response> setGetStartedButton(String payload) {
         Event event = new Event().setGetStarted(new Postback().setPayload(payload));
         return restTemplate.postForEntity(fbMessengerProfileUrl, event, Response.class);
     }
@@ -215,7 +215,7 @@ public abstract class Bot extends BaseBot {
      * @param greeting an array of Payload consisting of text and locale
      * @return response from facebook
      */
-    public final ResponseEntity<Response> setGreetingText(Payload[] greeting) {
+    protected final ResponseEntity<Response> setGreetingText(Payload[] greeting) {
         Event event = new Event().setGreeting(greeting);
         return restTemplate.postForEntity(fbMessengerProfileUrl, event, Response.class);
     }
@@ -239,7 +239,7 @@ public abstract class Bot extends BaseBot {
      *
      * @param event received from facebook
      */
-    public final void startConversation(Event event, String methodName) {
+    protected final void startConversation(Event event, String methodName) {
         startConversation(event.getSender().getId(), methodName);
     }
 
@@ -248,7 +248,7 @@ public abstract class Bot extends BaseBot {
      *
      * @param event received from facebook
      */
-    public final void nextConversation(Event event) {
+    protected final void nextConversation(Event event) {
         nextConversation(event.getSender().getId());
     }
 
@@ -257,7 +257,7 @@ public abstract class Bot extends BaseBot {
      *
      * @param event received from facebook
      */
-    public final void stopConversation(Event event) {
+    protected final void stopConversation(Event event) {
         stopConversation(event.getSender().getId());
     }
 
@@ -267,7 +267,7 @@ public abstract class Bot extends BaseBot {
      * @param event received from facebook
      * @return true if a conversation is on, false otherwise.
      */
-    public final boolean isConversationOn(Event event) {
+    protected final boolean isConversationOn(Event event) {
         return isConversationOn(event.getSender().getId());
     }
 
