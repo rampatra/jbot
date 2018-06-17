@@ -118,14 +118,14 @@ public abstract class Bot extends BaseBot {
                 if (event.getType().equalsIgnoreCase(EventType.IM_OPEN.name())
                         || event.getType().equalsIgnoreCase(EventType.IM_CREATED.name())) {
                     if (event.getChannelId() != null) {
-                        slackService.addDmChannel(event.getChannelId());
+                        slackService.addImChannelId(event.getChannelId());
                     } else if (event.getChannel() != null) {
-                        slackService.addDmChannel(event.getChannel().getId());
+                        slackService.addImChannelId(event.getChannel().getId());
                     }
                 } else if (event.getType().equalsIgnoreCase(EventType.MESSAGE.name())) {
                     if (event.getText() != null && event.getText().contains(slackService.getCurrentUser().getId())) { // direct mention
                         event.setType(EventType.DIRECT_MENTION.name());
-                    } else if (slackService.getDmChannels().contains(event.getChannelId())) { // direct message
+                    } else if (slackService.getImChannelIds().contains(event.getChannelId())) { // direct message
                         event.setType(EventType.DIRECT_MESSAGE.name());
                     }
                 } else if (event.getType().equalsIgnoreCase(EventType.HELLO.name())) {
@@ -296,7 +296,7 @@ public abstract class Bot extends BaseBot {
      */
     @PostConstruct
     protected void startRTMAndWebSocketConnection() {
-        slackService.startRTM(getSlackToken());
+        slackService.connectRTM(getSlackToken());
         if (slackService.getWebSocketUrl() != null) {
             WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
             manager.start();
