@@ -22,6 +22,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -93,6 +94,17 @@ public class SlackBotTest {
         assertThat(capture.toString(), containsString("Second group: as"));
         assertThat(capture.toString(), containsString("Third group: 12"));
         assertThat(capture.toString(), containsString("Fourth group: sd"));
+    }
+
+    @Test
+    public void When_MessageWithPatternAndPatternFlags_Then_InvokeOnReceiveMessageWithPatternAndPatternFlags() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
+            "\"ts\": \"1358878749.000002\"," +
+            "\"channel\": \"A1E78BACV\"," +
+            "\"user\": \"U023BECGF\"," +
+            "\"text\": \"HEY\"}"); // this matches the pattern with CASE_INSENSITIVE pattern flag on
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("hey to you too!"));
     }
 
     @Test
@@ -227,6 +239,11 @@ public class SlackBotTest {
                     "Second group: " + matcher.group(1) + "\n" +
                     "Third group: " + matcher.group(2) + "\n" +
                     "Fourth group: " + matcher.group(3));
+        }
+
+        @Controller(events = EventType.MESSAGE, pattern = "hey", patternFlags = Pattern.CASE_INSENSITIVE)
+        public void onReceiveMessageWithPatternAndPatternFlags(WebSocketSession session, Event event) {
+            System.out.println("hey to you too!");
         }
 
         @Controller(events = EventType.PIN_ADDED)
