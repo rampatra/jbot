@@ -195,6 +195,26 @@ public class SlackBotTest {
         assertThat(capture.toString(), containsString("You can always schedule one with 'setup meeting' command"));
     }
 
+    @Test
+    public void When_UserJoinsChannel_Then_InvokeOnMemberJoinedChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_joined_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Welcome to the channel!"));
+    }
+
+    @Test
+    public void When_UserLeavesChannel_Then_InvokeOnMemberLeftChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_left_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Someone just left."));
+    }
+
 
     /**
      * Slack Bot for unit tests.
@@ -275,6 +295,16 @@ public class SlackBotTest {
                 System.out.println("Okay, don't forget to attend the meeting tomorrow :)");
             }
             stopConversation(event);    // stop conversation
+        }
+
+        @Controller(events = EventType.MEMBER_JOINED_CHANNEL)
+        public void onMemberJoinedChannel(WebSocketSession session, Event event) {
+            System.out.println("Welcome to the channel!");
+        }
+
+        @Controller(events = EventType.MEMBER_LEFT_CHANNEL)
+        public void onMemberLeftChannel(WebSocketSession session, Event event) {
+            System.out.println("Someone just left.");
         }
     }
 }
