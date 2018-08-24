@@ -146,6 +146,30 @@ public class SlackBotTest {
     }
 
     @Test
+    public void When_UserJoinsChannel_Then_InvokeOnMemberJoinedChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_joined_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Welcome to the channel!"));
+    }
+
+    @Test
+    public void When_UserLeavesChannel_Then_InvokeOnMemberLeftChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_left_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Someone just left."));
+    }
+
+    /**
+     * Unit tests for conversation feature.
+     */
+    
+    @Test
     public void When_ConversationPattern_Then_StartConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1158878749.000002\"," +
@@ -254,6 +278,16 @@ public class SlackBotTest {
         @Controller(events = EventType.FILE_SHARED)
         public void onFileShared(WebSocketSession session, Event event) {
             System.out.println("File shared.");
+        }
+
+        @Controller(events = EventType.MEMBER_JOINED_CHANNEL)
+        public void onMemberJoinedChannel(WebSocketSession session, Event event) {
+            System.out.println("Welcome to the channel!");
+        }
+
+        @Controller(events = EventType.MEMBER_LEFT_CHANNEL)
+        public void onMemberLeftChannel(WebSocketSession session, Event event) {
+            System.out.println("Someone just left.");
         }
 
         /**

@@ -19,7 +19,7 @@ public class EventTypeTest {
     @Test
     public void numberOfEventsType() {
         EventType[] events = EventType.values();
-        assertEquals(85, events.length);
+        assertEquals(87, events.length);
     }
 
 }
