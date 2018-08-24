@@ -134,6 +134,30 @@ public class SlackBotTest {
     }
 
     @Test
+    public void When_UserJoinsChannel_Then_InvokeOnMemberJoinedChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_joined_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Welcome to the channel!"));
+    }
+
+    @Test
+    public void When_UserLeavesChannel_Then_InvokeOnMemberLeftChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_left_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Someone just left."));
+    }
+
+    /**
+     * Unit tests for conversation feature.
+     */
+    
+    @Test
     public void When_ConversationPattern_Then_StartConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
                 "\"ts\": \"1158878749.000002\"," +
@@ -193,26 +217,6 @@ public class SlackBotTest {
                 "\"text\": \"no\"}");
         bot.handleTextMessage(session, textMessage);
         assertThat(capture.toString(), containsString("You can always schedule one with 'setup meeting' command"));
-    }
-
-    @Test
-    public void When_UserJoinsChannel_Then_InvokeOnMemberJoinedChannel() {
-        TextMessage textMessage = new TextMessage("{\"type\": \"member_joined_channel\"," +
-                "\"ts\": \"1348878749.000302\"," +
-                "\"channel\": \"A1E78BACV\"," +
-                "\"user\": \"U023BECGF\"}");
-        bot.handleTextMessage(session, textMessage);
-        assertThat(capture.toString(), containsString("Welcome to the channel!"));
-    }
-
-    @Test
-    public void When_UserLeavesChannel_Then_InvokeOnMemberLeftChannel() {
-        TextMessage textMessage = new TextMessage("{\"type\": \"member_left_channel\"," +
-                "\"ts\": \"1348878749.000302\"," +
-                "\"channel\": \"A1E78BACV\"," +
-                "\"user\": \"U023BECGF\"}");
-        bot.handleTextMessage(session, textMessage);
-        assertThat(capture.toString(), containsString("Someone just left."));
     }
 
 
