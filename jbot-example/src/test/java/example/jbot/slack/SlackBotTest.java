@@ -263,6 +263,16 @@ public class SlackBotTest {
             System.out.println("File shared.");
         }
 
+        @Controller(events = EventType.MEMBER_JOINED_CHANNEL)
+        public void onMemberJoinedChannel(WebSocketSession session, Event event) {
+            System.out.println("Welcome to the channel!");
+        }
+
+        @Controller(events = EventType.MEMBER_LEFT_CHANNEL)
+        public void onMemberLeftChannel(WebSocketSession session, Event event) {
+            System.out.println("Someone just left.");
+        }
+
         /**
          * Conversation feature of JBot.
          */
@@ -299,16 +309,6 @@ public class SlackBotTest {
                 System.out.println("Okay, don't forget to attend the meeting tomorrow :)");
             }
             stopConversation(event);    // stop conversation
-        }
-
-        @Controller(events = EventType.MEMBER_JOINED_CHANNEL)
-        public void onMemberJoinedChannel(WebSocketSession session, Event event) {
-            System.out.println("Welcome to the channel!");
-        }
-
-        @Controller(events = EventType.MEMBER_LEFT_CHANNEL)
-        public void onMemberLeftChannel(WebSocketSession session, Event event) {
-            System.out.println("Someone just left.");
         }
     }
 }
