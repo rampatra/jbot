@@ -2,7 +2,6 @@ package me.ramswaroop.jbot.core.facebook;
 
 import me.ramswaroop.jbot.core.facebook.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +16,9 @@ public class FbService {
     RestTemplate restTemplate;
 
     @Autowired
-    FacebookApiEndpoints facebookApiEndpoints;
+    FbApiEndpoints fbApiEndpoints;
 
-    public User getUser(String id) {
-        return restTemplate.getForEntity("", User.class).getBody();
+    public User getUser(String id, String pageAccessToken) {
+        return restTemplate.getForEntity(fbApiEndpoints.getUserApi(), User.class, id, pageAccessToken).getBody();
     }
 }
