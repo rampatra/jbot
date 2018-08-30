@@ -47,6 +47,7 @@ public abstract class BaseBot {
                 Controller controller = method.getAnnotation(Controller.class);
                 EventType[] eventTypes = controller.events();
                 String pattern = controller.pattern();
+                int patternFlags = controller.patternFlags();
                 String next = controller.next();
 
                 if (!StringUtils.isEmpty(next)) {
@@ -56,6 +57,7 @@ public abstract class BaseBot {
                 MethodWrapper methodWrapper = new MethodWrapper();
                 methodWrapper.setMethod(method);
                 methodWrapper.setPattern(pattern);
+                methodWrapper.setPatternFlags(patternFlags);
                 methodWrapper.setNext(next);
 
                 if (!conversationMethodNames.contains(method.getName())) {
@@ -97,7 +99,7 @@ public abstract class BaseBot {
 
     /**
      * Search for a method whose {@link Controller#pattern()} match with the {@code Event} text or payload
-     * received from Slack/Facebook and also filter out the methods in {@code methodWrappers} whose 
+     * received from Slack/Facebook and also filter out the methods in {@code methodWrappers} whose
      * {@link Controller#pattern()} do not match.
      *
      * @param text is the message from the user
@@ -112,13 +114,14 @@ public abstract class BaseBot {
             while (listIterator.hasNext()) {
                 MethodWrapper methodWrapper = listIterator.next();
                 String pattern = methodWrapper.getPattern();
+                int patternFlags = methodWrapper.getPatternFlags();
 
                 if (!StringUtils.isEmpty(pattern)) {
                     if (StringUtils.isEmpty(text)) {
                         listIterator.remove();
                         continue;
                     }
-                    Pattern p = Pattern.compile(pattern);
+                    Pattern p = Pattern.compile(pattern, patternFlags);
                     Matcher m = p.matcher(text);
                     if (m.find()) {
                         methodWrapper.setMatcher(m);
@@ -155,6 +158,7 @@ public abstract class BaseBot {
     public class MethodWrapper {
         private Method method;
         private String pattern;
+        private int patternFlags;
         private Matcher matcher;
         private String next;
 
@@ -172,6 +176,14 @@ public abstract class BaseBot {
 
         public void setPattern(String pattern) {
             this.pattern = pattern;
+        }
+
+        public int getPatternFlags() {
+            return patternFlags;
+        }
+
+        public void setPatternFlags(int patternFlags) {
+            this.patternFlags = patternFlags;
         }
 
         public Matcher getMatcher() {
@@ -199,6 +211,7 @@ public abstract class BaseBot {
 
             if (!method.equals(that.method)) return false;
             if (pattern != null ? !pattern.equals(that.pattern) : that.pattern != null) return false;
+            if (patternFlags != that.patternFlags) return false;
             if (matcher != null ? !matcher.equals(that.matcher) : that.matcher != null) return false;
             return next != null ? next.equals(that.next) : that.next == null;
 
@@ -206,11 +219,7 @@ public abstract class BaseBot {
 
         @Override
         public int hashCode() {
-            int result = method.hashCode();
-            result = 31 * result + (pattern != null ? pattern.hashCode() : 0);
-            result = 31 * result + (matcher != null ? matcher.hashCode() : 0);
-            result = 31 * result + (next != null ? next.hashCode() : 0);
-            return result;
+            return Objects.hash(method, pattern, patternFlags, matcher, next);
         }
     }
 }

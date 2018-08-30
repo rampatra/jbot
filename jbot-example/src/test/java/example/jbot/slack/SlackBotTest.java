@@ -22,6 +22,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -107,6 +108,17 @@ public class SlackBotTest {
     }
 
     @Test
+    public void When_MessageWithPatternAndPatternFlags_Then_InvokeOnReceiveMessageWithPatternAndPatternFlags() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
+            "\"ts\": \"1358878749.000002\"," +
+            "\"channel\": \"A1E78BACV\"," +
+            "\"user\": \"U023BECGF\"," +
+            "\"text\": \"HEY\"}"); // this matches the pattern with CASE_INSENSITIVE pattern flag on
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("hey case insensitive"));
+    }
+
+    @Test
     public void When_DirectMessage_Then_InvokeOnPinAdded() {
         TextMessage textMessage = new TextMessage("{\"type\":\"pin_added\"," +
                 "\"user\":\"U0MCAEX8A\",\"channel_id\":\"C0NDSV5B8\"," +
@@ -133,6 +145,30 @@ public class SlackBotTest {
         assertThat(capture.toString(), containsString("File shared"));
     }
 
+    @Test
+    public void When_UserJoinsChannel_Then_InvokeOnMemberJoinedChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_joined_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Welcome to the channel!"));
+    }
+
+    @Test
+    public void When_UserLeavesChannel_Then_InvokeOnMemberLeftChannel() {
+        TextMessage textMessage = new TextMessage("{\"type\": \"member_left_channel\"," +
+                "\"ts\": \"1348878749.000302\"," +
+                "\"channel\": \"A1E78BACV\"," +
+                "\"user\": \"U023BECGF\"}");
+        bot.handleTextMessage(session, textMessage);
+        assertThat(capture.toString(), containsString("Someone just left."));
+    }
+
+    /**
+     * Unit tests for conversation feature.
+     */
+    
     @Test
     public void When_ConversationPattern_Then_StartConversation() {
         TextMessage textMessage = new TextMessage("{\"type\": \"message\"," +
@@ -229,6 +265,11 @@ public class SlackBotTest {
                     "Fourth group: " + matcher.group(3));
         }
 
+        @Controller(events = EventType.MESSAGE, pattern = "hey", patternFlags = Pattern.CASE_INSENSITIVE)
+        public void onReceiveMessageWithPatternAndPatternFlags(WebSocketSession session, Event event) {
+            System.out.println("hey case insensitive!");
+        }
+
         @Controller(events = EventType.PIN_ADDED)
         public void onPinAdded(WebSocketSession session, Event event) {
             System.out.println("Thanks for the pin! You can find all pinned items under channel details.");
@@ -237,6 +278,16 @@ public class SlackBotTest {
         @Controller(events = EventType.FILE_SHARED)
         public void onFileShared(WebSocketSession session, Event event) {
             System.out.println("File shared.");
+        }
+
+        @Controller(events = EventType.MEMBER_JOINED_CHANNEL)
+        public void onMemberJoinedChannel(WebSocketSession session, Event event) {
+            System.out.println("Welcome to the channel!");
+        }
+
+        @Controller(events = EventType.MEMBER_LEFT_CHANNEL)
+        public void onMemberLeftChannel(WebSocketSession session, Event event) {
+            System.out.println("Someone just left.");
         }
 
         /**
