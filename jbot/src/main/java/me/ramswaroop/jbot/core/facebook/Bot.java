@@ -32,22 +32,20 @@ public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
-    @Value("${fbSubscribeUrl}")
-    private String subscribeUrl;
-
-    @Value("${fbSendUrl}")
     private String fbSendUrl;
-
-    @Value("${fbMessengerProfileUrl}")
     private String fbMessengerProfileUrl;
 
     @Autowired
     protected RestTemplate restTemplate;
 
+    @Autowired
+    protected FbApiEndpoints fbApiEndpoints;
+
     @PostConstruct
     private void constructFbSendUrl() {
-        fbSendUrl = fbSendUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
-        fbMessengerProfileUrl = fbMessengerProfileUrl.replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbSendUrl = fbApiEndpoints.getFbSendUrl().replace("{PAGE_ACCESS_TOKEN}", getPageAccessToken());
+        fbMessengerProfileUrl = fbApiEndpoints.getFbMessengerProfileUrl().replace("{PAGE_ACCESS_TOKEN}",
+                getPageAccessToken());
     }
 
     /**
@@ -220,7 +218,7 @@ public abstract class Bot extends BaseBot {
     public final void subscribeAppToPage() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set("access_token", getPageAccessToken());
-        restTemplate.postForEntity(subscribeUrl, params, String.class);
+        restTemplate.postForEntity(fbApiEndpoints.getSubscribeUrl(), params, String.class);
     }
 
     /**
