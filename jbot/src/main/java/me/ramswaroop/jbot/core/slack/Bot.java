@@ -41,6 +41,8 @@ public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
+    private final Object sendMessageLock = new Object();
+
     /**
      * Service to access Slack APIs.
      */
@@ -163,7 +165,9 @@ public abstract class Bot extends BaseBot {
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
             }
-            session.sendMessage(new TextMessage(reply.toJSONString()));
+            synchronized (sendMessageLock) {
+                session.sendMessage(new TextMessage(reply.toJSONString()));
+            }
             if (logger.isDebugEnabled()) {  // For debugging purpose only
                 logger.debug("Reply (Message): {}", reply.toJSONString());
             }
@@ -328,7 +332,9 @@ public abstract class Bot extends BaseBot {
                 isRunning = true;
                 Message message = new Message();
                 message.setType(EventType.PING.name().toLowerCase());
-                webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
+                synchronized (sendMessageLock) {
+                    webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
+                }
             } catch (Exception e) {
                 logger.error("Error pinging Slack. Slack bot may go offline when not active. Exception: ", e);
             }
