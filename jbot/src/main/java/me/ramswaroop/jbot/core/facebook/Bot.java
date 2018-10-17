@@ -222,6 +222,22 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
+     * Call this method to initialize a conversation without a previous interaction of the user.
+     *
+     * @param userId id of user you want to send the message to
+     * @param messageText message that you want to send to user
+     */
+    protected final void initializeConversation(String userId, String messageText) {
+        User user = new User().setId(userId);
+        Message message = new Message().setText(messageText);
+
+        Event event = new Event().setRecipient(user).setMessage(message).setType(EventType.MESSAGE);
+
+        constructFbSendUrl();
+        restTemplate.postForEntity(fbSendUrl, event, Response.class);
+    }
+
+    /**
      * Call this method to start a conversation.
      *
      * @param event received from facebook
