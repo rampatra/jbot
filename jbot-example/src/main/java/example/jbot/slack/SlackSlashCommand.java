@@ -2,8 +2,8 @@ package example.jbot.slack;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.jbot.core.slack.models.Attachment;
-import me.ramswaroop.jbot.core.slack.models.RichMessage;
+import com.rampatra.jbot.core.slack.models.Attachment;
+import com.rampatra.jbot.core.slack.models.RichMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Sample Slash Command Handler.
  *
- * @author ramswaroop
+ * @author rampatra
  * @version 1.0.0, 20/06/2016
  */
 @RestController

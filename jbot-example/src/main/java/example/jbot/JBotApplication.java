@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication(scanBasePackages = {"me.ramswaroop.jbot", "example.jbot"})
+@SpringBootApplication(scanBasePackages = {"com.rampatra.jbot", "example.jbot"})
 public class JBotApplication {
     
     @Bean

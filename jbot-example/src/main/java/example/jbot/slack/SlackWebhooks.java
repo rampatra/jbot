@@ -2,8 +2,8 @@ package example.jbot.slack;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.jbot.core.slack.models.Attachment;
-import me.ramswaroop.jbot.core.slack.models.RichMessage;
+import com.rampatra.jbot.core.slack.models.Attachment;
+import com.rampatra.jbot.core.slack.models.RichMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
  * 1) Send as a JSON string as the payload parameter in a POST request
  * 2) Send as a JSON string as the body of a POST request
  *
- * @author ramswaroop
+ * @author rampatra
  * @version 1.0.0, 21/06/2016
  */
 @Component

@@ -3,26 +3,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>me.ramswaroop.jbot</groupId>
+        <groupId>com.rampatra.jbot</groupId>
         <artifactId>jbot-parent</artifactId>
-        <version>4.1.1-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>jbot</artifactId>
-    <version>4.1.1-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>JBot</name>
     <description>Make Slack and Facebook bots in Java in minutes.</description>
-    <url>https://github.com/ramswaroop/jbot</url>
+    <url>https://github.com/rampatra/jbot</url>
 
     <developers>
         <developer>
             <id>ram</id>
             <name>Ram Patra</name>
-            <email>hi at ramswaroop.me</email>
-            <organization>Ramswaroop.me</organization>
-            <organizationUrl>http://www.ramswaroop.me</organizationUrl>
+            <email>hi at rampatra.com</email>
+            <organization>RamPatra.com</organization>
+            <organizationUrl>http://www.rampatra.com</organizationUrl>
         </developer>
     </developers>
 

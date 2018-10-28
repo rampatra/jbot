@@ -1,11 +1,11 @@
 package example.jbot.facebook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.ramswaroop.jbot.core.common.Controller;
-import me.ramswaroop.jbot.core.common.EventType;
-import me.ramswaroop.jbot.core.facebook.Bot;
-import me.ramswaroop.jbot.core.facebook.models.Callback;
-import me.ramswaroop.jbot.core.facebook.models.Event;
+import com.rampatra.jbot.core.common.Controller;
+import com.rampatra.jbot.core.common.EventType;
+import com.rampatra.jbot.core.facebook.Bot;
+import com.rampatra.jbot.core.facebook.models.Callback;
+import com.rampatra.jbot.core.facebook.models.Event;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author ramswaroop
+ * @author rampatra
  * @version 11/03/2018
  */
 @SpringBootTest

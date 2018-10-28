@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @author ramswaroop
+ * @author rampatra
  * @version 05/08/2016
  */
 @ActiveProfiles("slack")

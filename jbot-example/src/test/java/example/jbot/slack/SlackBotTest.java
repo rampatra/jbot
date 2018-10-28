@@ -1,12 +1,12 @@
 package example.jbot.slack;
 
 
-import me.ramswaroop.jbot.core.common.Controller;
-import me.ramswaroop.jbot.core.common.EventType;
-import me.ramswaroop.jbot.core.slack.Bot;
-import me.ramswaroop.jbot.core.slack.SlackService;
-import me.ramswaroop.jbot.core.slack.models.Event;
-import me.ramswaroop.jbot.core.slack.models.User;
+import com.rampatra.jbot.core.common.Controller;
+import com.rampatra.jbot.core.common.EventType;
+import com.rampatra.jbot.core.slack.Bot;
+import com.rampatra.jbot.core.slack.SlackService;
+import com.rampatra.jbot.core.slack.models.Event;
+import com.rampatra.jbot.core.slack.models.User;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * @author ramswaroop
+ * @author rampatra
  * @version 20/06/2016
  */
 @SpringBootTest
