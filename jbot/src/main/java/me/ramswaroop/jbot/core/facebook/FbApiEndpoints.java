@@ -30,7 +30,7 @@ public class FbApiEndpoints {
     }
 
     public String getFbSendUrl() {
-        return fbGraphApi + "/messages?access_token={PAGE_ACCESS_TOKEN}";
+        return fbGraphApi + "/me/messages?access_token={PAGE_ACCESS_TOKEN}";
     }
 
     public String getFbMessengerProfileUrl() {
