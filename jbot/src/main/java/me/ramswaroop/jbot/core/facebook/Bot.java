@@ -222,12 +222,12 @@ public abstract class Bot extends BaseBot {
     }
 
     /**
-     * Call this method to initialize a conversation without a previous interaction of the user.
+     * Call this method to send a message without a previous interaction of the user.
      *
      * @param userId id of user you want to send the message to
      * @param messageText message that you want to send to user
      */
-    protected final void initializeConversation(String userId, String messageText) {
+    protected final void sendMessageToUser(String userId, String messageText) {
         User user = new User().setId(userId);
         Message message = new Message().setText(messageText);
 
