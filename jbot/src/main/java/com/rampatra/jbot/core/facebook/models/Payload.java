@@ -13,10 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Payload {
 
     private String url;
-    @JsonProperty("coordinates.lat")
-    private String coordinatesLat;
-    @JsonProperty("coordinates.long")
-    private String coordinatesLong;
+    private Coordinates coordinates;
     @JsonProperty("is_reusable")
     private Boolean isReusable;
     @JsonProperty("attachment_id")
@@ -73,22 +70,12 @@ public class Payload {
         return this;
     }
 
-    public String getCoordinatesLat() {
-        return coordinatesLat;
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
-    public Payload setCoordinatesLat(String coordinatesLat) {
-        this.coordinatesLat = coordinatesLat;
-        return this;
-    }
-
-    public String getCoordinatesLong() {
-        return coordinatesLong;
-    }
-
-    public Payload setCoordinatesLong(String coordinatesLong) {
-        this.coordinatesLong = coordinatesLong;
-        return this;
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public Boolean isReusable() {
