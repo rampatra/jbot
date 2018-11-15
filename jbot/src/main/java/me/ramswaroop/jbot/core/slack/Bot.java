@@ -19,6 +19,7 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -310,6 +311,16 @@ public abstract class Bot extends BaseBot {
             manager.start();
         } else {
             logger.error("No web socket url returned by Slack.");
+        }
+    }
+
+    /**
+     * Shutdown ping scheduler when application shuts down.
+     */
+    @PreDestroy
+    public void destroy() {
+        if (pingScheduledExecutorService != null) {
+            pingScheduledExecutorService.shutdownNow();
         }
     }
 
