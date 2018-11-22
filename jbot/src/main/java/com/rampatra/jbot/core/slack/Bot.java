@@ -19,6 +19,7 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public abstract class Bot extends BaseBot {
 
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
+    private final Object sendMessageLock = new Object();
+
     /**
      * Service to access Slack APIs.
      */
@@ -52,6 +55,11 @@ public abstract class Bot extends BaseBot {
      * closing of web socket connection.
      */
     private PingTask pingTask;
+
+    /**
+     * Executor service which houses the ping task.
+     */
+    private ScheduledExecutorService pingScheduledExecutorService;
 
     /**
      * Class extending this must implement this as it's
@@ -129,8 +137,7 @@ public abstract class Bot extends BaseBot {
                         event.setType(EventType.DIRECT_MESSAGE.name());
                     }
                 } else if (event.getType().equalsIgnoreCase(EventType.HELLO.name())) {
-                    pingTask = new PingTask(session);
-                    pingAtRegularIntervals();
+                    pingAtRegularIntervals(session);
                 }
             } else { // slack does not send any TYPE for acknowledgement messages
                 event.setType(EventType.ACK.name());
@@ -163,7 +170,9 @@ public abstract class Bot extends BaseBot {
             if (reply.getChannel() == null && event.getChannelId() != null) {
                 reply.setChannel(event.getChannelId());
             }
-            session.sendMessage(new TextMessage(reply.toJSONString()));
+            synchronized (sendMessageLock) {
+                session.sendMessage(new TextMessage(reply.toJSONString()));
+            }
             if (logger.isDebugEnabled()) {  // For debugging purpose only
                 logger.debug("Reply (Message): {}", reply.toJSONString());
             }
@@ -305,10 +314,36 @@ public abstract class Bot extends BaseBot {
         }
     }
 
-    private void pingAtRegularIntervals() {
-        if (pingTask != null && !pingTask.isRunning()) {
-            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-            scheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
+    /**
+     * Shutdown ping scheduler when application shuts down.
+     */
+    @PreDestroy
+    public void destroy() {
+        if (pingScheduledExecutorService != null) {
+            pingScheduledExecutorService.shutdownNow();
+        }
+    }
+
+    private void pingAtRegularIntervals(WebSocketSession session) {
+        boolean resetPingTask = false;
+
+        if (pingTask == null) {
+            // Create ping task if not exists
+            pingTask = new PingTask(session);
+            resetPingTask = true;
+        } else if (pingTask.isRunning() && pingTask.isException()) {
+            // Reset ping task if it is throwing exceptions
+            pingTask = new PingTask(session);
+            resetPingTask = true;
+        }
+
+        if (resetPingTask) {
+            if (pingScheduledExecutorService != null) {
+                pingScheduledExecutorService.shutdownNow();
+            }
+
+            pingScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+            pingScheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
         }
     }
 
@@ -316,6 +351,7 @@ public abstract class Bot extends BaseBot {
 
         WebSocketSession webSocketSession;
         boolean isRunning;
+        boolean isException;
 
         PingTask(WebSocketSession webSocketSession) {
             this.webSocketSession = webSocketSession;
@@ -328,14 +364,22 @@ public abstract class Bot extends BaseBot {
                 isRunning = true;
                 Message message = new Message();
                 message.setType(EventType.PING.name().toLowerCase());
-                webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
+                synchronized (sendMessageLock) {
+                    webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
+                }
+                isException = false;
             } catch (Exception e) {
                 logger.error("Error pinging Slack. Slack bot may go offline when not active. Exception: ", e);
+                isException = true;
             }
         }
 
         boolean isRunning() {
             return isRunning;
+        }
+
+        boolean isException() {
+            return isException;
         }
     }
 }
