@@ -1,10 +1,10 @@
 package example.jbot.slack;
 
-import me.ramswaroop.jbot.core.common.Controller;
-import me.ramswaroop.jbot.core.common.EventType;
-import me.ramswaroop.jbot.core.common.JBot;
-import me.ramswaroop.jbot.core.slack.Bot;
-import me.ramswaroop.jbot.core.slack.models.Event;
+import com.rampatra.jbot.core.common.Controller;
+import com.rampatra.jbot.core.common.EventType;
+import com.rampatra.jbot.core.common.JBot;
+import com.rampatra.jbot.core.slack.Bot;
+import com.rampatra.jbot.core.slack.models.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
  * extending {@link Bot} class like this one. Though it is
  * recommended to create only bot per jbot instance.
  *
- * @author ramswaroop
+ * @author rampatra
  * @version 1.0.0, 05/06/2016
  */
 @JBot

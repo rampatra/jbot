@@ -9,9 +9,9 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     
-    <groupId>me.ramswaroop.jbot</groupId>
+    <groupId>com.rampatra.jbot</groupId>
     <artifactId>jbot-parent</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>JBot Parent</name>
@@ -27,9 +27,9 @@
         <developer>
             <id>ram</id>
             <name>Ram Patra</name>
-            <email>hi at ramswaroop.me</email>
-            <organization>Ramswaroop.me</organization>
-            <organizationUrl>http://www.ramswaroop.me</organizationUrl>
+            <email>hi at rampatra.com</email>
+            <organization>RamPatra.com</organization>
+            <organizationUrl>http://www.rampatra.com</organizationUrl>
         </developer>
     </developers>
 
@@ -54,7 +54,7 @@
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 

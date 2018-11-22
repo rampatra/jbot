@@ -1,10 +1,15 @@
 package example.jbot.facebook;
 
-import me.ramswaroop.jbot.core.common.Controller;
-import me.ramswaroop.jbot.core.common.EventType;
-import me.ramswaroop.jbot.core.common.JBot;
-import me.ramswaroop.jbot.core.facebook.Bot;
-import me.ramswaroop.jbot.core.facebook.models.*;
+import com.rampatra.jbot.core.common.Controller;
+import com.rampatra.jbot.core.common.EventType;
+import com.rampatra.jbot.core.common.JBot;
+import com.rampatra.jbot.core.facebook.Bot;
+import com.rampatra.jbot.core.facebook.models.Attachment;
+import com.rampatra.jbot.core.facebook.models.Button;
+import com.rampatra.jbot.core.facebook.models.Element;
+import com.rampatra.jbot.core.facebook.models.Event;
+import com.rampatra.jbot.core.facebook.models.Message;
+import com.rampatra.jbot.core.facebook.models.Payload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
@@ -13,7 +18,7 @@ import org.springframework.context.annotation.Profile;
  * extending {@link Bot} class like this one. Though it is
  * recommended to create only bot per jbot instance.
  * 
- * @author ramswaroop
+ * @author rampatra
  * @version 17/09/2016
  */
 @JBot
@@ -95,7 +100,7 @@ public class FbBot extends Bot {
     @Controller(events = EventType.MESSAGE, pattern = "(?i:button)")
     public void showButtons(Event event) {
         Button[] buttons = new Button[]{
-                new Button().setType("web_url").setUrl("http://blog.ramswaroop.me").setTitle("JBot Docs"),
+                new Button().setType("web_url").setUrl("http://blog.rampatra.com").setTitle("JBot Docs"),
                 new Button().setType("web_url").setUrl("https://goo.gl/uKrJWX").setTitle("Buttom Template")
         };
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
@@ -137,7 +142,7 @@ public class FbBot extends Bot {
     public void showGithubLink(Event event) {
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
                 .setTemplateType("button").setText("Bye. Happy coding!").setButtons(new Button[]{new Button()
-                        .setType("web_url").setTitle("View code").setUrl("https://github.com/ramswaroop/jbot")}))));
+                        .setType("web_url").setTitle("View code").setUrl("https://github.com/rampatra/jbot")}))));
     }
 
 
