@@ -27,6 +27,9 @@ public class SlackBot extends Bot {
 
     private static final Logger logger = LoggerFactory.getLogger(SlackBot.class);
 
+    @Value("${userId}")
+    private String userId;
+
     /**
      * Slack token from application.properties file. You can get your slack token
      * next <a href="https://my.slack.com/services/new/bot">creating a new bot</a>.
@@ -55,6 +58,7 @@ public class SlackBot extends Bot {
      */
     @Controller(events = {EventType.DIRECT_MENTION, EventType.DIRECT_MESSAGE})
     public void onReceiveDM(WebSocketSession session, Event event) {
+        if (!userId.isEmpty() && !event.getUserId().equals(userId)) return;
         reply(session, event, "Hi, I am " + slackService.getCurrentUser().getName());
     }
 
@@ -68,6 +72,7 @@ public class SlackBot extends Bot {
      */
     @Controller(events = EventType.MESSAGE, pattern = "^([a-z ]{2})(\\d+)([a-z ]{2})$")
     public void onReceiveMessage(WebSocketSession session, Event event, Matcher matcher) {
+        if (!userId.isEmpty() && !event.getUserId().equals(userId)) return;
         reply(session, event, "First group: " + matcher.group(0) + "\n" +
                 "Second group: " + matcher.group(1) + "\n" +
                 "Third group: " + matcher.group(2) + "\n" +
