@@ -21,6 +21,7 @@
     <modules>
         <module>jbot</module>
         <module>jbot-example</module>
+        <module>github-api</module>
     </modules>
 
     <developers>
