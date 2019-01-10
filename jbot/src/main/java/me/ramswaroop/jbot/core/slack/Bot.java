@@ -29,6 +29,7 @@ import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 /**
@@ -43,6 +44,17 @@ public abstract class Bot extends BaseBot {
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
 
     private final Object sendMessageLock = new Object();
+    private Function<String,String> messageEncoder = s ->
+            s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+
+    /**
+     * Encoder of messageText.
+     * To avoid encoding the identity-function can be applied: Function.identity()
+     * @param messageEncoder
+     */
+    public void setMessageEncoder(Function<String, String> messageEncoder) {
+        this.messageEncoder = messageEncoder;
+    }
 
     /**
      * Service to access Slack APIs.
@@ -288,7 +300,7 @@ public abstract class Bot extends BaseBot {
      * @return encoded message
      */
     private String encode(String message) {
-        return message == null ? null : message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        return message == null ? null : messageEncoder.apply(message);
     }
 
     private StandardWebSocketClient client() {
