@@ -64,7 +64,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Web socket manager
      */
-	private WebSocketConnectionManager manager;
+    private WebSocketConnectionManager webSocketManager;
 
     /**
      * Class extending this must implement this as it's
@@ -312,8 +312,8 @@ public abstract class Bot extends BaseBot {
 	protected void startRTMAndWebSocketConnection() {
 		slackService.connectRTM(getSlackToken());
 		if (slackService.getWebSocketUrl() != null) {
-			manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-			manager.start();
+			webSocketManager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+			webSocketManager.start();
 		} else {
 			logger.error("No web socket url returned by Slack.");
 		}
@@ -373,9 +373,9 @@ public abstract class Bot extends BaseBot {
 				isException = true;
 				if (!isOpen()) {
 					try {
-						manager.stop();
-					} catch (Throwable t) {
-						logger.error("Error closing websocket after failed ping. Exception: ", t);
+						webSocketManager.stop();
+					} catch (Exception innerException) {
+						logger.error("Error closing websocket after failed ping. Exception: ", innerException);
 					}
 					pingTask = null;
 					if (pingScheduledExecutorService != null) {
