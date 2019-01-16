@@ -374,7 +374,7 @@ public abstract class Bot extends BaseBot {
 				if (!isOpen()) {
 					try {
 						manager.stop();
-					} catch (Throwable t) {
+					} catch (Exception e) {
 						logger.error("Error closing websocket after failed ping. Exception: ", t);
 					}
 					pingTask = null;
