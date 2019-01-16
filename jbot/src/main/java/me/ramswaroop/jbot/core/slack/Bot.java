@@ -64,7 +64,7 @@ public abstract class Bot extends BaseBot {
     /**
      * Web socket manager
      */
-	private WebSocketConnectionManager manager;
+	private WebSocketConnectionManager webSocketManager;
 
     /**
      * Class extending this must implement this as it's
