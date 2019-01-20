@@ -62,6 +62,11 @@ public abstract class Bot extends BaseBot {
     private ScheduledExecutorService pingScheduledExecutorService;
 
     /**
+     * Web socket manager
+     */
+    private WebSocketConnectionManager webSocketManager;
+
+    /**
      * Class extending this must implement this as it's
      * required to make the initial RTM.start() call.
      *
@@ -307,8 +312,8 @@ public abstract class Bot extends BaseBot {
     protected void startRTMAndWebSocketConnection() {
         slackService.connectRTM(getSlackToken());
         if (slackService.getWebSocketUrl() != null) {
-            WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-            manager.start();
+            webSocketManager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+            webSocketManager.start();
         } else {
             logger.error("No web socket url returned by Slack.");
         }
@@ -324,34 +329,23 @@ public abstract class Bot extends BaseBot {
         }
     }
 
+    /**
+     * Starts the ping task. Note: It only gets called on HELLO event type.
+     *
+     * @param session
+     */
     private void pingAtRegularIntervals(WebSocketSession session) {
-        boolean resetPingTask = false;
-
-        if (pingTask == null) {
-            // Create ping task if not exists
-            pingTask = new PingTask(session);
-            resetPingTask = true;
-        } else if (pingTask.isRunning() && pingTask.isException()) {
-            // Reset ping task if it is throwing exceptions
-            pingTask = new PingTask(session);
-            resetPingTask = true;
+        pingTask = new PingTask(session);
+        if (pingScheduledExecutorService != null) {
+            pingScheduledExecutorService.shutdownNow();
         }
-
-        if (resetPingTask) {
-            if (pingScheduledExecutorService != null) {
-                pingScheduledExecutorService.shutdownNow();
-            }
-
-            pingScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-            pingScheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
-        }
+        pingScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        pingScheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
     }
 
     class PingTask implements Runnable {
 
         WebSocketSession webSocketSession;
-        boolean isRunning;
-        boolean isException;
 
         PingTask(WebSocketSession webSocketSession) {
             this.webSocketSession = webSocketSession;
@@ -361,25 +355,31 @@ public abstract class Bot extends BaseBot {
         public void run() {
             try {
                 logger.debug("Pinging Slack...");
-                isRunning = true;
                 Message message = new Message();
                 message.setType(EventType.PING.name().toLowerCase());
                 synchronized (sendMessageLock) {
                     webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
                 }
-                isException = false;
             } catch (Exception e) {
                 logger.error("Error pinging Slack. Slack bot may go offline when not active. Exception: ", e);
-                isException = true;
+                if (!isWebSocketSessionOpen()) {
+                    try {
+                        webSocketManager.stop();
+                    } catch (Exception innerException) {
+                        logger.error("Error closing websocket after failed ping. Exception: ", innerException);
+                    }
+                    pingTask = null;
+                    if (pingScheduledExecutorService != null) {
+                        pingScheduledExecutorService.shutdownNow();
+                    }
+                    pingScheduledExecutorService = null;
+                    startRTMAndWebSocketConnection();
+                }
             }
         }
 
-        boolean isRunning() {
-            return isRunning;
-        }
-
-        boolean isException() {
-            return isException;
+        boolean isWebSocketSessionOpen() {
+            return pingTask != null && webSocketSession.isOpen();
         }
     }
 }
