@@ -304,27 +304,20 @@ public abstract class Bot extends BaseBot {
         return new BotWebSocketHandler(getSlackBot());
     }
 
-	/**
-	 * Entry point where the web socket connection starts
-	 * and after which your bot becomes live.
-	 */
-	@PostConstruct
-	protected void startRTMAndWebSocketConnection() {
-		slackService.connectRTM(getSlackToken());
-		if (slackService.getWebSocketUrl() != null) {
-			webSocketManager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
-			webSocketManager.start();
-		} else {
-			logger.error("No web socket url returned by Slack.");
-		}
-	}
-
-	/**
-	 * Is websocket open
-	 */
-	protected boolean isOpen() {
-		return pingTask != null && pingTask.isConnected();
-	}
+    /**
+     * Entry point where the web socket connection starts
+     * and after which your bot becomes live.
+     */
+    @PostConstruct
+    protected void startRTMAndWebSocketConnection() {
+        slackService.connectRTM(getSlackToken());
+        if (slackService.getWebSocketUrl() != null) {
+            webSocketManager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
+            webSocketManager.start();
+        } else {
+            logger.error("No web socket url returned by Slack.");
+        }
+    }
 
     /**
      * Shutdown ping scheduler when application shuts down.
@@ -336,67 +329,57 @@ public abstract class Bot extends BaseBot {
         }
     }
 
-	private void pingAtRegularIntervals(WebSocketSession session) {
-		// only get called on hello response (connect)
-		pingTask = new PingTask(session);
-		if (pingScheduledExecutorService != null) {
-			pingScheduledExecutorService.shutdownNow();
-		}
-		pingScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		pingScheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
+    /**
+     * Starts the ping task. Note: It only gets called on HELLO event type.
+     *
+     * @param session
+     */
+    private void pingAtRegularIntervals(WebSocketSession session) {
+        pingTask = new PingTask(session);
+        if (pingScheduledExecutorService != null) {
+            pingScheduledExecutorService.shutdownNow();
+        }
+        pingScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        pingScheduledExecutorService.scheduleAtFixedRate(pingTask, 1L, 30L, TimeUnit.SECONDS);
+    }
 
-	}
+    class PingTask implements Runnable {
 
-	class PingTask implements Runnable {
+        WebSocketSession webSocketSession;
 
-		WebSocketSession webSocketSession;
-		boolean isRunning;
-		boolean isException;
+        PingTask(WebSocketSession webSocketSession) {
+            this.webSocketSession = webSocketSession;
+        }
 
-		PingTask(WebSocketSession webSocketSession) {
-			this.webSocketSession = webSocketSession;
-		}
+        @Override
+        public void run() {
+            try {
+                logger.debug("Pinging Slack...");
+                Message message = new Message();
+                message.setType(EventType.PING.name().toLowerCase());
+                synchronized (sendMessageLock) {
+                    webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
+                }
+            } catch (Exception e) {
+                logger.error("Error pinging Slack. Slack bot may go offline when not active. Exception: ", e);
+                if (!isWebSocketSessionOpen()) {
+                    try {
+                        webSocketManager.stop();
+                    } catch (Exception innerException) {
+                        logger.error("Error closing websocket after failed ping. Exception: ", innerException);
+                    }
+                    pingTask = null;
+                    if (pingScheduledExecutorService != null) {
+                        pingScheduledExecutorService.shutdownNow();
+                    }
+                    pingScheduledExecutorService = null;
+                    startRTMAndWebSocketConnection();
+                }
+            }
+        }
 
-		@Override
-		public void run() {
-			try {
-				logger.debug("Pinging Slack...");
-				isRunning = true;
-				Message message = new Message();
-				message.setType(EventType.PING.name().toLowerCase());
-				synchronized (sendMessageLock) {
-					webSocketSession.sendMessage(new TextMessage(message.toJSONString()));
-				}
-				isException = false;
-			} catch (Exception e) {
-				logger.error("Error pinging Slack. Slack bot may go offline when not active. Exception: ", e);
-				isException = true;
-				if (!isOpen()) {
-					try {
-						webSocketManager.stop();
-					} catch (Exception innerException) {
-						logger.error("Error closing websocket after failed ping. Exception: ", innerException);
-					}
-					pingTask = null;
-					if (pingScheduledExecutorService != null) {
-						pingScheduledExecutorService.shutdownNow();
-					}
-					pingScheduledExecutorService = null;
-					startRTMAndWebSocketConnection();
-				}
-			}
-		}
-
-		boolean isConnected() {
-			return webSocketSession.isOpen();
-		}
-
-		boolean isRunning() {
-			return isRunning;
-		}
-
-		boolean isException() {
-			return isException;
-		}
-	}
+        boolean isWebSocketSessionOpen() {
+            return pingTask != null && webSocketSession.isOpen();
+        }
+    }
 }
