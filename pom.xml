@@ -11,7 +11,7 @@
     
     <groupId>me.ramswaroop.jbot</groupId>
     <artifactId>jbot-parent</artifactId>
-    <version>4.1.3-rc.1-SNAPSHOT</version>
+    <version>4.1.2-rc.2</version>
     <packaging>pom</packaging>
 
     <name>JBot Parent</name>
@@ -44,7 +44,7 @@
         <url>https://github.com/rampatra/jbot</url>
         <connection>scm:git:git://github.com/rampatra/jbot.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/rampatra/jbot.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>jbot-4.1.2-rc.2</tag>
     </scm>
 
     <distributionManagement>
