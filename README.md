@@ -73,8 +73,8 @@ Read the detailed [Facebook documentation](/docs/facebook/README-Facebook-JBot-4
 
 ## Contributors
 
-This project exists thanks to all the awesome people who contribute. If you want to flaunt your skills or make 
-the project even better, [you can start contributing](/CONTRIBUTING.md) and for any queries please just 
+This project exists thanks to all the awesome people who contribute. If you want to flaunt your skills and make 
+the project better, [you can start contributing](/CONTRIBUTING.md), and for any queries please just 
 [raise an issue](https://github.com/rampatra/jbot/issues) and I would be more than happy to discuss :)
 
 <a href="graphs/contributors"><img src="https://opencollective.com/jbot/contributors.svg?width=890" /></a>
