@@ -92,10 +92,10 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <table border="0">
   <tr>
     <td>
-      <a href="https://www.jetbrains.com" target="_blank"><img src="https://svgshare.com/i/6AL.svg"></a>
+      <a href="https://www.jetbrains.com?from=JBot" target="_blank"><img src="https://svgshare.com/i/6AL.svg"></a>
     </td>
     <td>
-      <a href="https://www.yourkit.com" target="_blank"><img src="https://www.yourkit.com/images/yklogo.png"></a>
+      <a href="https://www.yourkit.com?from=JBot" target="_blank"><img src="https://www.yourkit.com/images/yklogo.png"></a>
     </td>
   </tr>
  </table>
