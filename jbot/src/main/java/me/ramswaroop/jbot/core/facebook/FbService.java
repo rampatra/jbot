@@ -13,10 +13,10 @@ import org.springframework.web.client.RestTemplate;
 public class FbService {
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Autowired
-    FbApiEndpoints fbApiEndpoints;
+    private FbApiEndpoints fbApiEndpoints;
 
     public User getUser(String id, String pageAccessToken) {
         return restTemplate.getForEntity(fbApiEndpoints.getUserApi(), User.class, id, pageAccessToken).getBody();
