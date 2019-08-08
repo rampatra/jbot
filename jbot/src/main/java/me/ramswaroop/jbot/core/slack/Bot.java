@@ -102,7 +102,7 @@ public abstract class Bot extends BaseBot {
      * @see WebSocketHandler#afterConnectionClosed
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        logger.debug("WebSocket closed: {}, Close Status: {}", session, status.toString());
+        logger.debug("WebSocket closed: {}, Close Status: {}", session, status);
     }
 
     /**
@@ -113,7 +113,7 @@ public abstract class Bot extends BaseBot {
      * @see WebSocketHandler#handleTransportError
      */
     public void handleTransportError(WebSocketSession session, Throwable exception) {
-        logger.error("Transport Error: ", exception);
+        logger.error("Transport Error for session with id [{}]: ", session.getId(), exception);
     }
 
     /**
