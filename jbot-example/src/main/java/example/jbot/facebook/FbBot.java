@@ -51,7 +51,7 @@ public class FbBot extends Bot {
     public void init() {
         setGetStartedButton("hi");
         setGreetingText(new Payload[]{new Payload().setLocale("default").setText("JBot is a Java Framework to help" +
-                " developers make Facebook, Slack and Twitter bots easily. You can see a quick demo by clicking " +
+                " developers make Facebook, and Slack bots easily. You can see a quick demo by clicking " +
                 "the \"Get Started\" button.")});
     }
 
