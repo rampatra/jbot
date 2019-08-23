@@ -8,11 +8,13 @@ import me.ramswaroop.jbot.core.facebook.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
+import javax.annotation.PostConstruct;
+
 /**
  * A simple Facebook Bot. You can create multiple bots by just
  * extending {@link Bot} class like this one. Though it is
  * recommended to create only bot per jbot instance.
- * 
+ *
  * @author ramswaroop
  * @version 17/09/2016
  */
@@ -44,7 +46,7 @@ public class FbBot extends Bot {
 
     /**
      * Sets the "Get Started" button with a payload "hi". It also set the "Greeting Text" which the user sees when it
-     * opens up the chat window. Uncomment the {@code @PostConstruct} annotation only after you have verified your 
+     * opens up the chat window. Uncomment the {@code @PostConstruct} annotation only after you have verified your
      * webhook.
      */
     //@PostConstruct
@@ -52,7 +54,7 @@ public class FbBot extends Bot {
         setGetStartedButton("hi");
         setGreetingText(new Payload[]{new Payload().setLocale("default").setText("JBot is a Java Framework to help" +
                 " developers make Facebook, and Slack bots easily. You can see a quick demo by clicking " +
-                "the \"Get Started\" button.")});
+                "the \"Get Started\" button or just typing \"Hi\".")});
     }
 
     /**
