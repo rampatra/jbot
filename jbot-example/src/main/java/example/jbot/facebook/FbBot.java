@@ -82,7 +82,7 @@ public class FbBot extends Bot {
     @Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
     public void onReceiveQuickReply(Event event) {
         if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
-            reply(event, "Cool! You can type: \n 1) Show Buttons \n 2) Show List \n 3) Setup meeting");
+            reply(event, "Cool! You can type: \n - Show Buttons \n - Show List \n - Setup meeting");
         } else {
             reply(event, "See you soon!");
         }
@@ -94,7 +94,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "(?i:button|1)")
+    @Controller(events = EventType.MESSAGE, pattern = "(?i:button)")
     public void showButtons(Event event) {
         Button[] buttons = new Button[]{
                 new Button().setType("web_url").setUrl("http://blog.ramswaroop.me").setTitle("JBot Docs"),
@@ -110,7 +110,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "(?i:list|2)")
+    @Controller(events = EventType.MESSAGE, pattern = "(?i:list)")
     public void showList(Event event) {
         Element[] elements = new Element[]{
                 new Element().setTitle("AnimateScroll").setSubtitle("A jQuery Plugin for Animating Scroll.")
@@ -153,7 +153,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(pattern = "(?i)(setup meeting|3)", next = "confirmTiming")
+    @Controller(pattern = "(?i)(setup meeting)", next = "confirmTiming")
     public void setupMeeting(Event event) {
         startConversation(event, "confirmTiming");   // start conversation
         reply(event, "Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
