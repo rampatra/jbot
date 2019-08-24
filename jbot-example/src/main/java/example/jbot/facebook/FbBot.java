@@ -94,7 +94,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "(?i:button)")
+    @Controller(events = EventType.MESSAGE, pattern = "(?i:button|1)")
     public void showButtons(Event event) {
         Button[] buttons = new Button[]{
                 new Button().setType("web_url").setUrl("http://blog.ramswaroop.me").setTitle("JBot Docs"),
@@ -110,7 +110,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(events = EventType.MESSAGE, pattern = "(?i:list)")
+    @Controller(events = EventType.MESSAGE, pattern = "(?i:list|2)")
     public void showList(Event event) {
         Element[] elements = new Element[]{
                 new Element().setTitle("AnimateScroll").setSubtitle("A jQuery Plugin for Animating Scroll.")
@@ -153,7 +153,7 @@ public class FbBot extends Bot {
      *
      * @param event
      */
-    @Controller(pattern = "(?i)(setup meeting)", next = "confirmTiming")
+    @Controller(pattern = "(?i)(setup meeting|3)", next = "confirmTiming")
     public void setupMeeting(Event event) {
         startConversation(event, "confirmTiming");   // start conversation
         reply(event, "Cool! At what time (ex. 15:30) do you want me to set up the meeting?");
