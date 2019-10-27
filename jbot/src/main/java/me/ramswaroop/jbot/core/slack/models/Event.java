@@ -1,5 +1,6 @@
 package me.ramswaroop.jbot.core.slack.models;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -9,10 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by ramswaroop on 10/06/2016.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties()
 public class Event {
 
     private static final Logger logger = LoggerFactory.getLogger(Event.class);
@@ -82,6 +86,8 @@ public class Event {
     private Attachment[] attachments;
     @JsonProperty("response_metadata")
     private ResponseMetadata responseMetadata;
+
+    private Map<String, Object> properties = new HashMap<>();
 
     public int getId() {
         return id;
@@ -510,4 +516,14 @@ public class Event {
     public void setResponseMetadata(ResponseMetadata responseMetadata) {
         this.responseMetadata = responseMetadata;
     }
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    @JsonAnySetter
+    public void setProperty(String name, Object value) {
+        properties.put(name, value);
+    }
+
 }
