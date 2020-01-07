@@ -28,7 +28,7 @@ can make your bot live right away.
 
 **Running your SlackBot is just 4 easy steps:**
   
-1. Clone this project `$ git clone git@github.com:rampatra/jbot.git`.  
+1. Clone this project `$ git clone https://github.com/rampatra/jbot.git`.  
 2. [Create a slack bot](https://my.slack.com/services/new/bot) and get your slack token.  
 3. Paste the token in [application.properties](/jbot-example/src/main/resources/application.properties) file.  
 4. Run the example application by running `JBotApplication` in your IDE or via commandline: 
