@@ -1,6 +1,0 @@
-language: java
-jdk:
-  - openjdk8
-sudo: false
-install: true
-script: mvn clean install
