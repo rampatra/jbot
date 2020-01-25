@@ -1,1 +1,1 @@
-Implementation of [JBot](https://github.com/rampatra/jbot) in Kotlin with Gradle.
+Kotlin Slack bot using [JBot](https://github.com/rampatra/jbot).

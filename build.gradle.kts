@@ -13,7 +13,8 @@ plugins {
 
 dependencies {
     implementation("me.ramswaroop.jbot:jbot:4.1.2-rc.2")
-    implementation("org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE")
+    implementation("org.springframework.boot:spring-boot-dependencies:1.4.0.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-parent:1.4.0.RELEASE")
     implementation(kotlin("stdlib-jdk8"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE")
