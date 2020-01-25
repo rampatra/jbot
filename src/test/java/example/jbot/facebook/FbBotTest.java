@@ -1,6 +1,7 @@
 package example.jbot.facebook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.facebook.Bot;
@@ -16,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.rule.OutputCapture;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
