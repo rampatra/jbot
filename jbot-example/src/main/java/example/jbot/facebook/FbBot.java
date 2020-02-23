@@ -84,7 +84,7 @@ public class FbBot extends Bot {
         if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
             reply(event, "Cool! You can type: \n - Show Buttons \n - Show List \n - Setup meeting");
         } else {
-            reply(event, "See you soon!");
+            reply(event, "No worries, see you soon!");
         }
     }
 
@@ -97,7 +97,7 @@ public class FbBot extends Bot {
     @Controller(events = EventType.MESSAGE, pattern = "(?i:button)")
     public void showButtons(Event event) {
         Button[] buttons = new Button[]{
-                new Button().setType("web_url").setUrl("http://blog.ramswaroop.me").setTitle("JBot Docs"),
+                new Button().setType("web_url").setUrl("https://blog.rampatra.com/how-to-make-facebook-bots-in-java").setTitle("JBot Docs"),
                 new Button().setType("web_url").setUrl("https://goo.gl/uKrJWX").setTitle("Buttom Template")
         };
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
@@ -139,7 +139,7 @@ public class FbBot extends Bot {
     public void showGithubLink(Event event) {
         reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(new Payload()
                 .setTemplateType("button").setText("Bye. Happy coding!").setButtons(new Button[]{new Button()
-                        .setType("web_url").setTitle("View code").setUrl("https://github.com/ramswaroop/jbot")}))));
+                        .setType("web_url").setTitle("View Docs").setUrl("https://blog.rampatra.com/how-to-make-facebook-bots-in-java")}))));
     }
 
 
