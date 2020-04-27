@@ -42,6 +42,19 @@ public abstract class BaseBot {
      */
     public BaseBot() {
         Method[] methods = this.getClass().getMethods();
+
+        // Gather conversation methods first to prevent these from using as event methods
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Controller.class)) {
+                Controller controller = method.getAnnotation(Controller.class);
+                String next = controller.next();
+
+                if (!StringUtils.isEmpty(next)) {
+                    conversationMethodNames.add(next);
+                }
+            }
+        }
+
         for (Method method : methods) {
             if (method.isAnnotationPresent(Controller.class)) {
                 Controller controller = method.getAnnotation(Controller.class);
@@ -49,10 +62,6 @@ public abstract class BaseBot {
                 String pattern = controller.pattern();
                 int patternFlags = controller.patternFlags();
                 String next = controller.next();
-
-                if (!StringUtils.isEmpty(next)) {
-                    conversationMethodNames.add(next);
-                }
 
                 MethodWrapper methodWrapper = new MethodWrapper();
                 methodWrapper.setMethod(method);
