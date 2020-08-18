@@ -63,7 +63,7 @@ public class SlackService {
         try {
             Event event = restTemplate.getForEntity(slackApiEndpoints.getImListApi(), Event.class,
                     slackToken, limit, nextCursor).getBody();
-            imChannelIds.addAll(Arrays.stream(event.getIms()).map(Channel::getId).collect(Collectors.toList()));
+            imChannelIds.addAll(Arrays.stream(event.getChannels()).map(Channel::getId).collect(Collectors.toList()));
             if (event.getResponseMetadata() != null &&
                     !StringUtils.isEmpty(event.getResponseMetadata().getNextCursor())) {
                 Thread.sleep(5000L); // sleep because its a tier 2 api which allows only 20 calls per minute

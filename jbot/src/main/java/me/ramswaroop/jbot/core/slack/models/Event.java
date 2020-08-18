@@ -37,7 +37,7 @@ public class Event {
     @JsonProperty("pinned_to")
     private String[] pinnedTo;
     private Channel channel;
-    private Channel[] ims;
+    private Channel[] channels;
     private Item item;
     private Bot bot;
     private File file;
@@ -179,12 +179,12 @@ public class Event {
         this.channel = channel;
     }
 
-    public Channel[] getIms() {
-        return ims;
+    public Channel[] getChannels() {
+        return channels;
     }
 
-    public void setIms(Channel[] ims) {
-        this.ims = ims;
+    public void setChannels(Channel[] channels) {
+        this.channels = channels;
     }
 
     public Item getItem() {

@@ -20,6 +20,6 @@ public class SlackApiEndpoints {
     }
 
     public String getImListApi() {
-        return slackApi + "/im.list?token={token}&limit={limit}&next_cursor={cursor}";
+        return slackApi + "/conversations.list?token={token}&limit={limit}&cursor={cursor}&types=im";
     }
 }
