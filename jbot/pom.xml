@@ -5,11 +5,11 @@
     <parent>
         <groupId>me.ramswaroop.jbot</groupId>
         <artifactId>jbot-parent</artifactId>
-        <version>4.1.2-rc.3-SNPLOW</version>
+        <version>4.1.2-rc.4-SNPLOW</version>
     </parent>
 
     <artifactId>jbot</artifactId>
-    <version>4.1.2-rc.3-SNPLOW</version>
+    <version>4.1.2-rc.4-SNPLOW</version>
     <packaging>jar</packaging>
 
     <name>JBot</name>
