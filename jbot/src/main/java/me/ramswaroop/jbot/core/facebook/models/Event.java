@@ -305,4 +305,22 @@ public class Event {
             return null;
         }
     }
+
+    /**
+     * Match the pattern with different attributes based on the event type.
+     *
+     * @return the pattern string
+     */
+    public String getPatternFromEventType() {
+        switch (getType()) {
+            case MESSAGE:
+                return getMessage().getText();
+            case QUICK_REPLY:
+                return getMessage().getQuickReply().getPayload();
+            case POSTBACK:
+                return getPostback().getPayload();
+            default:
+                return getMessage().getText();
+        }
+    }
 }
