@@ -54,11 +54,7 @@ public abstract class BaseBot {
                     conversationMethodNames.add(next);
                 }
 
-                MethodWrapper methodWrapper = new MethodWrapper();
-                methodWrapper.setMethod(method);
-                methodWrapper.setPattern(pattern);
-                methodWrapper.setPatternFlags(patternFlags);
-                methodWrapper.setNext(next);
+                MethodWrapper methodWrapper = getMethodWrapper(method, pattern, patternFlags, next);
 
                 if (!conversationMethodNames.contains(method.getName())) {
                     for (EventType eventType : eventTypes) {
@@ -75,6 +71,15 @@ public abstract class BaseBot {
                 methodNameMap.put(method.getName(), methodWrapper);
             }
         }
+    }
+
+    private MethodWrapper getMethodWrapper(Method method, String pattern, int patternFlags, String next) {
+        MethodWrapper methodWrapper = new MethodWrapper();
+        methodWrapper.setMethod(method);
+        methodWrapper.setPattern(pattern);
+        methodWrapper.setPatternFlags(patternFlags);
+        methodWrapper.setNext(next);
+        return methodWrapper;
     }
 
     protected void startConversation(String id, String methodName) {
