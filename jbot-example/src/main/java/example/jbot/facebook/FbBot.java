@@ -35,7 +35,7 @@ public class FbBot extends Bot {
     private String pageAccessToken;
 
     @Override
-    public String getFbToken() {
+    public String getToken() {
         return fbToken;
     }
 

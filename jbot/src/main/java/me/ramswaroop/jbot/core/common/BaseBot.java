@@ -26,6 +26,15 @@ public abstract class BaseBot {
      * A Map of all methods annotated with {@link Controller} where key is the {@link Method#getName()} and
      * value is the respective {@link MethodWrapper}.
      */
+
+    /**
+     * Class extending this must implement this as it's
+     * required to make the initial RTM.start() call.
+     *
+     * @return the token of the bot
+     */
+    public abstract String getToken();
+
     private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
     /**
      * A List of names of the methods which are part of any conversation.

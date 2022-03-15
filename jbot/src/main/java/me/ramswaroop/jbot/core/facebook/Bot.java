@@ -47,13 +47,8 @@ public abstract class Bot extends BaseBot {
                 getPageAccessToken());
     }
 
-    /**
-     * Class extending this must implement this as it's
-     * required to setup the webhook.
-     *
-     * @return facebook token
-     */
-    public abstract String getFbToken();
+
+
 
     /**
      * Class extending this must implement this as it's
@@ -73,7 +68,7 @@ public abstract class Bot extends BaseBot {
     public final ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
                                                          @RequestParam("hub.verify_token") String verifyToken,
                                                          @RequestParam("hub.challenge") String challenge) {
-        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getFbToken().equals(verifyToken)) {
+        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getToken().equals(verifyToken)) {
             return ResponseEntity.ok(challenge);
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

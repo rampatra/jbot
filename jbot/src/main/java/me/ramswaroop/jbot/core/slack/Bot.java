@@ -66,13 +66,8 @@ public abstract class Bot extends BaseBot {
      */
     private WebSocketConnectionManager webSocketManager;
 
-    /**
-     * Class extending this must implement this as it's
-     * required to make the initial RTM.start() call.
-     *
-     * @return the slack token of the bot
-     */
-    public abstract String getSlackToken();
+
+
 
     /**
      * An instance of the Bot is required by
@@ -310,7 +305,7 @@ public abstract class Bot extends BaseBot {
      */
     @PostConstruct
     protected void startRTMAndWebSocketConnection() {
-        slackService.connectRTM(getSlackToken());
+        slackService.connectRTM(getToken());
         if (slackService.getWebSocketUrl() != null) {
             webSocketManager = new WebSocketConnectionManager(client(), handler(), slackService.getWebSocketUrl());
             webSocketManager.start();
