@@ -11,11 +11,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Passenger {
-
-    private final Ticket ticket = new Ticket();
+    
     private String name;
+    @JsonProperty("ticket_number")
+    private String ticketNumber;
     @JsonProperty("passenger_id")
     private String passengerId;
+    @JsonProperty("segment_id")
+    private String segmentId;
+    private String seat;
+    @JsonProperty("seat_type")
+    private String seatType;
 
     public String getName() {
         return name;
@@ -27,11 +33,11 @@ public class Passenger {
     }
 
     public String getTicketNumber() {
-        return ticket.getTicketNumber();
+        return ticketNumber;
     }
 
     public Passenger setTicketNumber(String ticketNumber) {
-        this.ticket.ticketNumber = ticketNumber;
+        this.ticketNumber = ticketNumber;
         return this;
     }
 
@@ -45,29 +51,29 @@ public class Passenger {
     }
 
     public String getSegmentId() {
-        return ticket.getSegmentId();
+        return segmentId;
     }
 
     public Passenger setSegmentId(String segmentId) {
-        this.ticket.segmentId = segmentId;
+        this.segmentId = segmentId;
         return this;
     }
 
     public String getSeat() {
-        return ticket.getSeat();
+        return seat;
     }
 
     public Passenger setSeat(String seat) {
-        this.ticket.seat = seat;
+        this.seat = seat;
         return this;
     }
 
     public String getSeatType() {
-        return ticket.getSeatType();
+        return seatType;
     }
 
     public Passenger setSeatType(String seatType) {
-        this.ticket.seatType = seatType;
+        this.seatType = seatType;
         return this;
     }
 }
