@@ -26,6 +26,15 @@ public abstract class BaseBot {
      * A Map of all methods annotated with {@link Controller} where key is the {@link Method#getName()} and
      * value is the respective {@link MethodWrapper}.
      */
+
+    /**
+     * Class extending this must implement this as it's
+     * required to make the initial RTM.start() call.
+     *
+     * @return the token of the bot
+     */
+    public abstract String getToken();
+
     private final Map<String, MethodWrapper> methodNameMap = new HashMap<>();
     /**
      * A List of names of the methods which are part of any conversation.
@@ -54,11 +63,7 @@ public abstract class BaseBot {
                     conversationMethodNames.add(next);
                 }
 
-                MethodWrapper methodWrapper = new MethodWrapper();
-                methodWrapper.setMethod(method);
-                methodWrapper.setPattern(pattern);
-                methodWrapper.setPatternFlags(patternFlags);
-                methodWrapper.setNext(next);
+                MethodWrapper methodWrapper = getMethodWrapper(method, pattern, patternFlags, next);
 
                 if (!conversationMethodNames.contains(method.getName())) {
                     for (EventType eventType : eventTypes) {
@@ -75,6 +80,15 @@ public abstract class BaseBot {
                 methodNameMap.put(method.getName(), methodWrapper);
             }
         }
+    }
+
+    private MethodWrapper getMethodWrapper(Method method, String pattern, int patternFlags, String next) {
+        MethodWrapper methodWrapper = new MethodWrapper();
+        methodWrapper.setMethod(method);
+        methodWrapper.setPattern(pattern);
+        methodWrapper.setPatternFlags(patternFlags);
+        methodWrapper.setNext(next);
+        return methodWrapper;
     }
 
     protected void startConversation(String id, String methodName) {

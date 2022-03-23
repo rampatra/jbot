@@ -129,7 +129,7 @@ public class FbBotTest {
      */
     public static class TestBot extends Bot {
         @Override
-        public String getFbToken() {
+        public String getToken() {
             return "fb_token";
         }
 

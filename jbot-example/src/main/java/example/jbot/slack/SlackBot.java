@@ -35,7 +35,7 @@ public class SlackBot extends Bot {
     private String slackToken;
 
     @Override
-    public String getSlackToken() {
+    public String getToken() {
         return slackToken;
     }
 

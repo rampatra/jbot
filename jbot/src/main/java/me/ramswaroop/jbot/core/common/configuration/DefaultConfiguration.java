@@ -17,7 +17,7 @@ public class DefaultConfiguration {
      */
     @ConditionalOnMissingBean
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate createDefaultRestTemplate() {
         LOGGER.info("There are no any rest template beans defined, creating default rest template...");
 
         return new RestTemplate();

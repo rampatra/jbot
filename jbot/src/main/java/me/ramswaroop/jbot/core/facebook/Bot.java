@@ -7,7 +7,6 @@ import me.ramswaroop.jbot.core.facebook.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -48,13 +47,8 @@ public abstract class Bot extends BaseBot {
                 getPageAccessToken());
     }
 
-    /**
-     * Class extending this must implement this as it's
-     * required to setup the webhook.
-     *
-     * @return facebook token
-     */
-    public abstract String getFbToken();
+
+
 
     /**
      * Class extending this must implement this as it's
@@ -74,7 +68,7 @@ public abstract class Bot extends BaseBot {
     public final ResponseEntity setupWebhookVerification(@RequestParam("hub.mode") String mode,
                                                          @RequestParam("hub.verify_token") String verifyToken,
                                                          @RequestParam("hub.challenge") String challenge) {
-        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getFbToken().equals(verifyToken)) {
+        if (EventType.SUBSCRIBE.name().equalsIgnoreCase(mode) && getToken().equals(verifyToken)) {
             return ResponseEntity.ok(challenge);
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -271,7 +265,7 @@ public abstract class Bot extends BaseBot {
 
             methodWrappers = new ArrayList<>(methodWrappers);
             MethodWrapper matchedMethod =
-                    getMethodWithMatchingPatternAndFilterUnmatchedMethods(getPatternFromEventType(event), methodWrappers);
+                    getMethodWithMatchingPatternAndFilterUnmatchedMethods(event.getPatternFromEventType(), methodWrappers);
             if (matchedMethod != null) {
                 methodWrappers = new ArrayList<>();
                 methodWrappers.add(matchedMethod);
@@ -315,22 +309,6 @@ public abstract class Bot extends BaseBot {
         }
     }
 
-    /**
-     * Match the pattern with different attributes based on the event type.
-     *
-     * @param event received from facebook
-     * @return the pattern string
-     */
-    private String getPatternFromEventType(Event event) {
-        switch (event.getType()) {
-            case MESSAGE:
-                return event.getMessage().getText();
-            case QUICK_REPLY:
-                return event.getMessage().getQuickReply().getPayload();
-            case POSTBACK:
-                return event.getPostback().getPayload();
-            default:
-                return event.getMessage().getText();
-        }
-    }
 }
+
+
