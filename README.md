@@ -45,7 +45,7 @@ Read the detailed [Slack documentation](https://blog.rampatra.com/how-to-make-a-
 
 ## JBot for Facebook
 
-**Similar to Slack, Facebook is simple too but has few extra steps:**
+**Similar to Slack, Facebook is simple too but has a few extra steps:**
 
 1. Clone this project `$ git clone git@github.com:rampatra/jbot.git`.
 2. Create a [facebook app](https://developers.facebook.com/docs/apps/register#create-app) and a 
