@@ -66,8 +66,8 @@ as `fb_token_for_jbot` and click "Verify and Save".
 
 You can now start messaging your bot by going to the facebook page and clicking on the "Send message" button. 
 
-_If you're too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
-[JBot facebook page](https://www.facebook.com/jbotframework/) and clicking on the "Send Message" button._
+~_If you're too lazy to start now and just want to play around, you can try `jbot-example` by visiting 
+[JBot facebook page](https://www.facebook.com/jbotframework/) and clicking on the "Send Message" button._~ -- The server is currently down
 
 Read the detailed [Facebook documentation](https://blog.rampatra.com/how-to-make-facebook-bots-in-java) to learn more.
 
