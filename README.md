@@ -110,6 +110,6 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/jbot/sponsor/1/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/1/avatar.svg"></a>
 -->
 
-<hr></hr>
+---
 
 _P.S. If my open-source project(s) benefitted you in some way or the other, a follow on [Twitter](https://twitter.com/ram__patra) would be greatly appreciated 🙇‍♂️._
