@@ -13,9 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.boot.test.system.OutputCaptureRule;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -47,7 +47,7 @@ public class SlackBotTest {
     private TestBot bot;
 
     @Rule
-    public OutputCapture capture = new OutputCapture();
+    public OutputCaptureRule capture = new OutputCaptureRule();
 
     @Before
     public void init() {
@@ -58,7 +58,6 @@ public class SlackBotTest {
         // set rtm
         when(slackService.getImChannelIds()).thenReturn(Arrays.asList("D1E79BACV", "C0NDSV5B8"));
         when(slackService.getCurrentUser()).thenReturn(user);
-        when(slackService.getWebSocketUrl()).thenReturn("");
     }
 
     @Test

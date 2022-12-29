@@ -11,9 +11,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.boot.test.system.OutputCaptureRule;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +38,7 @@ public class FbBotTest {
     private TestBot bot;
 
     @Rule
-    public OutputCapture capture = new OutputCapture();
+    public OutputCaptureRule capture = new OutputCaptureRule();
     
     @Test
     public void When_PostbackInCallback_Then_InvokeOnReceivePostback() throws IOException {
