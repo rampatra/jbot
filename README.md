@@ -95,6 +95,9 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
       <a href="https://presentifyapp.com/" target="_blank"><img src="https://presentifyapp.com/assets/img/presentify/app-icon-512.png" width="150" height="150"></a>
     </td>
     <td>
+        <a href="https://todobarapp.com/" target="_blank"><img src="https://todobarapp.com/assets/img/todobar/app-icon-512.png" width="150" height="150"></a>
+    </td>
+    <td>
       <a href="https://www.jetbrains.com?from=JBot" target="_blank"><img src="https://svgshare.com/i/6AL.svg"></a>
     </td>
     <td>
