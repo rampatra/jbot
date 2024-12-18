@@ -79,15 +79,9 @@ the project better, [you can start contributing](/CONTRIBUTING.md), and for any 
 
 <a href="graphs/contributors"><img src="https://opencollective.com/jbot/contributors.svg?width=890" /></a>
 
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/jbot#backers)]
-
-<a href="https://opencollective.com/jbot#backers" target="_blank"><img src="https://opencollective.com/jbot/backers.svg?width=890"></a>
-
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/jbot#sponsors)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://x.com/rampatra_)]
 
 <table border="0">
   <tr>
@@ -98,21 +92,11 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
         <a href="https://todobarapp.com/" target="_blank"><img src="https://todobarapp.com/assets/img/todobar/app-icon-512.png" width="150" height="150"></a>
     </td>
     <td>
-      <a href="https://www.jetbrains.com?from=JBot" target="_blank"><img src="https://svgshare.com/i/6AL.svg"></a>
-    </td>
-    <td>
-      <a href="https://www.yourkit.com?from=JBot" target="_blank"><img src="https://www.yourkit.com/images/yklogo.png"></a>
+      <a href="https://facescreenapp.com/" target="_blank"><img src="https://github.com/user-attachments/assets/b251b413-ccc4-48f1-a316-c2c2a71f959e" width="150" height="150"></a>
     </td>
   </tr>
  </table>
- 
-<a href="https://opencollective.com/jbot#sponsors" target="_blank"><img src="https://opencollective.com/jbot/sponsors.svg?width=890"></a>
-
-<!--
-<a href="https://opencollective.com/jbot/sponsor/0/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/jbot/sponsor/1/website" target="_blank"><img src="https://opencollective.com/jbot/sponsor/1/avatar.svg"></a>
--->
 
 ---
 
-_P.S. For any queries or concerns, you can reach out to me on [Twitter](https://twitter.com/ram__patra). I'll try my best to help 🙏._
+_P.S. For any queries or concerns, you can reach out to me on [Twitter](https://twitter.com/rampatra_). I'll try my best to help 🙏._
