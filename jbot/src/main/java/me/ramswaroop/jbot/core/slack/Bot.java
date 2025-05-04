@@ -182,6 +182,12 @@ public abstract class Bot extends BaseBot {
     }
 
     protected final void reply(WebSocketSession session, Event event, String text) {
+        reply(session, event, text, false);
+    }
+
+    protected final void reply(WebSocketSession session, Event event, String text, boolean mrkdwn) {
+        Message message = new Message(text);
+        message.setMrkdwn(mrkdwn);
         reply(session, event, new Message(text));
     }
 
