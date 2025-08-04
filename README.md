@@ -86,7 +86,7 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <table border="0">
   <tr>
     <td>
-      <a href="https://presentifyapp.com/" target="_blank"><img src="https://presentifyapp.com/assets/img/presentify/app-icon-512.png" width="150" height="150"></a>
+      <a href="https://presentifyapp.com/" target="_blank"><img src="https://raw.githubusercontent.com/rampatra/assets/refs/heads/main/Presentify/Icons/icon_512.png" width="150" height="150"></a>
     </td>
     <td>
       <a href="https://facescreenapp.com/" target="_blank"><img src="https://github.com/user-attachments/assets/b251b413-ccc4-48f1-a316-c2c2a71f959e" width="150" height="150"></a>
